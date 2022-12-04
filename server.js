@@ -6,7 +6,7 @@ const path = require("path");
 const server = http.createServer(app);
 const io = socketIO(server);
 
-const port = 3000;
+const port = 8080;
 app.set('port', port);
 
 app.use("/", express.static(__dirname + '/dist'));
@@ -18,7 +18,7 @@ server.listen(port, function () {
     console.log('Starting server on port ' + port);
 });
 
-let MILLIS = 5000;
+let MILLIS = 100;
 io.on("connection", (socket) => {
     setInterval(function () {
         //data collection
