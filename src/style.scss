@@ -1,17 +1,1 @@
-@use "@material/chips/styles" as chips;
-
-@use "@material/button/styles" as button;
-
-@use "@material/fab" as fab;
-
-@use "@material/checkbox" as checkbox;
-
-@use "@material/form-field" as formfield;
-
 @import "~bootstrap/scss/bootstrap";
-
-@include fab.core-styles;
-
-@include checkbox.core-styles;
-
-@include formfield.core-styles;

@@ -17,28 +17,17 @@
     "start": "webpack serve"
   },
   "keywords": [],
-  "author": "",
+  "author": "Luca Bombonati",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@material/button": "^14.0.0",
-    "@material/checkbox": "^14.0.0",
-    "@material/chips": "^14.0.0",
-    "@material/dialog": "^14.0.0",
-    "@material/fab": "^14.0.0",
-    "@material/form-field": "^14.0.0",
-    "@material/ripple": "^14.0.0",
     "@popperjs/core": "^2.11.6",
-    "@shopify/draggable": "^1.0.0-beta.8",
     "bootstrap": "^5.2.3",
     "express": "^4.18.2",
     "ify-loader": "^1.1.0",
-    "jquery": "^3.6.1",
-    "material-components-web": "^14.0.0",
-    "plotly.js-dist": "^2.16.3",
+    "plotly.js-dist-min": "^2.16.4",
     "socket.io": "^4.5.3",
     "socket.io-client": "^4.5.4",
-    "style-loader": "^3.3.1",
-    "vue": "^3.2.45"
+    "style-loader": "^3.3.1"
   }
 }

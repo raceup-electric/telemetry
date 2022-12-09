@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Telemetria</title>
-    <link href="MaterialIcons.css" rel="stylesheet">
+    <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
 
     <style>
         body {
-            /*background-color: #121212 !important;*/
+            background-color: #121212 !important;
             position: absolute;
             width: 100%;
             height: 100%;
@@ -17,36 +17,34 @@
 
         #indicatori {
             position: relative;
-            height: 17.5%;
-            margin: 2%;
+            height: 21%;
+            width: 95%;
+            margin: 2.5%;
             display: flex;
-            justify-content: space-around;
             overflow-x: auto;
+            overflow-y: hidden;
         }
 
         #indicatori > div {
             position: relative;
             height: 100%;
-            width: 15%;
+            width: 16rem;
+            margin: 0 2% 0 2%;
         }
 
         .new {
             box-sizing: border-box;
             text-align: center;
-            display: table;
+            display: grid;
+            place-items: center;
             border: 1px dashed grey;
             border-radius: 25px;
-        }
-
-        .new > .mdc-fab {
-            top: 50%;
-            transform: translateY(-50%);
         }
 
         #grafici {
             position: relative;
             width: 96%;
-            height: 60%;
+            height: 50%;
             left: 2%;
             top: 2%;
             display: flex;
@@ -74,426 +72,571 @@
 
 <div id="indicatori">
     <div class="new">
-        <button id="newInd" class="mdc-fab mdc-fab--extended" aria-label="New">
-            <div class="mdc-fab__ripple"></div>
-            <span id="fabIcon" class="mdc-fab__icon material-icons">add</span>
-            <span class="mdc-fab__label">New indicator</span>
+        <button id="newInd" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                data-bs-target="#indicatorsModal"
+                aria-label="New">New indicator
         </button>
     </div>
 </div>
 
 <div id="grafici">
     <div class="new">
-        <button id="newChart" class="mdc-fab mdc-fab--extended" data-bs-toggle="modal" data-bs-target="#optionsModal"
-                aria-label="New">
-            <div class="mdc-fab__ripple"></div>
-            <span id="fabIcon" class="mdc-fab__icon material-icons">add</span>
-            <span class="mdc-fab__label">New plot</span>
+        <button id="newInd" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                data-bs-target="#plotModal"
+                aria-label="New">New plot
         </button>
     </div>
 </div>
 
-<div class="modal fade" id="optionsModal" tabindex="-1" aria-labelledby="optionsModalLabel" aria-hidden="true">
+<div class="modal fade" id="plotModal" tabindex="-1" aria-labelledby="optionsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable ">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">New chart</h1>
+                <h1 class="modal-title fs-5">New chart</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div id="options">
-                    <div id="yOptions">
-                        <h3>Options</h3>
-                        <ul id="yOptionsCheckBoxes">
-                            <li id="temperature">
-                                <div class="mdc-form-field">
-                                    <div class="mdc-checkbox">
-                                        <input type="checkbox" id="temperature-indeterminate-checkbox"
-                                               class="mdc-checkbox__native-control" data-indeterminate="false"/>
-                                        <div class="mdc-checkbox__background">
-                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                      d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                            </svg>
-                                            <div class="mdc-checkbox__mixedmark"></div>
-                                        </div>
-                                        <div class="mdc-checkbox__ripple"></div>
+                <div id="optionsPlot">
+                    <ul>
+                        <li id="temperature">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value=""
+                                       id="temperature-indeterminate-checkbox" disabled>
+                                <label class="form-check-label" for="temperature-indeterminate-checkbox">
+                                    Temperatures
+                                </label>
+                            </div>
+                            <ul id="temperatureCheckboxes">
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value=""
+                                               id="motor-temperature-indeterminate-checkbox" disabled>
+                                        <label class="form-check-label" for="motor-temperature-indeterminate-checkbox">
+                                            Motors
+                                        </label>
                                     </div>
-                                    <label for="temperature-indeterminate-checkbox"
-                                           id="temperature-indeterminate-checkbox-label">Temperature</label>
-                                </div>
-                                <ul id="temperatureCheckboxes">
-                                    <li>
-                                        <div class="mdc-form-field">
-                                            <div class="mdc-checkbox">
-                                                <input type="checkbox" id="motor-temperature-indeterminate-checkbox"
-                                                       class="mdc-checkbox__native-control" data-indeterminate="false"/>
-                                                <div class="mdc-checkbox__background">
-                                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                        <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                              d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                    </svg>
-                                                    <div class="mdc-checkbox__mixedmark"></div>
-                                                </div>
-                                                <div class="mdc-checkbox__ripple"></div>
+                                    <ul id="temperatureMotorsCheckBoxes">
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.motors.fl">
+                                                <label class="form-check-label" for="temperature.motors.fl">
+                                                    FL motor temperature
+                                                </label>
                                             </div>
-                                            <label for="motor-temperature-indeterminate-checkbox"
-                                                   id="temperature-indeterminate-checkbox-label">Motor
-                                                temperature</label>
-                                        </div>
-                                        <ul id="temperatureMotorsCheckBoxes">
-                                            <li>
-                                                <div class="mdc-form-field">
-                                                    <div class="mdc-checkbox">
-                                                        <input type="checkbox" class="mdc-checkbox__native-control"
-                                                               id="temperature.motors.fl"/>
-                                                        <div class="mdc-checkbox__background">
-                                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                                <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                                      d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                            </svg>
-                                                            <div class="mdc-checkbox__mixedmark"></div>
-                                                        </div>
-                                                        <div class="mdc-checkbox__ripple"></div>
-                                                    </div>
-                                                    <label for="temperature.motors.fl">Front left motor
-                                                        temperature</label>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="mdc-form-field">
-                                                    <div class="mdc-checkbox">
-                                                        <input type="checkbox" class="mdc-checkbox__native-control"
-                                                               id="temperature.motors.fr"/>
-                                                        <div class="mdc-checkbox__background">
-                                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                                <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                                      d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                            </svg>
-                                                            <div class="mdc-checkbox__mixedmark"></div>
-                                                        </div>
-                                                        <div class="mdc-checkbox__ripple"></div>
-                                                    </div>
-                                                    <label for="temperature.motors.fr">Front right motor
-                                                        temperature</label>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="mdc-form-field">
-                                                    <div class="mdc-checkbox">
-                                                        <input type="checkbox" class="mdc-checkbox__native-control"
-                                                               id="temperature.motors.rl"/>
-                                                        <div class="mdc-checkbox__background">
-                                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                                <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                                      d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                            </svg>
-                                                            <div class="mdc-checkbox__mixedmark"></div>
-                                                        </div>
-                                                        <div class="mdc-checkbox__ripple"></div>
-                                                    </div>
-                                                    <label for="temperature.motors.rl">Rear left motor
-                                                        temperature</label>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="mdc-form-field">
-                                                    <div class="mdc-checkbox">
-                                                        <input type="checkbox" class="mdc-checkbox__native-control"
-                                                               id="temperature.motors.rr"/>
-                                                        <div class="mdc-checkbox__background">
-                                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                                <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                                      d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                            </svg>
-                                                            <div class="mdc-checkbox__mixedmark"></div>
-                                                        </div>
-                                                        <div class="mdc-checkbox__ripple"></div>
-                                                    </div>
-                                                    <label for="temperature.motors.fl">Rear right motor
-                                                        temperature</label>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <div class="mdc-form-field">
-                                            <div class="mdc-checkbox">
-                                                <input type="checkbox" id="cooling-temperature-indeterminate-checkbox"
-                                                       class="mdc-checkbox__native-control" data-indeterminate="false"/>
-                                                <div class="mdc-checkbox__background">
-                                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                        <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                              d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                    </svg>
-                                                    <div class="mdc-checkbox__mixedmark"></div>
-                                                </div>
-                                                <div class="mdc-checkbox__ripple"></div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.motors.fr">
+                                                <label class="form-check-label" for="temperature.motors.fr">
+                                                    FR motor temperature
+                                                </label>
                                             </div>
-                                            <label for="cooling-temperature-indeterminate-checkbox"
-                                                   id="temperature-indeterminate-checkbox-label">Cooling
-                                                temperature</label>
-                                        </div>
-                                        <ul id="temperatureCoolingCheckBoxes">
-                                            <li>
-                                                <div class="mdc-form-field">
-                                                    <div class="mdc-checkbox">
-                                                        <input type="checkbox" class="mdc-checkbox__native-control"
-                                                               id="temperature.cooling.preRad"/>
-                                                        <div class="mdc-checkbox__background">
-                                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                                <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                                      d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                            </svg>
-                                                            <div class="mdc-checkbox__mixedmark"></div>
-                                                        </div>
-                                                        <div class="mdc-checkbox__ripple"></div>
-                                                    </div>
-                                                    <label for="temperature.motors.fl">preRad cooling
-                                                        temperature</label>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="mdc-form-field">
-                                                    <div class="mdc-checkbox">
-                                                        <input type="checkbox" class="mdc-checkbox__native-control"
-                                                               id="temperature.cooling.preMot"/>
-                                                        <div class="mdc-checkbox__background">
-                                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                                <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                                      d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                            </svg>
-                                                            <div class="mdc-checkbox__mixedmark"></div>
-                                                        </div>
-                                                        <div class="mdc-checkbox__ripple"></div>
-                                                    </div>
-                                                    <label for="temperature.cooling.preMot">preMot cooling
-                                                        temperature</label>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="mdc-form-field">
-                                                    <div class="mdc-checkbox">
-                                                        <input type="checkbox" class="mdc-checkbox__native-control"
-                                                               id="temperature.cooling.preCold"/>
-                                                        <div class="mdc-checkbox__background">
-                                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                                <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                                      d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                            </svg>
-                                                            <div class="mdc-checkbox__mixedmark"></div>
-                                                        </div>
-                                                        <div class="mdc-checkbox__ripple"></div>
-                                                    </div>
-                                                    <label for="temperature.cooling.preCold">preCold cooling
-                                                        temperature</label>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="mdc-form-field">
-                                                    <div class="mdc-checkbox">
-                                                        <input type="checkbox" class="mdc-checkbox__native-control"
-                                                               id="temperature.cooling.postMot"/>
-                                                        <div class="mdc-checkbox__background">
-                                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                                <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                                      d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                            </svg>
-                                                            <div class="mdc-checkbox__mixedmark"></div>
-                                                        </div>
-                                                        <div class="mdc-checkbox__ripple"></div>
-                                                    </div>
-                                                    <label for="temperature.cooling.postMot">postMot cooling
-                                                        temperature</label>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="mdc-form-field">
-                                                    <div class="mdc-checkbox">
-                                                        <input type="checkbox" class="mdc-checkbox__native-control"
-                                                               id="temperature.cooling.postCold"/>
-                                                        <div class="mdc-checkbox__background">
-                                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                                <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                                      d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                            </svg>
-                                                            <div class="mdc-checkbox__mixedmark"></div>
-                                                        </div>
-                                                        <div class="mdc-checkbox__ripple"></div>
-                                                    </div>
-                                                    <label for="temperature.cooling.postCold">postCold cooling
-                                                        temperature</label>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <div class="mdc-form-field">
-                                            <div class="mdc-checkbox">
-                                                <input type="checkbox" id="hv-temperature-indeterminate-checkbox"
-                                                       class="mdc-checkbox__native-control" data-indeterminate="false"/>
-                                                <div class="mdc-checkbox__background">
-                                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                        <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                              d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                    </svg>
-                                                    <div class="mdc-checkbox__mixedmark"></div>
-                                                </div>
-                                                <div class="mdc-checkbox__ripple"></div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.motors.rl">
+                                                <label class="form-check-label" for="temperature.motors.rl">
+                                                    RL motor temperature
+                                                </label>
                                             </div>
-                                            <label for="hv-temperature-indeterminate-checkbox"
-                                                   id="temperature-indeterminate-checkbox-label">High Voltage
-                                                temperature</label>
-                                        </div>
-                                        <ul id="temperatureCoolingCheckBoxes">
-                                            <li>
-                                                <div class="mdc-form-field">
-                                                    <div class="mdc-checkbox">
-                                                        <input type="checkbox" class="mdc-checkbox__native-control"
-                                                               id="temperature.hv.high"/>
-                                                        <div class="mdc-checkbox__background">
-                                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                                <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                                      d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                            </svg>
-                                                            <div class="mdc-checkbox__mixedmark"></div>
-                                                        </div>
-                                                        <div class="mdc-checkbox__ripple"></div>
-                                                    </div>
-                                                    <label for="temperature.hv.high">HV high temperature</label>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="mdc-form-field">
-                                                    <div class="mdc-checkbox">
-                                                        <input type="checkbox" class="mdc-checkbox__native-control"
-                                                               id="temperature.hv.low"/>
-                                                        <div class="mdc-checkbox__background">
-                                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                                <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                                      d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                            </svg>
-                                                            <div class="mdc-checkbox__mixedmark"></div>
-                                                        </div>
-                                                        <div class="mdc-checkbox__ripple"></div>
-                                                    </div>
-                                                    <label for="temperature.hv.low">HV low temperature</label>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="mdc-form-field">
-                                                    <div class="mdc-checkbox">
-                                                        <input type="checkbox" class="mdc-checkbox__native-control"
-                                                               id="temperature.hv.avg"/>
-                                                        <div class="mdc-checkbox__background">
-                                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                                <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                                      d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                            </svg>
-                                                            <div class="mdc-checkbox__mixedmark"></div>
-                                                        </div>
-                                                        <div class="mdc-checkbox__ripple"></div>
-                                                    </div>
-                                                    <label for="temperature.hv.avg">Hv avg temperature</label>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li id="voltage">
-                                <div class="mdc-form-field">
-                                    <div class="mdc-checkbox">
-                                        <input type="checkbox" id="voltage-indeterminate-checkbox"
-                                               class="mdc-checkbox__native-control" data-indeterminate="false"/>
-                                        <div class="mdc-checkbox__background">
-                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                      d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                            </svg>
-                                            <div class="mdc-checkbox__mixedmark"></div>
-                                        </div>
-                                        <div class="mdc-checkbox__ripple"></div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.motors.rr">
+                                                <label class="form-check-label" for="temperature.motors.rr">
+                                                    RR motor temperature
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value=""
+                                               id="igbt-temperature-indeterminate-checkbox" disabled>
+                                        <label class="form-check-label" for="igbt-temperature-indeterminate-checkbox">
+                                            IGBT
+                                        </label>
                                     </div>
-                                    <label for="voltage-indeterminate-checkbox"
-                                           id="voltage-indeterminate-checkbox-label">Voltage</label>
-                                </div>
-                                <ul id="voltageCheckbox">
-                                    <li>
-                                        <div class="mdc-form-field">
-                                            <div class="mdc-checkbox">
-                                                <input type="checkbox" id="hv-voltage-indeterminate-checkbox"
-                                                       class="mdc-checkbox__native-control" data-indeterminate="false"/>
-                                                <div class="mdc-checkbox__background">
-                                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                        <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                              d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                    </svg>
-                                                    <div class="mdc-checkbox__mixedmark"></div>
-                                                </div>
-                                                <div class="mdc-checkbox__ripple"></div>
+                                    <ul id="temperatureigbtCheckBoxes">
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.igbt.fl">
+                                                <label class="form-check-label" for="temperature.igbt.fl">
+                                                    FL igbt temperature
+                                                </label>
                                             </div>
-                                            <label for="hv-voltage-indeterminate-checkbox"
-                                                   id="temperature-indeterminate-checkbox-label">HV voltage</label>
-                                        </div>
-                                        <ul id="temperatureCoolingCheckBoxes">
-                                            <li>
-                                                <div class="mdc-form-field">
-                                                    <div class="mdc-checkbox">
-                                                        <input type="checkbox" class="mdc-checkbox__native-control"
-                                                               id="voltage.hv.high"/>
-                                                        <div class="mdc-checkbox__background">
-                                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                                <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                                      d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                            </svg>
-                                                            <div class="mdc-checkbox__mixedmark"></div>
-                                                        </div>
-                                                        <div class="mdc-checkbox__ripple"></div>
-                                                    </div>
-                                                    <label for="voltage.hv.high">HV high voltage</label>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="mdc-form-field">
-                                                    <div class="mdc-checkbox">
-                                                        <input type="checkbox" class="mdc-checkbox__native-control"
-                                                               id="voltage.hv.low"/>
-                                                        <div class="mdc-checkbox__background">
-                                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                                <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                                      d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                            </svg>
-                                                            <div class="mdc-checkbox__mixedmark"></div>
-                                                        </div>
-                                                        <div class="mdc-checkbox__ripple"></div>
-                                                    </div>
-                                                    <label for="voltage.hv.low">HV low voltage</label>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="mdc-form-field">
-                                                    <div class="mdc-checkbox">
-                                                        <input type="checkbox" class="mdc-checkbox__native-control"
-                                                               id="voltage.hv.avg"/>
-                                                        <div class="mdc-checkbox__background">
-                                                            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                                                <path class="mdc-checkbox__checkmark-path" fill="none"
-                                                                      d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                            </svg>
-                                                            <div class="mdc-checkbox__mixedmark"></div>
-                                                        </div>
-                                                        <div class="mdc-checkbox__ripple"></div>
-                                                    </div>
-                                                    <label for="voltage.hv.avg">Hv avg voltage</label>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.igbt.fr">
+                                                <label class="form-check-label" for="temperature.igbt.fr">
+                                                    FR igbt temperature
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.igbt.rl">
+                                                <label class="form-check-label" for="temperature.igbt.rl">
+                                                    RL igbt temperature
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.igbt.rr">
+                                                <label class="form-check-label" for="temperature.igbt.rr">
+                                                    RR igbt temperature
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value=""
+                                               id="inverter-temperature-indeterminate-checkbox" disabled>
+                                        <label class="form-check-label"
+                                               for="inverter-temperature-indeterminate-checkbox">
+                                            Inverter
+                                        </label>
+                                    </div>
+                                    <ul id="temperatureinverterCheckBoxes">
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.inverter.fl">
+                                                <label class="form-check-label" for="temperature.inverter.fl">
+                                                    FL inverter temperature
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.inverter.fr">
+                                                <label class="form-check-label" for="temperature.inverter.fr">
+                                                    FR inverter temperature
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.inverter.rl">
+                                                <label class="form-check-label" for="temperature.inverter.rl">
+                                                    RL inverter temperature
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.inverter.rr">
+                                                <label class="form-check-label" for="temperature.inverter.rr">
+                                                    RR inverter temperature
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value=""
+                                               id="cooling-temperature-indeterminate-checkbox" disabled>
+                                        <label class="form-check-label"
+                                               for="cooling-temperature-indeterminate-checkbox">
+                                            Cooling
+                                        </label>
+                                    </div>
+                                    <ul id="temperatureCoolingCheckBoxes">
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.cooling.preRad">
+                                                <label class="form-check-label" for="temperature.cooling.preRad">
+                                                    PreRad temperature
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.cooling.preMot">
+                                                <label class="form-check-label" for="temperature.cooling.preMot">
+                                                    PreMot temperature
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.cooling.preCold">
+                                                <label class="form-check-label" for="temperature.cooling.preCold">
+                                                    PreCold temperature
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.cooling.postMot">
+                                                <label class="form-check-label" for="temperature.cooling.postMot">
+                                                    PostMot temperature
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.cooling.postCold">
+                                                <label class="form-check-label" for="temperature.cooling.postCold">
+                                                    PostCold temperature
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value=""
+                                               id="hv-temperature-indeterminate-checkbox" disabled>
+                                        <label class="form-check-label" for="hv-temperature-indeterminate-checkbox">
+                                            HV
+                                        </label>
+                                    </div>
+                                    <ul id="temperatureHVCheckBoxes">
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.hv.high">
+                                                <label class="form-check-label" for="temperature.hv.high">
+                                                    High temperature
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.hv.low">
+                                                <label class="form-check-label" for="temperature.hv.low">
+                                                    Low temperature
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.hv.avg">
+                                                <label class="form-check-label" for="temperature.hv.avg">
+                                                    Average temperature
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value=""
+                                               id="lv-temperature-indeterminate-checkbox" disabled>
+                                        <label class="form-check-label" for="lv-temperature-indeterminate-checkbox">
+                                            LV
+                                        </label>
+                                    </div>
+                                    <ul id="temperatureLVCheckBoxes">
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="temperature.lv.high">
+                                                <label class="form-check-label" for="temperature.lv.high">
+                                                    High temperature
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li id="voltage">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value=""
+                                       id="voltage-indeterminate-checkbox" disabled>
+                                <label class="form-check-label" for="voltage-indeterminate-checkbox">
+                                    Voltage
+                                </label>
+                            </div>
+                            <ul id="hVoltageCheckbox">
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value=""
+                                               id="hv-voltage-indeterminate-checkbox" disabled>
+                                        <label class="form-check-label" for="hv-voltage-indeterminate-checkbox">
+                                            HV
+                                        </label>
+                                    </div>
+                                    <ul id="voltageHVCheckBoxes">
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="voltage.hv.high">
+                                                <label class="form-check-label" for="voltage.hv.high">
+                                                    HV high
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="voltage.hv.low">
+                                                <label class="form-check-label" for="voltage.hv.low">
+                                                    HV low
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="voltage.hv.avg">
+                                                <label class="form-check-label" for="voltage.hv.avg">
+                                                    HV avg
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <ul id="lVoltageCheckbox">
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value=""
+                                               id="lv-voltage-indeterminate-checkbox" disabled>
+                                        <label class="form-check-label" for="lv-voltage-indeterminate-checkbox">
+                                            LV
+                                        </label>
+                                    </div>
+                                    <ul id="VoltageLVCheckBoxes">
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="voltage.lv.total">
+                                                <label class="form-check-label" for="voltage.lv.total">
+                                                    LV total
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="voltage.lv.low">
+                                                <label class="form-check-label" for="voltage.lv.low">
+                                                    LV low
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li id="car">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value=""
+                                       id="car-indeterminate-checkbox" disabled>
+                                <label class="form-check-label" for="car-indeterminate-checkbox">
+                                    Car
+                                </label>
+                            </div>
+                            <ul id="carCheckboxes">
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value=""
+                                               id="car-velocity-indeterminate-checkbox" disabled>
+                                        <label class="form-check-label" for="car-velocity-indeterminate-checkbox">
+                                            Velocity
+                                        </label>
+                                    </div>
+                                    <ul id="carVelocityCheckBoxes">
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="car.velocity.avfl">
+                                                <label class="form-check-label" for="car.velocity.avfl">
+                                                    Average FL
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="car.velocity.avfr">
+                                                <label class="form-check-label" for="car.velocity.avfr">
+                                                    Average FR
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="car.velocity.avrl">
+                                                <label class="form-check-label" for="car.velocity.avrl">
+                                                    Average RL
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="car.velocity.avrr">
+                                                <label class="form-check-label" for="car.velocity.avrr">
+                                                    Average RR
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="car.velocity.av">
+                                                <label class="form-check-label" for="car.velocity.av">
+                                                    Average
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value=""
+                                               id="car-info-indeterminate-checkbox" disabled>
+                                        <label class="form-check-label" for="car-info-indeterminate-checkbox">
+                                            Info
+                                        </label>
+                                    </div>
+                                    <ul id="carInfoCheckBoxes">
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="car.info.throttle">
+                                                <label class="form-check-label" for="car.info.throttle">
+                                                    Throttle
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="car.info.steeringangle">
+                                                <label class="form-check-label" for="car.info.steeringangle">
+                                                    Steering angle
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="car.info.brake">
+                                                <label class="form-check-label" for="car.info.brake">
+                                                    Brake
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="car.info.brakepress">
+                                                <label class="form-check-label" for="car.info.brakepress">
+                                                    Brake press
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value=""
+                                               id="car-acceleration-indeterminate-checkbox" disabled>
+                                        <label class="form-check-label" for="car-acceleration-indeterminate-checkbox">
+                                            Acceleration
+                                        </label>
+                                    </div>
+                                    <ul id="carAccelerationCheckBoxes">
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="car.acceleration.x">
+                                                <label class="form-check-label" for="car.acceleration.x">
+                                                    X
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="car.acceleration.y">
+                                                <label class="form-check-label" for="car.acceleration.y">
+                                                    Y
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="car.acceleration.z">
+                                                <label class="form-check-label" for="car.acceleration.z">
+                                                    Z
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value=""
+                                               id="car-omega-indeterminate-checkbox" disabled>
+                                        <label class="form-check-label" for="car-omega-indeterminate-checkbox">
+                                            Omega
+                                        </label>
+                                    </div>
+                                    <ul id="carOmegaCheckBoxes">
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="car.omega.x">
+                                                <label class="form-check-label" for="car.omega.x">
+                                                    X
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="car.omega.y">
+                                                <label class="form-check-label" for="car.omega.y">
+                                                    Y
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                       id="car.omega.z">
+                                                <label class="form-check-label" for="car.omega.z">
+                                                    Z
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="modal-footer">
@@ -503,35 +646,273 @@
         </div>
     </div>
 </div>
-<script src="/plotly-2.16.1.min.js"></script>
+
+<div class="modal fade" id="indicatorsModal" tabindex="-1" aria-labelledby="optionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">New indicator</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="indicatorPlot">
+                    <ul>
+                        <li id="car">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioIndicator" value=""
+                                       id="car-indeterminate-checkbox" disabled>
+                                <label class="form-check-label" for="car-indeterminate-checkbox">
+                                    Car
+                                </label>
+                            </div>
+                            <ul id="carCheckboxes">
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="flexRadioIndicator" value=""
+                                               id="car-velocity-indeterminate-checkbox" disabled>
+                                        <label class="form-check-label" for="car-velocity-indeterminate-checkbox">
+                                            Velocity
+                                        </label>
+                                    </div>
+                                    <ul id="carVelocityCheckBoxes">
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" name="flexRadioIndicator" type="radio"
+                                                       value=""
+                                                       id="car.velocity.avfl">
+                                                <label class="form-check-label" for="car.velocity.avfl">
+                                                    Average FL
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" name="flexRadioIndicator" type="radio"
+                                                       value=""
+                                                       id="car.velocity.avfr">
+                                                <label class="form-check-label" for="car.velocity.avfr">
+                                                    Average FR
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" name="flexRadioIndicator" type="radio"
+                                                       value=""
+                                                       id="car.velocity.avrl">
+                                                <label class="form-check-label" for="car.velocity.avrl">
+                                                    Average RL
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" name="flexRadioIndicator" type="radio"
+                                                       value=""
+                                                       id="car.velocity.avrr">
+                                                <label class="form-check-label" for="car.velocity.avrr">
+                                                    Average RR
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" name="flexRadioIndicator" type="radio"
+                                                       value=""
+                                                       id="car.velocity.av">
+                                                <label class="form-check-label" for="car.velocity.av">
+                                                    Average
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="flexRadioIndicator" value=""
+                                               id="car-info-indeterminate-checkbox" disabled>
+                                        <label class="form-check-label" for="car-info-indeterminate-checkbox">
+                                            Info
+                                        </label>
+                                    </div>
+                                    <ul id="carInfoCheckBoxes">
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="flexRadioIndicator"
+                                                       value=""
+                                                       id="car.info.throttle">
+                                                <label class="form-check-label" for="car.info.throttle">
+                                                    Throttle
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="flexRadioIndicator"
+                                                       value=""
+                                                       id="car.info.steeringangle">
+                                                <label class="form-check-label" for="car.info.steeringangle">
+                                                    Steering angle
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="flexRadioIndicator"
+                                                       value=""
+                                                       id="car.info.brake">
+                                                <label class="form-check-label" for="car.info.brake">
+                                                    Brake
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="flexRadioIndicator"
+                                                       value=""
+                                                       id="car.info.brakepress">
+                                                <label class="form-check-label" for="car.info.brakepress">
+                                                    Brake press
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="flexRadioIndicator" value=""
+                                               id="car-acceleration-indeterminate-checkbox" disabled>
+                                        <label class="form-check-label" for="car-acceleration-indeterminate-checkbox">
+                                            Acceleration
+                                        </label>
+                                    </div>
+                                    <ul id="carAccelerationCheckBoxes">
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="flexRadioIndicator"
+                                                       value=""
+                                                       id="car.acceleration.x">
+                                                <label class="form-check-label" for="car.acceleration.x">
+                                                    X
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="flexRadioIndicator"
+                                                       value=""
+                                                       id="car.acceleration.y">
+                                                <label class="form-check-label" for="car.acceleration.y">
+                                                    Y
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="flexRadioIndicator"
+                                                       value=""
+                                                       id="car.acceleration.z">
+                                                <label class="form-check-label" for="car.acceleration.z">
+                                                    Z
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="" name="flexRadioIndicator"
+                                               id="car-omega-indeterminate-checkbox" disabled>
+                                        <label class="form-check-label" for="car-omega-indeterminate-checkbox">
+                                            Omega
+                                        </label>
+                                    </div>
+                                    <ul id="carOmegaCheckBoxes">
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" value=""
+                                                       name="flexRadioIndicator"
+                                                       id="car.omega.x">
+                                                <label class="form-check-label" for="car.omega.x">
+                                                    X
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" value=""
+                                                       name="flexRadioIndicator"
+                                                       id="car.omega.y">
+                                                <label class="form-check-label" for="car.omega.y">
+                                                    Y
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" value=""
+                                                       name="flexRadioIndicator"
+                                                       id="car.omega.z">
+                                                <label class="form-check-label" for="car.omega.z">
+                                                    Z
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="initIndicator" type="button" class="btn btn-primary">Load indicator</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="/socket.io/socket.io.js"></script>
 <script src="/main.js"></script>
 <script>
     const START = Date.now();
-    const MAX_POINT = 60; // 10 log/s * 60 s/min = 60 logs
+    const MAX_POINT = 150; // 10 log/s * 60 s/min = 60 logs
     const socket = io();
 
     let i = 0;
     socket.on('data', function (data) {
+        console.log(data);
         if (window.plotArray.length > 0) {
             window.plotArray.forEach((value) => {
-                let y = [];
-                let x = [];
-                let now = Date.now();
-                value[2].forEach((value) => {
-                    y.push([value.split('.').reduce((o, i) => o[i], data)]);
-                    x.push([now - START]);
-                })
+                if (value[0].startsWith('chart')) {
+                    let y = [];
+                    let x = [];
+                    let now = Date.now();
+                    value[2].forEach((value) => {
+                        y.push([value.split('.').reduce((o, i) => o[i], data)]);
+                        x.push([now - START]);
+                    })
 
-                Plotly.extendTraces(
-                    'chart' + value[0],
-                    {
-                        y: y,
-                        x: x
-                    },
-                    [...Array(value[2].length).keys()],
-                    128 //TODO: trovare un modo per traslare i grafici senza cancellare i valori vecchi
-                );
+                    window.Plotly.extendTraces(
+                        value[0],
+                        {
+                            y: y,
+                            x: x
+                        },
+                        [...Array(value[2].length).keys()],
+                        MAX_POINT
+                    );
+                } else {
+                    window.Plotly.update(
+                        value[1],
+                        {
+                            value: value[2].split('.').reduce((o, i) => o[i], data)
+                        },
+                        {}
+                    );
+                }
             });
         }
     });

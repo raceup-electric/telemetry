@@ -25,10 +25,22 @@ io.on("connection", (socket) => {
         let data = {
             "temperature": {
                 "motors": {
-                    "fl": Math.random(), //front left
-                    "fr": Math.random(), //front right
-                    "rl": Math.random(), //rear left
-                    "rr": Math.random() //rear right
+                    "fl": Math.random(), 
+                    "fr": Math.random(), 
+                    "rl": Math.random(), 
+                    "rr": Math.random() 
+                },
+                "igbt": {
+                    "fl": Math.random(), 
+                    "fr": Math.random(), 
+                    "rl": Math.random(), 
+                    "rr": Math.random() 
+                },
+                "inverter": {
+                    "fl": Math.random(), 
+                    "fr": Math.random(), 
+                    "rl": Math.random(), 
+                    "rr": Math.random() 
                 },
                 "cooling": {
                     "preRad": Math.random(),
@@ -41,16 +53,48 @@ io.on("connection", (socket) => {
                     "high": Math.random(),
                     "low": Math.random(),
                     "avg": Math.random()
+                },
+                "lv": {
+                    "high": Math.random()
                 }
             },
             "voltage": {
                 "hv": {
                     "high": Math.random(),
                     "low": Math.random(),
-                    "avg": Math.random()
+                    "avg": Math.random(),
+                },
+                "lv": {
+                    "total": Math.random(),
+                    "low": Math.random()
+                },
+            },
+            "car": {
+                "velocity": {
+                    "avfl": Math.random() * 250,
+                    "avfr": Math.random() * 250,
+                    "avrl": Math.random() * 250,
+                    "avrr": Math.random() * 250,
+                    "av": Math.random() * 250
+                },
+                "info": {
+                    "throttle": Math.random(),
+                    "steeringangle": Math.random(),
+                    "brake": Math.random(),
+                    "brakepress": Math.random()
+                },
+                "acceleration": {
+                    "x": Math.random(),
+                    "y": Math.random(),
+                    "z": Math.random()
+                },
+                "omega": {
+                    "x": Math.random(),
+                    "y": Math.random(),
+                    "z": Math.random()
                 }
             }
         }
-        socket.broadcast.emit("data", data);
+        io.emit("data", data);
     }, MILLIS)
 });
