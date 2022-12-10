@@ -1,6 +1,7 @@
 import "./style.scss";
 
 window.Plotly = require('plotly.js-dist-min');
+window.io = require('socket.io-client');
 
 import {Modal, Button} from "bootstrap";
 
@@ -80,6 +81,8 @@ document.getElementById('initIndicator').addEventListener('click', () => {
     document.getElementById('indicatori').insertBefore(newChart, document.getElementById('indicatori').firstChild);
 
     plotArray.push([newChart.id, newChart, element.id]);
+
+    //TODO: shape
 
     Plotly.newPlot(
         newChart,
