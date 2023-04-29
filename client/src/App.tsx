@@ -3,104 +3,140 @@ import { SocketContext } from './main';
 import uPlot from 'uplot';
 import UplotReact from 'uplot-react';
 //import 'uplot/dist/uPlot.min.css';
-import { mockData } from './MOCK_DATA-3'
 
-interface CarData {
-  voltage: number
+import Button from '@mui/material/Button';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import TextField from '@mui/material/TextField';
+import Select from '@mui/material/Select';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import MenuItem from '@mui/material/MenuItem';
+
+class Plot {
+  container: Element;
+  opts;
+  jsonReference: String;
+  uplot: uPlot;
+
+  constructor(_container: Element, _opts, _jsonReference: String, _plot: uPlot) {
+    this.container = _container;
+    this.opts = _opts;
+    this.jsonReference = _jsonReference;
+    this.uplot = _plot;
+  }
 }
 
-let len = 1;
-let start = 0;
+function App() {
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-class ClassApp extends React.Component<Record<string, never>, { options: uPlot.Options; data: uPlot.AlignedData }> {
-  constructor(args: Record<string, never>) {
-    super(args);
-    this.state = {
-      options: {
-        title: "Chart",
-        width: 800,
-        height: 500,
-        series: [
-          {
-            label: "Date"
-          },
-          {
-            label: "",
-            points: { show: false },
-            stroke: "blue",
-            fill: "blue"
-          }
-        ],
-        scales: { x: { time: false } }
-      },
-      data: [
-        mockData[0].slice(start, len),
-        mockData[1].slice(start, len)
-      ]
-    };      
-  }
-  
-  render(): React.ReactNode {
-    return (
-      <UplotReact
-      key="class-key"
-      options={this.state.options}
-      data={this.state.data}
-      // Uncomment the line below to use predefined target
-      // target={root}
-      onDelete={(/* chart: uPlot */) => console.log("Deleted from class")}
-      onCreate={(/* chart: uPlot */) => console.log("Created from class")}
-      />
-      );
+  const plotter = [
+    {
+      value: 'temperature.motors.fl',
+      label: 'Front left motor temperature',
+    },
+    {
+      value: 'temperature.motors.rl',
+      label: 'Right left motor temperature',
     }
-  }
-  
-  function App() {
-    const [ data, setData ] = useState<CarData>();
-    
-    const socket = useContext(SocketContext)!;
-    
-    socket.on("connect", () => {
-      console.log("Connected to SocketIO");
-    })
-  
-  socket.on("hello", (newData) => {
-    setData(JSON.parse(newData));
+  ];
 
-    /*len++;
-    if(len > 100) start++;
-    const options = {
-      ...this.state.options,
-      title: "Rendered with class"
-    };
-    const d: uPlot.AlignedData = [
-      mockData[0].slice(start, len),
-      mockData[1].slice(start, len)
-    ];
-    this.setState({ d, options });
-    console.log(d);*/
+  const [value, setValue] = React.useState('temperature.motors.fl');
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
+
+  let plots = new Array<Plot>();;
+
+  const socket = useContext(SocketContext)!;
+  
+  socket.on("connect", () => {
+    console.log("Connected to SocketIO");
   })
+  
+  socket.on("data", (data) => {
+    console.log(data);
+    plots.forEach((plot) => {
+      let value = ((plot.jsonReference).split(".")).reduce((a, c) => a[c], data);
 
-  const [ greeting, setGreeting ] = useState("World");
+      let data1 = plot.uplot.data;
 
-  useEffect(() => {
-    const f = async() => {
-      const res = await fetch(import.meta.env.VITE_SERVER_URL + "greet");
-      console.log(res);
-      const greet = await res.json(); 
-      console.log(greet);
-      setGreeting(greet.greeting);
-    }
-    f();
-  }, [greeting]);
+      data1[0].push(data1[0].length);
+      data1[1].push(value);
+
+      plot.uplot.setData(data1);
+    });
+  });
+
+  const handlePlot = () => {
+    let newDiv = document.createElement('div');
+    document.body.appendChild(newDiv);
+
+    const opts = {
+      title: value,
+      width: 800,
+      height: 500,
+      series: [
+        {
+          label: "Date"
+        },
+        {
+          label: "",
+          points: { 
+            show: true 
+          },
+          stroke: "blue"
+        }
+      ],
+      scales: { x: { time: false } }
+    };
+
+    let newPlot = new uPlot(opts, [[], []], newDiv);
+    plots.push(new Plot(newDiv, opts, value, newPlot));
+
+    setOpen(false);
+  };
 
   return (
     <div className="App">
-      <p>Hello {greeting}</p>
       <button onClick={() => {
         socket.emit("hello", "server");
       }}>Click to emit</button>
-      <ClassApp></ClassApp>
+
+      <Fab onClick={handleClickOpen} style={{
+          'position': 'absolute', 
+          'bottom': '5%', 
+          'right': '3%'
+        }} color="primary" aria-label="add">
+        <AddIcon />
+      </Fab>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Nuovo grafico</DialogTitle>
+        <DialogContent> 
+          <DialogContentText> Seleziona il dato che vuoi plottare </DialogContentText>
+          <Select value={value} onChange={handleChange} defaultValue={'temperature.motors.fl'} id="reference" label="Option" fullWidth variant="standard">
+            {plotter.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+          <TextField label="Color Input" value={color} type={"color"} onChange={(e) => setColor(e.target.value)}/>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handlePlot}>Plot</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   )
 }

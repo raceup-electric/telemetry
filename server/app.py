@@ -51,13 +51,12 @@ def send():
       }
     }
   }
-  print(type(data))
   socketio.emit('data', data)
   return data
 
+# Da far diventare ogni 100ms
 @socketio.on('hello')
 def handle_message(data):
-  print('received: ' + data)
   send()
 
 if __name__== '__main__':
