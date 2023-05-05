@@ -6,11 +6,10 @@ import './index.css'
 
 export const SocketContext = createContext<Socket | null>(null);
 
-
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
+  //<React.StrictMode>
     <SocketContext.Provider value={io(import.meta.env.VITE_SERVER_URL)}>
       <App />
     </SocketContext.Provider>
-  </React.StrictMode>,
+  //</React.StrictMode>,
 )
