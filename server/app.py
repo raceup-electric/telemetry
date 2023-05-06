@@ -7,7 +7,7 @@ from flask_socketio import SocketIO
 from reader import SerialReader
 import globals
 
-port = '/dev/tty.usbmodem1101'
+port = '/dev/ttyACM0'
 baud = 9600
 
 app = Flask(__name__)
@@ -18,7 +18,7 @@ scheduler.start()
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins='*')
 
-ser = serial.Serial(port, baud, timeout=1)
+ser = serial.Serial(port, baud, timeout=5)
 
 @app.route("/greet")
 def greet():
@@ -31,6 +31,8 @@ def greet():
 @scheduler.task('interval', id='send_task', seconds=1, misfire_grace_time=5)
 def send_data():
   globals.lock.acquire(blocking=True)
+  if len(globals.data) != 12:
+    return
   print(globals.data)
   json_data = {
     "temperature": {
@@ -62,10 +64,10 @@ def send_data():
   }
   globals.lock.release()
   print(json_data)
-  socketio.emit('data', globals.data)
+  socketio.emit('data', json_data)
   
 read_thread = ReaderThread(ser, SerialReader)
 
 if __name__ == '__main__':
   read_thread.start()
-  socketio.run(app)
+  socketio.run(app, host="0.0.0.0")

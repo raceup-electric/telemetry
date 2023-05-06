@@ -1,11 +1,14 @@
 from serial.threaded import LineReader
 import globals
-import numpy
 
 class SerialReader(LineReader):
   def handle_line(self, line: str) -> None:
     globals.lock.acquire()
     globals.data = []
-    for elt in numpy.fromstring(line, dtype=int, sep=','):
-      globals.data.append(elt)
-    globals.lock.release()
+    try:
+      for elt in list(map(int, line.split(','))):
+        globals.data.append(elt)
+    except:
+      pass
+    finally:
+      globals.lock.release()
