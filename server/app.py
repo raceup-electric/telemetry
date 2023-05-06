@@ -1,16 +1,21 @@
 from flask import Flask
 from flask_cors import CORS
 from flask_socketio import SocketIO
+from reader import SerialReader
+from flask_apscheduler import APScheduler
 
-import time
-
-from random import seed, random
-seed(420)
+port = '/dev/tty.usbmodem101'
+baud = 9600
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = ''
+scheduler = APScheduler()
+scheduler.init_app(app)
+scheduler.start()
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins='*')
+
+reader = SerialReader(port, baud)
 
 @app.route("/greet")
 def greet():
@@ -20,44 +25,40 @@ def greet():
     }
   """
 
-@app.route("/data")
-def send():
-  # read data from SPI
+def send_data():
+  # read data from serial
+  val = reader.read()
   data = {
     "temperature": {
       "motors": {
-        "fl": random(),
-        "fr": random(),
-        "rl": random(),
-        "rr": random()
+        "fl": val[0],
+        "fr": val[1],
+        "rl": val[2],
+        "rr": val[3]
       }
     },
     "voltage": {
       "hv": {
-        "high": random(),
-        "low": random(),
-        "avg": random(),
+        "high": val[4],
+        "low": val[5],
+        "avg": val[6],
       },
       "lv": {
-        "total": random(),
-        "low": random()
+        "total": val[7],
+        "low": val[8]
       },
     },
     "car": {
       "info": {
-        "throttle": random(),
-        "steeringangle": random(),
-        "brake": random()
+        "throttle": val[9],
+        "steeringangle": val[10],
+        "brake": val[11]
       }
     }
   }
   socketio.emit('data', data)
-  return data
 
-# Da far diventare ogni 100ms
-@socketio.on('hello')
-def handle_message(data):
-  send()
+scheduler.add_job(id='send_task', func=send_data, trigger='interval', seconds=0.5)
 
 if __name__== '__main__':
   socketio.run(app)
