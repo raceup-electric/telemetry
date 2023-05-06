@@ -56,8 +56,11 @@ def send_data():
       }
     }
   }
+  print(val)
+  print(data) 
   socketio.emit('data', data)
-
+  
+  
 scheduler.add_job(id='send_task', func=send_data, trigger='interval', seconds=0.5)
 
 if __name__== '__main__':
