@@ -13,6 +13,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { plotterOptions } from './PlotterOptions';
 import scaleGradient from './utils';
 
+const MAX_POINT = 60;
+
 class Plot {
   container: Element;
   opts;
@@ -62,13 +64,16 @@ function App() {
       let value = ((plot.jsonReference).split(".")).reduce((a, c) => a[c], data);
 
       let data1 = plot.uplot.data;
+      console.log(data1[0])
 
-      data1[0].push(plot.getPointsPlotted());
+      //data1[0].push(plot.getPointsPlotted());
       data1[1].push(value);
+      //data1[0].push(plot.getPointsPlotted() + 1);
 
-      if(data1[0].length == 60){
-        data1[0].shift();
+      if(plot.getPointsPlotted() >= MAX_POINT){
+        data1[0].push(plot.getPointsPlotted() + 1);
         data1[1].shift();
+        data1[0].shift();
       }
 
       plot.uplot.setData(data1);
@@ -94,6 +99,7 @@ function App() {
       title: title,
       width: newDiv.clientWidth,
       height: newDiv.clientHeight,
+      pxAlign: 0,
       series: [{
           label: "Date"
         },
@@ -109,15 +115,16 @@ function App() {
 
             return scaleGradient(u, s.scale, 1, [[0, "green"],[redLine, "red"],], 1);
           }
-          //stroke: color,
         }
       ],
-      scales: { x: { 
-        time: false
-      }}
+      scales: {
+        x: {
+          time: false
+        }
+      }
     };
 
-    let newPlot = new uPlot(opts, [[], []], newDiv);
+    let newPlot = new uPlot(opts, [Array.from(Array(MAX_POINT).keys()), []], newDiv);
     plots.push(new Plot(newDiv, opts, value, newPlot));
 
     setOpen(false);
@@ -128,7 +135,6 @@ function App() {
       <button style={{position: 'absolute'}} onClick={() => {
         socket.emit("hello", "server");
       }}>Click to emit</button>
-
       <Fab onClick={handleClickOpen} style={{
           'position': 'fixed', 
           'bottom': '5%', 
