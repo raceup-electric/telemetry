@@ -4,7 +4,7 @@ from flask_socketio import SocketIO
 from reader import SerialReader
 from flask_apscheduler import APScheduler
 
-port = '/dev/tty.usbmodem101'
+port = '/dev/ttyACM0'
 baud = 9600
 
 app = Flask(__name__)
