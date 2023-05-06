@@ -44,4 +44,19 @@ export const plotterOptions = [
       label: 'Low Voltage low',
       redline: 0.55,
     },
+    {
+      value: 'car.info.throttle',
+      label: 'Throttle',
+      redline: 0.55,
+    },
+    {
+      value: 'car.info.brake',
+      label: 'Brake',
+      redline: 0.55,
+    },
+    {
+      value: 'car.info.steerengangle',
+      label: 'Low Voltage low',
+      redline: 0.55,
+    },
 ];

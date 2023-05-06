@@ -1,42 +1,33 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { SocketContext } from './main';
 import uPlot from 'uplot';
 
 import { Button, Fab, 
-  TextField, Select, 
+  Select, 
   Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, MenuItem, 
-  Stack
+  Stack,
+  Box,
+  OutlinedInput,
+  Chip,
+  Alert,
+  AlertTitle,
+  createTheme,
+  ThemeProvider,
+  CssBaseline
 } from '@mui/material'
 
 import AddIcon from '@mui/icons-material/Add';
 
 import { plotterOptions } from './PlotterOptions';
 import scaleGradient from './utils';
+import Plot from './Plot';
 
 const MAX_POINT = 60;
-
-class Plot {
-  container: Element;
-  opts;
-  jsonReference: String;
-  uplot: uPlot;
-  pointsPlotted: number = 0;
-
-  constructor(_container: Element, _opts: object, _jsonReference: String, _plot: uPlot) {
-    this.container = _container;
-    this.opts = _opts;
-    this.jsonReference = _jsonReference;
-    this.uplot = _plot;
-  }
-
-  getPointsPlotted() {
-    return this.pointsPlotted;
-  }
-
-  addPoint() {
-    this.pointsPlotted = this.pointsPlotted + 1;
-  }
-}
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 function App() {
   window.addEventListener("resize", e => {
@@ -45,37 +36,59 @@ function App() {
     });
   });
 
+  let alert = <div className="alert">
+    <Alert severity="error">
+      <AlertTitle>Server error</AlertTitle>
+        Connection error — <strong>check the RPi</strong>
+    </Alert>
+  </div>;
+
   const socket = useContext(SocketContext)!;
+  const [connected, setConnected] = useState(false);
   
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => { setOpen(true); };
   const handleClose = () => { setOpen(false); };
 
-  const [value, setValue] = useState('temperature.motors.fl');
+  const [value, setValue] = useState([]);
+  const handleChange = (event) => {
+    const { target: { value }, } = event;
+    setValue(
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
   
   let plots = new Array<Plot>();
 
   socket.on("connect", () => {
-    console.log("Connected to SocketIO");
-  })
+    setConnected(true);
+    alert = "";
+  });
+
+  socket.on('connect_error', function(err) {
+    setConnected(false);
+  });
   
   socket.on("data", (data) => {
+    console.log(data);
     plots.forEach((plot) => {
-      let value = ((plot.jsonReference).split(".")).reduce((a, c) => a[c], data);
+      let data1 = plot.uplot.data;    
+      plot.jsonReference.forEach((jsonRef, i) => {
+        let value = ((jsonRef).split(".")).reduce((a, c) => a[c], data);
+  
+        console.log(data1);
+        
+        data1[i+1].push(value);
 
-      let data1 = plot.uplot.data;
-      console.log(data1[0])
-
-      //data1[0].push(plot.getPointsPlotted());
-      data1[1].push(value);
-      //data1[0].push(plot.getPointsPlotted() + 1);
-
+        if(plot.getPointsPlotted() >= MAX_POINT){
+          if(i == 0) data1[0].push(plot.getPointsPlotted() + 1);
+        }
+      });
       if(plot.getPointsPlotted() >= MAX_POINT){
-        data1[0].push(plot.getPointsPlotted() + 1);
-        data1[1].shift();
-        data1[0].shift();
+        data1.forEach((dat) => {
+          dat.shift();
+        })
       }
-
       plot.uplot.setData(data1);
       plot.addPoint();
     });
@@ -86,37 +99,38 @@ function App() {
     newDiv.className = "plot";
     document.body.appendChild(newDiv);
 
-    let title = "";
-    let redLine: number = 10000;
-    plotterOptions.forEach(option => {
-      if(option.value === value){
-        title = option.label;
-        redLine = option.redline
-      }
-    });
+    let series = [{
+        label: "Time"
+      },
+    ];
+    let data = [Array.from(Array(MAX_POINT).keys())];
+
+    value.forEach(val => {
+      data.push([]);
+      series.push({
+        label: val,
+        paths: uPlot.paths.spline!(),
+        points: { 
+          show: true 
+        },
+        stroke: "#" + String(Math.floor(Math.random()*16777215).toString(16)), /*(u: uPlot, seriesIdx: number) => {
+          let s = u.series[seriesIdx];
+          let sc = u.scales[s.scale!];
+
+          plotterOptions.forEach(option => {
+            if(option.value === val)
+              return scaleGradient(u, s.scale!, 1, [[0, "green"],[option.redline, "red"],], true);
+          },)
+        }*/
+      });
+    })
 
     const opts = {
-      title: title,
+      title: value.toString(),
       width: newDiv.clientWidth,
       height: newDiv.clientHeight,
       pxAlign: 0,
-      series: [{
-          label: "Date"
-        },
-        {
-          label: title,
-          paths: uPlot.paths.spline(),
-          points: { 
-            show: true 
-          },
-          stroke: (u: uPlot, seriesIdx: number) => {
-            let s = u.series[seriesIdx];
-            let sc = u.scales[s.scale];
-
-            return scaleGradient(u, s.scale, 1, [[0, "green"],[redLine, "red"],], 1);
-          }
-        }
-      ],
+      series: [...series],
       scales: {
         x: {
           time: false
@@ -124,17 +138,23 @@ function App() {
       }
     };
 
-    let newPlot = new uPlot(opts, [Array.from(Array(MAX_POINT).keys()), []], newDiv);
+    let newPlot = new uPlot(opts, data, newDiv);
     plots.push(new Plot(newDiv, opts, value, newPlot));
 
     setOpen(false);
+    setValue([]);
   };
 
   return (
+    //<ThemeProvider theme={darkTheme}>
+    //<CssBaseline />
     <div className="App">
-      <button style={{position: 'absolute'}} onClick={() => {
+      {
+      /*<button style={{position: 'absolute'}} onClick={() => {
         socket.emit("hello", "server");
-      }}>Click to emit</button>
+      }}>Click to emit</button>*/
+      }
+      {connected ? <></> : alert}
       <Fab onClick={handleClickOpen} style={{
           'position': 'fixed', 
           'bottom': '5%', 
@@ -147,7 +167,17 @@ function App() {
         <DialogContent> 
           <Stack spacing={2}>
             <DialogContentText> Seleziona il dato che vuoi plottare </DialogContentText>
-            <Select value={value} onChange={(e) => setValue(e.target.value)} defaultValue={'temperature.motors.fl'} id="reference" label="Option" fullWidth>
+            <Select id="reference" label="Option" fullWidth multiple
+              value={value}
+              onChange={handleChange}
+              input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+              renderValue={(selected) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={value} />
+                  ))}
+                </Box>
+              )}>
               {plotterOptions.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
@@ -162,6 +192,7 @@ function App() {
         </DialogActions>
       </Dialog>
     </div>
+    //</ThemeProvider>
   )
 }
 
