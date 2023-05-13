@@ -1,16 +1,24 @@
+import serial
+from serial.threaded import ReaderThread
 from flask import Flask
+from flask_apscheduler import APScheduler
 from flask_cors import CORS
 from flask_socketio import SocketIO
+from reader import SerialReader
+import globals
 
-import time
-
-from random import seed, random
-seed(420)
+port = '/dev/ttyACM0'
+baud = 9600
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = ''
+scheduler = APScheduler()
+scheduler.init_app(app)
+scheduler.start()
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins='*')
+
+ser = serial.Serial(port, baud, timeout=5)
 
 @app.route("/greet")
 def greet():
@@ -20,44 +28,46 @@ def greet():
     }
   """
 
-@app.route("/data")
-def send():
-  # read data from SPI
-  data = {
+@scheduler.task('interval', id='send_task', seconds=1, misfire_grace_time=5)
+def send_data():
+  globals.lock.acquire(blocking=True)
+  if len(globals.data) != 12:
+    return
+  print(globals.data)
+  json_data = {
     "temperature": {
       "motors": {
-        "fl": random(),
-        "fr": random(),
-        "rl": random(),
-        "rr": random()
+        "fl": globals.data[0],
+        "fr": globals.data[1],
+        "rl": globals.data[2],
+        "rr": globals.data[3]
       }
     },
     "voltage": {
       "hv": {
-        "high": random(),
-        "low": random(),
-        "avg": random(),
+        "high": globals.data[4],
+        "low": globals.data[5],
+        "avg": globals.data[6],
       },
       "lv": {
-        "total": random(),
-        "low": random()
+        "total": globals.data[7],
+        "low": globals.data[8]
       },
     },
     "car": {
       "info": {
-        "throttle": random(),
-        "steeringangle": random(),
-        "brake": random()
+        "throttle": globals.data[9],
+        "steeringangle": globals.data[10],
+        "brake": globals.data[11]
       }
     }
   }
-  socketio.emit('data', data)
-  return data
+  globals.lock.release()
+  print(json_data)
+  socketio.emit('data', json_data)
+  
+read_thread = ReaderThread(ser, SerialReader)
 
-# Da far diventare ogni 100ms
-@socketio.on('hello')
-def handle_message(data):
-  send()
-
-if __name__== '__main__':
-  socketio.run(app)
+if __name__ == '__main__':
+  read_thread.start()
+  socketio.run(app, host="0.0.0.0")
