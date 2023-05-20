@@ -51,8 +51,24 @@ export const plotterOptions = [
 
 export const optionsGroup = [
   {
-    value: 'temperature.motors.',
+    id: 'temperature.motors.',
     label: 'Temperatura motori',
-    max: 0.55
+    values: [
+      'temperature.motors.fl',
+      'temperature.motors.fr',
+      'temperature.motors.rl',
+      'temperature.motors.rr'
+    ],
+    max: 75
+  },
+  {
+    id: 'voltage.hv.',
+    label: 'Alta tensione',
+    values: [
+      'voltage.hv.high',
+      'voltage.hv.avg',
+      'voltage.hv.low'
+    ],
+    max: 75
   }
 ];

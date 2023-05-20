@@ -1,25 +1,19 @@
-import { MAX_POINT } from "../Plot"
-import Plot from "../Plot";
-import uPlot from 'uplot';
-
-import { useEffect } from 'react'
+import Grafico from "../components/Grafico";
 import Car from "../components/svg/car";
+import HV from "../components/svg/hv";
 
-function PreloadedPlots({ page, title, addPlot }: any) {
-    useEffect(() => {
-        let data = [Array.from(Array(MAX_POINT).keys())];
-        
-        let opts = Plot.defaultPlot(page, title);
-        opts.series.forEach(() => data.push([]));
-    
-        let newPlot = new uPlot(opts, data, document.getElementById("plot"));
-        addPlot(newPlot);
-    }, []);
+interface DefaultPlot {
+    jRef: string[],
+    page: string,
+    title: string
+}
 
+function PreloadedPlots({ jRef, page, title }: DefaultPlot) {
     return (
         <div className='innerBody'>
-            <div id="plot" className="plot"></div>
-            {(page.startsWith("temperature.moto")) ? <Car /> : <></>}
+            <Grafico jsonReference={jRef} title={title} custom={false}  />
+            {(page.startsWith("temperature.motors")) ? <Car /> : <></>}
+            {(page.startsWith("voltage.hv")) ? <HV /> : <></>}
         </div>
     );
 }

@@ -44,6 +44,7 @@ body {
   width: 50%;
   height: 60%;
   margin-bottom: 10%;
+  display: flex;
 }
 
 .alert {

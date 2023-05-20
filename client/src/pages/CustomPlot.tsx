@@ -19,10 +19,9 @@ import { plotterOptions } from '../PlotterOptions';
 import { useState } from "react"
 import Box from "@mui/material/Box"
 import Chip from "@mui/material/Chip"
-import Plot, { MAX_POINT } from "../Plot"
-import uPlot from "uplot"
+import Grafico from "../components/Grafico";
 
-function CustomPlot({ addPlot }: any) {
+function CustomPlot() {
     const [value, setValue] = useState([]);
     const handleChange = (event: any) => {
         const { target: { value }, } = event;
@@ -35,59 +34,23 @@ function CustomPlot({ addPlot }: any) {
     const handleClickOpen = () => { setOpen(true); };
     const handleClose = () => { setOpen(false); };
 
+    const [grafici, setGrafici] = useState<JSX.Element[]>([]);
+    const addPlot = (newPlot: JSX.Element) => {
+        let temp: JSX.Element[] = [...grafici];
+        temp.push(newPlot)
+        setGrafici(temp)
+    }
+
     const handlePlot = () => {
-        let newDiv = document.createElement('div');
-        newDiv.className = "plot";
-        document.body.getElementsByClassName('innerBody')[0].appendChild(newDiv);
-
-        let series = [{
-            label: "Time"
-        },
-        ];
-        let data = [Array.from(Array(MAX_POINT).keys())];
-
-        value.forEach(val => {
-            data.push([]);
-            series.push({
-                label: val,
-                paths: uPlot.paths.spline!(),
-                points: {
-                    show: true
-                },
-                stroke: "#" + String(Math.floor(Math.random() * 16777215).toString(16)), /*(u: uPlot, seriesIdx: number) => {
-              let s = u.series[seriesIdx];
-              let sc = u.scales[s.scale!];
-    
-              plotterOptions.forEach(option => {
-                if(option.value === val)
-                  return scaleGradient(u, s.scale!, 1, [[0, "green"],[option.redline, "red"],], true);
-              },)
-            }*/
-            });
-        });
-
-        const opts = {
-            title: value.toString(),
-            width: newDiv.clientWidth,
-            height: newDiv.clientHeight,
-            pxAlign: 0,
-            series: [...series],
-            scales: {
-                x: {
-                    time: false
-                }
-            }
-        };
-
-        let newPlot = new uPlot(opts, data, newDiv);
-        addPlot(newPlot);
-
+        if(value.length == 0) return;
+        addPlot(<Grafico jsonReference={value} title="Custom" custom={false} />);
         setOpen(false);
         setValue([]);
-    };
+    }
 
     return (
         <>
+            {grafici}
             <Fab onClick={handleClickOpen} style={{
                 'position': 'fixed', 
                 'bottom': '5%', 
