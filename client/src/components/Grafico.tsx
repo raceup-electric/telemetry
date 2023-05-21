@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { SocketContext } from "../main";
 import uPlot from "uplot";
-import { optionsGroup, plotterOptions } from "../PlotterOptions";
+import { plotterOptions } from "../PlotterOptions";
 
 interface PlotProps {
     jsonReference: string[],
@@ -49,8 +49,8 @@ function Grafico({ jsonReference, title, custom }: PlotProps) {
 
     let opt = {
         title: title,
-        width: 800,//document.getElementById("plot")!.clientWidth,
-        height: 600,//document.getElementById("plot")!.clientHeight,
+        width: 800,
+        height: 600,
         pxAlign: 0,
         series: series,
         scales: {
@@ -78,17 +78,15 @@ function Grafico({ jsonReference, title, custom }: PlotProps) {
 
             data1[i+1].push(value);
 
-            if(pointsPlotted >= MAX_POINT){
-                if(i == 0) data1[0].push(pointsPlotted + 1);
-            }
+            if(pointsPlotted >= MAX_POINT && i == 0) data1[0].push(pointsPlotted + 1);
             
             if(!custom) {
-                optionsGroup.forEach(group => {
-                    if (group.values.includes(ref)) {
-                        value < group.max ?
-                            document.getElementById(ref)?.setAttribute('style', 'fill: green') :
-                            document.getElementById(ref)?.setAttribute('style', 'fill: red');
-                    }
+                plotterOptions.forEach(opt => {
+                    if(opt.value != ref) return;
+                    try {
+                        let refFunction = new Function(opt.function.arguments, opt.function.body);
+                        refFunction(value, ref);
+                    } catch (err) {};
                 });
             }
         });

@@ -1,6 +1,6 @@
 import Grafico from "../components/Grafico";
 import Car from "../components/svg/car";
-import HV from "../components/svg/hv";
+import Info from "../components/svg/info";
 
 interface DefaultPlot {
     jRef: string[],
@@ -13,7 +13,7 @@ function PreloadedPlots({ jRef, page, title }: DefaultPlot) {
         <div className='innerBody'>
             <Grafico jsonReference={jRef} title={title} custom={false}  />
             {(page.startsWith("temperature.motors")) ? <Car /> : <></>}
-            {(page.startsWith("voltage.hv")) ? <HV /> : <></>}
+            {(page.startsWith("car.info")) ? <Info /> : <></>}
         </div>
     );
 }

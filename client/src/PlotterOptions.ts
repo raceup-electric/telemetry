@@ -1,19 +1,39 @@
 export const plotterOptions = [
-    {
+  {
       value: 'temperature.motors.fl',
       label: 'Front left motor temperature',
+      max: 75,
+      function: {
+        arguments: "value, ref",
+        body: "(value < 75) ? document.getElementById(ref)?.setAttribute('style', 'fill: green') : document.getElementById(ref)?.setAttribute('style', 'fill: red');"
+      }
     },
     {
       value: 'temperature.motors.fr',
       label: 'Right right motor temperature',
+      max: 75,
+      function: {
+        arguments: "value, ref",
+        body: "(value < 75) ? document.getElementById(ref)?.setAttribute('style', 'fill: green') : document.getElementById(ref)?.setAttribute('style', 'fill: red');"
+      }
     },
     {
       value: 'temperature.motors.rl',
       label: 'Rear left motor temperature',
+      max: 75,
+      function: {
+        arguments: "value, ref",
+        body: "(value < 75) ? document.getElementById(ref)?.setAttribute('style', 'fill: green') : document.getElementById(ref)?.setAttribute('style', 'fill: red');"
+      }
     },
     {
       value: 'temperature.motors.rr',
       label: 'Rear right motor temperature',
+      max: 75,
+      function: {
+        arguments: "value, ref",
+        body: "(value < 75) ? document.getElementById(ref)?.setAttribute('style', 'fill: green') : document.getElementById(ref)?.setAttribute('style', 'fill: red');"
+      }
     },
     {
       value: 'voltage.hv.high',
@@ -38,14 +58,26 @@ export const plotterOptions = [
     {
       value: 'car.info.throttle',
       label: 'Throttle',
+      function: {
+        arguments: "value, ref",
+        body: "document.getElementById(ref)?.setAttribute('transform', 'rotate(' + value + ')');"
+      }
     },
     {
       value: 'car.info.brake',
       label: 'Brake',
+      function: {
+        arguments: "value, ref",
+        body: "document.getElementById(ref)?.setAttribute('transform', 'rotate(' + value + ')');"
+      }
     },
     {
-      value: 'car.info.steerengangle',
+      value: 'car.info.steeringangle',
       label: 'Low Voltage low',
+      function: {
+        arguments: "value, ref",
+        body: "document.getElementById(ref)?.setAttribute('transform', 'rotate(' + value + ')');"
+      }
     },
 ];
 
@@ -59,7 +91,6 @@ export const optionsGroup = [
       'temperature.motors.rl',
       'temperature.motors.rr'
     ],
-    max: 75
   },
   {
     id: 'voltage.hv.',
@@ -69,6 +100,16 @@ export const optionsGroup = [
       'voltage.hv.avg',
       'voltage.hv.low'
     ],
-    max: 75
+    max: 75,
+    function: "color"
+  },
+  {
+    id: 'car.info.',
+    label: 'Info',
+    values: [
+      'car.info.throttle',
+      'car.info.brake',
+      'car.info.steeringangle',
+    ]
   }
 ];
