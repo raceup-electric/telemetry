@@ -13,7 +13,6 @@ function PreloadedPlots({ jRef, page, title }: DefaultPlot) {
         <div className='innerBody'>
             <Grafico jsonReference={jRef} title={title} custom={false}  />
             {(page.startsWith("temperature.motors")) ? <Car /> : <></>}
-            {(page.startsWith("car.info")) ? <Info /> : <></>}
         </div>
     );
 }
