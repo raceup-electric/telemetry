@@ -58,26 +58,14 @@ export const plotterOptions = [
     {
       value: 'car.info.throttle',
       label: 'Throttle',
-      function: {
-        arguments: "value, ref",
-        body: "document.getElementById(ref)?.setAttribute('transform', 'rotate(' + value + ')');"
-      }
     },
     {
       value: 'car.info.brake',
       label: 'Brake',
-      function: {
-        arguments: "value, ref",
-        body: "document.getElementById(ref)?.setAttribute('transform', 'rotate(' + value + ')');"
-      }
     },
     {
       value: 'car.info.steeringangle',
       label: 'Low Voltage low',
-      function: {
-        arguments: "value, ref",
-        body: "document.getElementById(ref)?.setAttribute('transform', 'rotate(' + value + ')');"
-      }
     },
 ];
 

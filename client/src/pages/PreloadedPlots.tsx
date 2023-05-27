@@ -1,6 +1,5 @@
 import Grafico from "../components/Grafico";
 import Car from "../components/svg/car";
-import Info from "../components/svg/info";
 
 interface DefaultPlot {
     jRef: string[],

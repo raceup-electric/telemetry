@@ -28,7 +28,6 @@ function Grafico({ jsonReference, title, custom }: PlotProps) {
     let data = [Array.from(Array(MAX_POINT).keys())];
     
     let div = document.createElement("div");
-    //div.className = "plot";
     div.id = "plot"
     
     let series: uPlot.Series[] = [{
@@ -84,7 +83,7 @@ function Grafico({ jsonReference, title, custom }: PlotProps) {
                 plotterOptions.forEach(opt => {
                     if(opt.value != ref) return;
                     try {
-                        let refFunction = new Function(opt.function.arguments, opt.function.body);
+                        let refFunction = new Function(opt.function!.arguments, opt.function!.body);
                         refFunction(value, ref);
                     } catch (err) {};
                 });
