@@ -1,4 +1,5 @@
 export const plotterOptions = [
+  // Temperature motori
   {
       value: 'temperature.motors.fl',
       label: 'Front left motor temperature',
@@ -35,37 +36,137 @@ export const plotterOptions = [
         body: "(value < 75) ? document.getElementById(ref)?.setAttribute('style', 'fill: green') : document.getElementById(ref)?.setAttribute('style', 'fill: red');"
       }
     },
+
+    // Temperature IGBT
     {
-      value: 'voltage.hv.high',
-      label: 'High Voltage high',
+      value: 'temperature.IGBT.fl',
+      label: 'Front left IGBT temperature',
     },
     {
-      value: 'voltage.hv.avg',
-      label: 'High Voltage avg',
+      value: 'temperature.IGBT.fr',
+      label: 'Front right IGBT temperature',
     },
     {
-      value: 'voltage.hv.low',
-      label: 'High Voltage low',
+      value: 'temperature.IGBT.rl',
+      label: 'Rear left IGBT temperature',
     },
     {
-      value: 'voltage.lv.avg',
-      label: 'Low Voltage avg',
+      value: 'temperature.IGBT.rr',
+      label: 'Rear right IGBT temperature',
+    },
+
+    // Temperature inverter
+    {
+      value: 'temperature.inverter.fl',
+      label: 'Front left inverter temperature',
     },
     {
-      value: 'voltage.lv.low',
-      label: 'Low Voltage low',
+      value: 'temperature.inverter.fr',
+      label: 'Front right inverter temperature',
     },
     {
-      value: 'car.info.throttle',
-      label: 'Throttle',
+      value: 'temperature.inverter.rl',
+      label: 'Rear left inverter temperature',
     },
     {
-      value: 'car.info.brake',
-      label: 'Brake',
+      value: 'temperature.inverter.rr',
+      label: 'Rear right inverter temperature',
+    },
+
+    // Stato motori
+    {
+      value: 'status.motor.fl',
+      label: 'Front left motor status',
     },
     {
-      value: 'car.info.steeringangle',
-      label: 'Low Voltage low',
+      value: 'status.motor.fr',
+      label: 'Front right motor status',
+    },
+    {
+      value: 'status.motor.rl',
+      label: 'Rear left motor status',
+    },
+    {
+      value: 'status.motor.rr',
+      label: 'Rear right motor status',
+    },
+
+    // Stato macchina
+    {
+      value: 'status',
+      label: 'Status',
+    },
+
+    // HV
+    {
+      value: 'voltage.hv.max',
+      label: 'High Voltage max voltage',
+    },
+    {
+      value: 'voltage.hv.min',
+      label: 'High Voltage min voltage',
+    },
+    {
+      value: 'voltage.hv.mean',
+      label: 'High Voltage mean voltage',
+    },
+    {
+      value: 'temp.hv.max',
+      label: 'High Voltage max temperature',
+    },
+    {
+      value: 'temp.hv.min',
+      label: 'High Voltage min temperature',
+    },
+
+    // LV
+    {
+      value: 'voltage.lv.tot',
+      label: 'Low Voltage tot voltage',
+    },
+    {
+      value: 'voltage.lv.min',
+      label: 'Low Voltage min voltage',
+    },
+    {
+      value: 'temp.lv.max',
+      label: 'Low Voltage max temperature',
+    },
+
+    // Dx
+    {
+      value: 'temp.dx.precold',
+      label: 'Dx precold temp',
+    },
+    {
+      value: 'temp.dx.postcold',
+      label: 'Dx postcold temp',
+    },
+    {
+      value: 'temp.dx.premot',
+      label: 'Dx premot temp',
+    },
+    {
+      value: 'temp.dx.postmot',
+      label: 'Dx postmot temp',
+    },
+
+    // Sx
+    {
+      value: 'temp.sx.precold',
+      label: 'Dx precold temp',
+    },
+    {
+      value: 'temp.sx.postcold',
+      label: 'Dx postcold temp',
+    },
+    {
+      value: 'temp.sx.premot',
+      label: 'Dx premot temp',
+    },
+    {
+      value: 'temp.sx.postmot',
+      label: 'Dx postmot temp',
     },
 ];
 
@@ -81,23 +182,79 @@ export const optionsGroup = [
     ],
   },
   {
-    id: 'voltage.hv.',
-    label: 'Alta tensione',
+    id: 'temperature.IGBT.',
+    label: 'Temperatura IGBT',
     values: [
-      'voltage.hv.high',
-      'voltage.hv.avg',
-      'voltage.hv.low'
+      'temperature.IGBT.fl',
+      'temperature.IGBT.fr',
+      'temperature.IGBT.rl',
+      'temperature.IGBT.rr'
     ],
-    max: 75,
-    function: "color"
   },
   {
-    id: 'car.info.',
-    label: 'Info',
+    id: 'temperature.inverter.',
+    label: 'Temperatura inverter',
     values: [
-      'car.info.throttle',
-      'car.info.brake',
-      'car.info.steeringangle',
-    ]
-  }
+      'temperature.inverter.fl',
+      'temperature.inverter.fr',
+      'temperature.inverter.rl',
+      'temperature.inverter.rr'
+    ],
+  },
+
+  {
+    id: 'voltage.hv.',
+    label: 'Tensione HV',
+    values: [
+      'voltage.hv.max',
+      'voltage.hv.min',
+      'voltage.hv.mean',
+    ],
+  },
+  {
+    id: 'temp.hv.',
+    label: 'Temperature HV',
+    values: [
+      'temp.hv.max',
+      'temp.hv.min',
+    ],
+  },
+
+  {
+    id: 'voltage.lv.',
+    label: 'Tensione LV',
+    values: [
+      'voltage.lv.tot',
+      'voltage.lv.min',
+    ],
+  },
+  {
+    id: 'temp.lv.',
+    label: 'Temperature LV',
+    values: [
+      'temp.lv.max',
+    ],
+  },
+
+  {
+    id: 'temp.dx.',
+    label: 'Temperature pre/post dx',
+    values: [
+      'temp.dx.precold',
+      'temp.dx.postcold',
+      'temp.dx.premot',
+      'temp.dx.postmot',
+    ],
+  },
+
+  {
+    id: 'temp.sx.',
+    label: 'Temperature pre/post sx',
+    values: [
+      'temp.sx.precold',
+      'temp.sx.postcold',
+      'temp.sx.premot',
+      'temp.sx.postmot',
+    ],
+  },
 ];

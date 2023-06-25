@@ -1,27 +1,75 @@
-int data[12] = {};
+#include <SPI.h>
+#include "LoRa_Custom.h"
+#include "global_definitions.h"
+#include "utils.h"
+#include <stdint.h>
 
-void setup()
-{
-  Serial.begin(9600);
+struct LoRa_Log logged_values;
+int counter = 0;
+
+int failed_packets = 0;
+
+void setup() {
+  Serial.begin(115200);
+  while (!Serial);
+
+  if (!LoRa.begin(868e6)) {
+    Serial.write("Starting LoRa failed!");
+    while (1);
+  }
+  LoRa.setSignalBandwidth(250e3);
+  LoRa.setSpreadingFactor(6);
+  LoRa.setCodingRate4(4);
+  //LoRa.enableCrc();
 }
 
-void loop()
-{
-	delay(random(50, 70));
-  for (int t = 0; t < 4; t++)
-    data[t] = random(20, 130);
-  for (int hv = 4; hv < 7; hv++)
-    data[hv] = random(3000, 4500);
-  for (int lv = 7; lv < 9; lv++)
-    data[lv] = random(11000, 12000);
-  data[9] = random(1, 100);
-  data[10] = random(-360, 360);
-  data[11] = random(1, 100);
-  String str = "";
-  for (int i = 0; i < 12; i++) {
-    str.concat(data[i]);
-    if (i != 11)
-      str.concat(",");
+void loop() {
+  // try to parse packet
+  int packetSize = LoRa.parsePacket(LORA_IMPLICIT_LENGTH);
+  if (packetSize) {
+    // received a packet
+    // Serial.println("Packet received");
+    #ifdef LORA_STRING_MODE
+
+      String incoming = "";
+
+      while (LoRa.available()) {
+        incoming += (char)LoRa.read();
+      }
+    #endif
+
+    #ifdef LORA_BYTE_MODE
+      uint8_t received_buffer[LORA_IMPLICIT_LENGTH];
+      int i = 0;
+
+      while(LoRa.available()){
+          received_buffer[i++] = (uint8_t)LoRa.read();
+      }
+
+      parse_to_struct(received_buffer);
+      Serial.write((const char *)&logged_values, sizeof(logged_values)); 
+
+      #ifdef PRINT_DEBUG
+        Serial.print("ID: ");
+        Serial.println(received_buffer[0]);
+        Serial.print("Value: ");
+        Serial.println(uint32_to_float(buffer_to_uint32(received_buffer)));
+        Serial.println("RSSI: " + String(LoRa.packetRssi()));
+        Serial.println("SNR: " + String(LoRa.packetSnr()));
+      #endif
+    #endif
   }
-  Serial.println(str);
+
+  #ifdef PRINT_DEBUG
+    if(counter % 10 == 0){
+      //send_JSON();
+      Serial.println(LoRa.failed_packets);
+      //Serial.write((const char *)&logged_values.temp_dx_log, sizeof(logged_values.temp_dx_log) + 1024); 
+      counter = 0;
+    }
+
+    counter++;
+  #endif
+  
+  //delay(5);
 }
