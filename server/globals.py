@@ -1,6 +1,8 @@
 from threading import Lock
+import time
 
 data = {
+    "timestamp": time.time(),
     "RSSI": 0,
     "SNR": 0,
     "car_status": 0,
@@ -67,3 +69,4 @@ data = {
     },
 }
 lock = Lock()
+last_received = time.time()

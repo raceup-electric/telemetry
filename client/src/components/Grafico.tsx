@@ -23,11 +23,10 @@ function Grafico({ jsonReference, title, custom }: PlotProps) {
         grafico.setSize(getSize());
     });
 
-    const [timestamp, setTimestamp] = useState(Date.now())
-
     const socket = useContext(SocketContext)!;
     
-    let data = [Array.from(Array(MAX_POINT).keys())];
+    //let data = [Array.from(Array(MAX_POINT).keys())];
+    let data = [[]];
     
     let div = document.createElement("div");
     div.style.marginBottom = "5%";
@@ -82,7 +81,7 @@ function Grafico({ jsonReference, title, custom }: PlotProps) {
             // Add y-data to series
             data1[i+1].push(value);
 
-            if(pointsPlotted >= MAX_POINT &&i == 0) data1[0].push(pointsPlotted + 1/* Date.now() - timestamp*/);
+            if(/*pointsPlotted >= MAX_POINT &&*/ i == 0) data1[0].push(/*pointsPlotted + 1*/ Number(data.timestamp));
         });
         if(pointsPlotted >= MAX_POINT){
             data1.forEach((dat) => {

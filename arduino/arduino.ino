@@ -10,7 +10,7 @@ struct LoRa_Log logged_values;
 int counter = 0;
 
 int failed_packets = 0;
-PacketSerial myPacketSerial;
+PacketSerial_<COBS> myPacketSerial;
 
 void setup() {
   myPacketSerial.begin(115200);

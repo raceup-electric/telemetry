@@ -1,6 +1,7 @@
 from serial.threaded import Packetizer
 from cobs import cobs
 import globals
+import time
 import struct
 from struct import *
 
@@ -10,11 +11,13 @@ size_payload = struct.calcsize(FORMAT_PAYLOAD)
 class SerialReader(Packetizer):
   def handle_packet(self, packet: bytes) -> None:
     globals.lock.acquire()
+    globals.last_received = time.time()
     # globals.data = []
     try:
       decodedPacket = cobs.decode(packet)
       data_unpacked = unpack(FORMAT_PAYLOAD, decodedPacket)
       globals.data = {
+        "timestamp": time.time(),
         "RSSI": data_unpacked[0],
         "SNR": data_unpacked[1],
         "car_status": data_unpacked[2],

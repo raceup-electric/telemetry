@@ -5,6 +5,7 @@ from flask_apscheduler import APScheduler
 from flask_cors import CORS
 from flask_socketio import SocketIO
 from reader import SerialReader
+import time
 import globals
 
 import struct
@@ -40,11 +41,14 @@ def greet():
     }
   """
 
-@scheduler.task('interval', id='send_task', seconds=.3, misfire_grace_time=5)
+@scheduler.task('interval', id='send_task', seconds=.2, misfire_grace_time=5)
 def send_data():    
-    print(globals.data)
+    # print(globals.data)
+  globals.lock.acquire()
+  if (time.time() - globals.last_received < 2):
     socketio.emit('data', globals.data)
-
+  
+  globals.lock.release()
   # globals.lock.acquire(blocking=True)
   # if len(globals.data) != 12:
   #   return
