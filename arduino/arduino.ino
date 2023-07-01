@@ -17,6 +17,7 @@ void setup() {
     Serial.write("Starting LoRa failed!");
     while (1);
   }
+
   LoRa.setSignalBandwidth(250e3);
   LoRa.setSpreadingFactor(6);
   LoRa.setCodingRate4(4);
@@ -26,28 +27,29 @@ void setup() {
 void loop() {
   // try to parse packet
   int packetSize = LoRa.parsePacket(LORA_IMPLICIT_LENGTH);
+
   if (packetSize) {
     // received a packet
-    // Serial.println("Packet received");
     #ifdef LORA_STRING_MODE
-
       String incoming = "";
 
-      while (LoRa.available()) {
+      while (LoRa.available()) 
         incoming += (char)LoRa.read();
-      }
     #endif
 
     #ifdef LORA_BYTE_MODE
       uint8_t received_buffer[LORA_IMPLICIT_LENGTH];
       int i = 0;
 
-      while(LoRa.available()){
-          received_buffer[i++] = (uint8_t)LoRa.read();
-      }
+      while(LoRa.available())
+        received_buffer[i++] = (uint8_t)LoRa.read();
 
       parse_to_struct(received_buffer);
-      Serial.write((const char *)&logged_values, sizeof(logged_values)); 
+      logged_values.RSSI = LoRa.packetRssi();
+      logged_values.SNR = LoRa.packetSnr();
+
+      if(received_buffer[0] == 31)
+        Serial.write((const char *)&logged_values, sizeof(logged_values)); 
 
       #ifdef PRINT_DEBUG
         Serial.print("ID: ");
@@ -67,7 +69,6 @@ void loop() {
       //Serial.write((const char *)&logged_values.temp_dx_log, sizeof(logged_values.temp_dx_log) + 1024); 
       counter = 0;
     }
-
     counter++;
   #endif
   

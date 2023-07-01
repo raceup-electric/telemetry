@@ -118,6 +118,10 @@ export const plotterOptions = [
       value: 'temp.hv.min',
       label: 'High Voltage min temperature',
     },
+    {
+      value: 'temp.hv.mean',
+      label: 'High Voltage min temperature',
+    },
 
     // LV
     {

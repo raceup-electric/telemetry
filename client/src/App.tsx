@@ -42,7 +42,7 @@ function App() {
       <Box sx={{ width: '100%', typography: 'body1' }} />
       <TabContext value={page}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList onChange={handleChange} aria-label="">
+          <TabList onChange={handleChange} aria-label="" variant="scrollable">
             {optionsGroup.map(opt => <Tab label={opt.label} value={opt.id} key={opt.id} />)}
             <Tab label="Custom plot" value="customPlot" />
           </TabList>

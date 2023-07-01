@@ -27,6 +27,7 @@ uint32_t buffer_to_uint32(uint8_t bytes[LORA_IMPLICIT_LENGTH]){
     }
     return temp;
 }
+
 //---------------------------------------------------------
 //Function to convert received buffer and load into the struct
 //---------------------------------------------------------

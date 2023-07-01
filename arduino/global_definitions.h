@@ -46,6 +46,8 @@ struct Temps{
 };
 
 struct LoRa_Log {
+    int RSSI;
+    float SNR;
     uint32_t status;
     struct motors motor_log[4];
     struct HV hv_log;
