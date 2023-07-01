@@ -1,8 +1,9 @@
 from threading import Lock
 import time
 
+start_time = time.time()
 data = {
-    "timestamp": time.time(),
+    "timestamp": time.time() - start_time,
     "RSSI": 0,
     "SNR": 0,
     "car_status": 0,
