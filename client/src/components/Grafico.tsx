@@ -23,6 +23,8 @@ function Grafico({ jsonReference, title, custom }: PlotProps) {
         grafico.setSize(getSize());
     });
 
+    const [timestamp, setTimestamp] = useState(Date.now())
+
     const socket = useContext(SocketContext)!;
     
     let data = [Array.from(Array(MAX_POINT).keys())];
@@ -74,21 +76,13 @@ function Grafico({ jsonReference, title, custom }: PlotProps) {
     socket.on("data", (data) => {
         let data1 = grafico.data; 
         jsonReference.forEach((ref, i) => {
+            // Get data from json
             let value = ((ref).split(".")).reduce((a, c) => a[c], data);
 
+            // Add y-data to series
             data1[i+1].push(value);
 
-            if(pointsPlotted >= MAX_POINT && i == 0) data1[0].push(pointsPlotted + 1);
-            
-            if(!custom) {
-                plotterOptions.forEach(opt => {
-                    if(opt.value != ref) return;
-                    try {
-                        let refFunction = new Function(opt.function!.arguments, opt.function!.body);
-                        refFunction(value, ref);
-                    } catch (err) {};
-                });
-            }
+            if(pointsPlotted >= MAX_POINT &&i == 0) data1[0].push(pointsPlotted + 1/* Date.now() - timestamp*/);
         });
         if(pointsPlotted >= MAX_POINT){
             data1.forEach((dat) => {
@@ -103,16 +97,16 @@ function Grafico({ jsonReference, title, custom }: PlotProps) {
         // SNR -> 10:-20
         if(data.RSSI < -130)
             document.getElementById("rssi")!.style.color = 'red';
-        if(data.RSSI > -130 && data.RSSI < -85)
+        if(data.RSSI >= -130 && data.RSSI < -85)
             document.getElementById("rssi")!.style.color = 'yellow';
-        if(data.RSSI > -85)
+        if(data.RSSI >= -85)
             document.getElementById("rssi")!.style.color = 'green';
 
         if(data.SNR < -20)
             document.getElementById("snr")!.style.color = 'red';
-        if(data.RSSI > -20 && data.RSSI < -5)
+        if(data.SNR >= -20 && data.SNR < -5)
             document.getElementById("snr")!.style.color = 'yellow';
-        if(data.RSSI > -5)
+        if(data.SNR >= -5)
             document.getElementById("snr")!.style.color = 'green';
     });
 

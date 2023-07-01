@@ -1,3 +1,5 @@
+#include <PacketSerial.h>
+
 #include <SPI.h>
 #include "LoRa_Custom.h"
 #include "global_definitions.h"
@@ -8,10 +10,10 @@ struct LoRa_Log logged_values;
 int counter = 0;
 
 int failed_packets = 0;
+PacketSerial myPacketSerial;
 
 void setup() {
-  Serial.begin(115200);
-  while (!Serial);
+  myPacketSerial.begin(115200);
 
   while (!LoRa.begin(868e6)) {
     Serial.write("Starting LoRa failed!");
@@ -52,19 +54,21 @@ void loop() {
       logged_values.SNR = LoRa.packetSnr();
 
       //if(received_buffer[0] == 31)
-      Serial.write((const char *)&logged_values, sizeof(logged_values)); 
-      Serial.write(0xFF);
-      Serial.write(0xFF);
-      Serial.write(0xFF);
-      Serial.write(0xFF);
+      #ifndef PRINT_DEBUG
+        myPacketSerial.send((const uint8_t *)&logged_values, sizeof(logged_values)); 
+        /*Serial.write(0xFF);
+        Serial.write(0xFF);
+        Serial.write(0xFF);
+        Serial.write(0xFF);*/
+      #endif
 
       #ifdef PRINT_DEBUG
         Serial.print("ID: ");
-        Serial.println(received_buffer[0]);
-        Serial.print("Value: ");
-        Serial.println(uint32_to_float(buffer_to_uint32(received_buffer)));
-        Serial.println("RSSI: " + String(LoRa.packetRssi()));
-        Serial.println("SNR: " + String(LoRa.packetSnr()));
+        Serial.write(received_buffer[0]);
+        //Serial.print("Value: ");
+        //Serial.println(uint32_to_float(buffer_to_uint32(received_buffer)));
+        //Serial.println("RSSI: " + String(LoRa.packetRssi()));
+        //Serial.println("SNR: " + String(LoRa.packetSnr()));
       #endif
     #endif
   }
