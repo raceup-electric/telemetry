@@ -80,7 +80,7 @@ void parse_to_struct(uint8_t received_buffer[LORA_IMPLICIT_LENGTH]){
             logged_values.motor_log[3].status = received_buffer[4];
         break;
         case 14:
-            logged_values.status = received_value;
+            logged_values.status = buffer_to_uint32(received_buffer);
         break;
         case 15:
             logged_values.hv_log.max_voltage = received_value;

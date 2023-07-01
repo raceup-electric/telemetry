@@ -30,7 +30,7 @@ scheduler.start()
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins='*')
 
-ser = serial.Serial(port, baud, timeout=5)
+ser = serial.Serial(port, baud, timeout=10)
 
 @app.route("/greet")
 def greet():
@@ -40,19 +40,28 @@ def greet():
     }
   """
 
-@scheduler.task('interval', id='send_task', seconds=1, misfire_grace_time=5)
+@scheduler.task('interval', id='send_task', seconds=.3, misfire_grace_time=5)
 def send_data():
-  ser.flush()
+  serial_sync = False
+  data = b''
+  while not serial_sync:
+    try:
+      data = ser.read_until(b'\xFF\xFF\xFF\xFF')
+      serial_sync = True
+    except Exception:
+      pass 
+  # print(data)
 
-  if(ser.in_waiting == size_payload):
-    data = ser.read(size_payload)
+  data = data[:-4]
+  if(len(data) == size_payload):
+    # print(data)
     data_unpacked = unpack(FORMAT_PAYLOAD, data)
     print(data_unpacked)
 
     json_data = {
       "RSSI": data_unpacked[0],
       "SNR": data_unpacked[1],
-      "status": data_unpacked[2],
+      "car_status": data_unpacked[2],
       "temperature": {
         "motors": {
           "fl": data_unpacked[3],

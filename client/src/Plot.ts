@@ -33,14 +33,7 @@ class Plot {
         if(this.getPointsPlotted() >= MAX_POINT){
           if(i == 0) _tempData[0].push(this.getPointsPlotted() + 1);
         }
-
-        optionsGroup.forEach((group) => {
-          if(jsonRef.startsWith(group)) {
-            value < group.max ? 
-              document.getElementById(jsonRef)?.setAttribute('style', 'fill: green') :
-              document.getElementById(jsonRef)?.setAttribute('style', 'fill: red')
-          }
-        });
+        
       });
       if(this.getPointsPlotted() >= MAX_POINT){
         _tempData.forEach((dat: any) => {

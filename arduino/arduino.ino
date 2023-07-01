@@ -13,10 +13,13 @@ void setup() {
   Serial.begin(115200);
   while (!Serial);
 
-  if (!LoRa.begin(868e6)) {
+  while (!LoRa.begin(868e6)) {
     Serial.write("Starting LoRa failed!");
-    while (1);
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(300);
   }
+
+  digitalWrite(LED_BUILTIN, LOW);
 
   LoRa.setSignalBandwidth(250e3);
   LoRa.setSpreadingFactor(6);
@@ -48,8 +51,12 @@ void loop() {
       logged_values.RSSI = LoRa.packetRssi();
       logged_values.SNR = LoRa.packetSnr();
 
-      if(received_buffer[0] == 31)
-        Serial.write((const char *)&logged_values, sizeof(logged_values)); 
+      //if(received_buffer[0] == 31)
+      Serial.write((const char *)&logged_values, sizeof(logged_values)); 
+      Serial.write(0xFF);
+      Serial.write(0xFF);
+      Serial.write(0xFF);
+      Serial.write(0xFF);
 
       #ifdef PRINT_DEBUG
         Serial.print("ID: ");
@@ -72,5 +79,5 @@ void loop() {
     counter++;
   #endif
   
-  //delay(5);
+  delay(1);
 }

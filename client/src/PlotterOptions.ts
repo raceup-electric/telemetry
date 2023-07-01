@@ -93,8 +93,8 @@ export const plotterOptions = [
 
     // Stato macchina
     {
-      value: 'status',
-      label: 'Status',
+      value: 'car_status',
+      label: 'Car status',
     },
 
     // HV
@@ -176,89 +176,109 @@ export const plotterOptions = [
 
 export const optionsGroup = [
   {
-    id: 'temperature.motors.',
-    label: 'Temperatura motori',
+    id: 'HV',
+    label: 'HV',
     values: [
-      'temperature.motors.fl',
-      'temperature.motors.fr',
-      'temperature.motors.rl',
-      'temperature.motors.rr'
-    ],
+      {
+        id: 'voltage.hv.',
+        label: 'Tensione HV',
+        values: [
+          'voltage.hv.max',
+          'voltage.hv.min',
+          'voltage.hv.mean',
+        ],
+      },
+      {
+        id: 'temp.hv.',
+        label: 'Temperature HV',
+        values: [
+          'temp.hv.max',
+          'temp.hv.min',
+        ],
+      }
+    ]
   },
   {
-    id: 'temperature.IGBT.',
-    label: 'Temperatura IGBT',
+    id: 'LV',
+    label: 'LV',
     values: [
-      'temperature.IGBT.fl',
-      'temperature.IGBT.fr',
-      'temperature.IGBT.rl',
-      'temperature.IGBT.rr'
-    ],
+      {
+        id: 'voltage.lv.',
+        label: 'Tensione LV',
+        values: [
+          'voltage.lv.tot',
+          'voltage.lv.min',
+        ],
+      },
+      {
+        id: 'temp.lv.',
+        label: 'Temperature LV',
+        values: [
+          'temp.lv.max',
+        ],
+      }
+    ]
   },
   {
-    id: 'temperature.inverter.',
-    label: 'Temperatura inverter',
+    id: 'Power',
+    label: 'Power',
     values: [
-      'temperature.inverter.fl',
-      'temperature.inverter.fr',
-      'temperature.inverter.rl',
-      'temperature.inverter.rr'
-    ],
+      {
+        id: 'temperature.motors.',
+        label: 'Temperatura motori',
+        values: [
+          'temperature.motors.fl',
+          'temperature.motors.fr',
+          'temperature.motors.rl',
+          'temperature.motors.rr'
+        ],
+      },
+      {
+        id: 'temperature.IGBT.',
+        label: 'Temperatura IGBT',
+        values: [
+          'temperature.IGBT.fl',
+          'temperature.IGBT.fr',
+          'temperature.IGBT.rl',
+          'temperature.IGBT.rr'
+        ],
+      },
+      {
+        id: 'temperature.inverter.',
+        label: 'Temperatura inverter',
+        values: [
+          'temperature.inverter.fl',
+          'temperature.inverter.fr',
+          'temperature.inverter.rl',
+          'temperature.inverter.rr'
+        ],
+      }
+    ]
   },
-
   {
-    id: 'voltage.hv.',
-    label: 'Tensione HV',
+    id: 'Cooling',
+    label: 'Cooling',
     values: [
-      'voltage.hv.max',
-      'voltage.hv.min',
-      'voltage.hv.mean',
-    ],
-  },
-  {
-    id: 'temp.hv.',
-    label: 'Temperature HV',
-    values: [
-      'temp.hv.max',
-      'temp.hv.min',
-    ],
-  },
-
-  {
-    id: 'voltage.lv.',
-    label: 'Tensione LV',
-    values: [
-      'voltage.lv.tot',
-      'voltage.lv.min',
-    ],
-  },
-  {
-    id: 'temp.lv.',
-    label: 'Temperature LV',
-    values: [
-      'temp.lv.max',
-    ],
-  },
-
-  {
-    id: 'temp.dx.',
-    label: 'Temperature pre/post dx',
-    values: [
-      'temp.dx.precold',
-      'temp.dx.postcold',
-      'temp.dx.premot',
-      'temp.dx.postmot',
-    ],
-  },
-
-  {
-    id: 'temp.sx.',
-    label: 'Temperature pre/post sx',
-    values: [
-      'temp.sx.precold',
-      'temp.sx.postcold',
-      'temp.sx.premot',
-      'temp.sx.postmot',
-    ],
+      {
+        id: 'temp.dx.',
+        label: 'Temperature pre/post dx',
+        values: [
+          'temp.dx.precold',
+          'temp.dx.postcold',
+          'temp.dx.premot',
+          'temp.dx.postmot',
+        ],
+      },
+      {  
+        id: 'temp.sx.',
+        label: 'Temperature pre/post sx',
+        values: [
+          'temp.sx.precold',
+          'temp.sx.postcold',
+          'temp.sx.premot',
+          'temp.sx.postmot',
+        ],
+      }
+    ]
   },
 ];

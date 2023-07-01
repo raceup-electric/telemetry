@@ -4,6 +4,9 @@ import { SocketContext } from './main';
 import ConnectionAlert from './components/ConnectionAlert';
 import CustomPlot from './pages/CustomPlot';
 
+import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt';
+import NetworkCheckIcon from '@mui/icons-material/NetworkCheck';
+
 import { 
   Tab,
   Box,
@@ -23,7 +26,7 @@ function App() {
 
   const [connected, setConnected] = useState(false);
 
-  const [page, setPage] = useState('temperature.motors.');
+  const [page, setPage] = useState('HV');
   const handleChange = (_event: SyntheticEvent, newPage: string) => {
     setPage(newPage);
   };
@@ -39,6 +42,16 @@ function App() {
   return (
     <div className="App">
       {connected ? <></> : <ConnectionAlert />}
+      <SignalCellularAltIcon id="rssi" fontSize="large" style={{
+        'position': 'fixed', 
+        'top': '10%', 
+        'right': '3%'
+      }} />
+      <NetworkCheckIcon id="snr" fontSize="large" style={{
+        'position': 'fixed', 
+        'top': '17%', 
+        'right': '3%'
+      }} />
       <Box sx={{ width: '100%', typography: 'body1' }} />
       <TabContext value={page}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -49,7 +62,7 @@ function App() {
         </Box>
         {optionsGroup.map(opt => (
           <TabPanel value={opt.id} key={opt.id}>
-            <PreloadedPlots jRef={opt.values} page={opt.id} title={opt.label} ></PreloadedPlots>
+            <PreloadedPlots jRef={opt.values} ></PreloadedPlots>
           </TabPanel>
         ))}
         <TabPanel value="customPlot">

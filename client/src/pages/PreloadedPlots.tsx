@@ -1,17 +1,11 @@
 import Grafico from "../components/Grafico";
-import Car from "../components/svg/car";
 
-interface DefaultPlot {
-    jRef: string[],
-    page: string,
-    title: string
-}
-
-function PreloadedPlots({ jRef, page, title }: DefaultPlot) {
+function PreloadedPlots({ jRef }: any) {
     return (
         <div className='innerBody'>
-            <Grafico jsonReference={jRef} title={title} custom={false}  />
-            {(page.startsWith("temperature.motors")) ? <Car /> : <></>}
+            {jRef.map(el => (
+                <Grafico jsonReference={el.values} title={el.label} custom={false} key={el.id}></Grafico>
+            ))}
         </div>
     );
 }

@@ -9,7 +9,7 @@ interface PlotProps {
     custom: boolean
 }
 
-const MAX_POINT = 60;
+const MAX_POINT = 150;
 
 function Grafico({ jsonReference, title, custom }: PlotProps) {
     function getSize() {
@@ -28,7 +28,8 @@ function Grafico({ jsonReference, title, custom }: PlotProps) {
     let data = [Array.from(Array(MAX_POINT).keys())];
     
     let div = document.createElement("div");
-    div.id = "plot"
+    div.style.marginBottom = "5%";
+    //div.id = "plot"
     
     let series: uPlot.Series[] = [{
         label: "Time"
@@ -96,6 +97,23 @@ function Grafico({ jsonReference, title, custom }: PlotProps) {
         }
         grafico.setData(data1);
         pointsPlotted++;
+
+        //Status 
+        // RSSI -> -50:-130
+        // SNR -> 10:-20
+        if(data.RSSI < -130)
+            document.getElementById("rssi")!.style.color = 'red';
+        if(data.RSSI > -130 && data.RSSI < -85)
+            document.getElementById("rssi")!.style.color = 'yellow';
+        if(data.RSSI > -85)
+            document.getElementById("rssi")!.style.color = 'green';
+
+        if(data.SNR < -20)
+            document.getElementById("snr")!.style.color = 'red';
+        if(data.RSSI > -20 && data.RSSI < -5)
+            document.getElementById("snr")!.style.color = 'yellow';
+        if(data.RSSI > -5)
+            document.getElementById("snr")!.style.color = 'green';
     });
 
     return (

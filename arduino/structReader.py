@@ -14,13 +14,18 @@ from struct import *
 FORMAT_PAYLOAD = "i" + "f" + "I" + ("f" * 3 + "B") * 4 + ("f" * 6) + ("f" * 3) + ("H" * 4) * 2
 size_payload = struct.calcsize(FORMAT_PAYLOAD)
 
-ser = serial.Serial(port="COM15", baudrate=115200, timeout=.1)
+ser = serial.Serial(port="COM15", baudrate=115200, timeout=1)
 
 while(True):
-    ser.flush()
+    # ser.flush()
 
-    if(ser.in_waiting == size_payload):
-        data = ser.read(size_payload)
+    data = ser.read_until(b'\xFF\xFF\xFF\xFF')
+    # print(data)
+
+    data = data[:-4]
+    if(len(data) == size_payload):
+        # print(data)
         data_unpacked = unpack(FORMAT_PAYLOAD, data)
         print(data_unpacked)
+        print()
         
