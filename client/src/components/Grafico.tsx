@@ -10,6 +10,20 @@ interface PlotProps {
 }
 
 const MAX_POINT = 150;
+const COLORS: String[] = [
+    '88CCEE', 
+    'CC6677', 
+    'DDCC77', 
+    '117733', 
+    '332288', 
+    'AA4499', 
+    '44AA99', 
+    '999933', 
+    '882255', 
+    '661100',
+    '6699CC',
+    '888888'
+];
 
 function Grafico({ jsonReference, title, custom }: PlotProps) {
     function getSize() {
@@ -35,7 +49,7 @@ function Grafico({ jsonReference, title, custom }: PlotProps) {
     let series: uPlot.Series[] = [{
         label: "Time"
     }];
-    plotterOptions.forEach(opt => {
+    plotterOptions.forEach((opt, i) => {
         if (!jsonReference.includes(opt.value)) return;
         data.push([]);
         series.push({
@@ -44,7 +58,7 @@ function Grafico({ jsonReference, title, custom }: PlotProps) {
             points: {
                 show: true,
             },
-            stroke: "#" + String(Math.floor(Math.random() * 16777215).toString(16)),
+            stroke: "#" + COLORS[i],
         });
     });
 
