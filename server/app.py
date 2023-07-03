@@ -8,6 +8,8 @@ from reader import SerialReader
 import time
 import globals
 
+import random
+
 import struct
 from struct import *
 # i -> RSSI
@@ -20,7 +22,7 @@ from struct import *
 FORMAT_PAYLOAD = "i" + "f" + "I" + ("f" * 3 + "B") * 4 + ("f" * 6) + ("f" * 3) + ("H" * 4) * 2
 size_payload = struct.calcsize(FORMAT_PAYLOAD)
 
-port = '/dev/ttyACM0'
+port = 'COM14'
 baud = 115200
 
 app = Flask(__name__)
@@ -46,44 +48,10 @@ def send_data():
     # print(globals.data)
   globals.lock.acquire()
   if (time.time() - globals.last_received < 2):
+    globals.data["timestamp"] = time.time()
     socketio.emit('data', globals.data)
   
   globals.lock.release()
-  # globals.lock.acquire(blocking=True)
-  # if len(globals.data) != 12:
-  #   return
-  # print(globals.data)
-  # json_data = {
-  #   "temperature": {
-  #     "motors": {
-  #       "fl": globals.data[0],
-  #       "fr": globals.data[1],
-  #       "rl": globals.data[2],
-  #       "rr": globals.data[3]
-  #     }
-  #   },
-  #   "voltage": {
-  #     "hv": {
-  #       "high": globals.data[4],
-  #       "low": globals.data[5],
-  #       "avg": globals.data[6],
-  #     },
-  #     "lv": {
-  #       "total": globals.data[7],
-  #       "low": globals.data[8]
-  #     },
-  #   },
-  #   "car": {
-  #     "info": {
-  #       "throttle": globals.data[9],
-  #       "steeringangle": globals.data[10],
-  #       "brake": globals.data[11]
-  #     }
-  #   }
-  # }
-  # globals.lock.release()
-  # print(json_data)
-  # socketio.emit('data', json_data)
   
 read_thread = ReaderThread(ser, SerialReader)
 

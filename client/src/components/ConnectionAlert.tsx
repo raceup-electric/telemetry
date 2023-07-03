@@ -1,6 +1,9 @@
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
+import {
+    Alert,
+    AlertTitle
+}from "@mui/material/";
 
+// Connection error 
 function ConnectionAlert() {
     return (
         <div className="alert">

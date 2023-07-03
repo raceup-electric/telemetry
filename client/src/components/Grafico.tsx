@@ -1,57 +1,60 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { SocketContext } from "../main";
-import uPlot from "uplot";
+import uPlot, { AlignedData, TypedArray } from "uplot";
 import { plotterOptions } from "../PlotterOptions";
 
 interface PlotProps {
     jsonReference: string[],
     title: string,
-    custom: boolean
 }
 
 const MAX_POINT = 150;
 const COLORS: String[] = [
-    '88CCEE', 
-    'CC6677', 
-    'DDCC77', 
-    '117733', 
-    '332288', 
-    'AA4499', 
-    '44AA99', 
-    '999933', 
-    '882255', 
-    '661100',
-    '6699CC',
-    '888888'
+    "88CCEE", 
+    "CC6677", 
+    "DDCC77", 
+    "117733", 
+    "332288", 
+    "AA4499", 
+    "44AA99", 
+    "999933", 
+    "882255", 
+    "661100",
+    "6699CC",
+    "888888"
 ];
 
-function Grafico({ jsonReference, title, custom }: PlotProps) {
+function Grafico({ jsonReference, title }: PlotProps) {
+    // Resize event for plots
     function getSize() {
         return {
             width: document.getElementById("plotContainer")?.clientWidth!,
             height: document.getElementById("plotContainer")?.clientHeight!,
         }
     }
-
     window.addEventListener("resize", e => {
         grafico.setSize(getSize());
     });
 
+    // SocketIo handler
     const socket = useContext(SocketContext)!;
     
-    //let data = [Array.from(Array(MAX_POINT).keys())];
-    let data = [[]];
-    
+    // Init data with an array for x-points
+    let data: AlignedData = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
+
+    // Plot container
     let div = document.createElement("div");
     div.style.marginBottom = "5%";
-    //div.id = "plot"
     
+    // Init array for plot data
     let series: uPlot.Series[] = [{
         label: "Time"
     }];
-    plotterOptions.forEach((opt, i) => {
+    let i = 0;
+    plotterOptions.forEach(opt => {
         if (!jsonReference.includes(opt.value)) return;
-        data.push([]);
+        // Add an array foreach option to plot
+        //data.push([]);
         series.push({
             label: opt.value,
             paths: uPlot.paths.spline!(),
@@ -60,8 +63,10 @@ function Grafico({ jsonReference, title, custom }: PlotProps) {
             },
             stroke: "#" + COLORS[i],
         });
+        i++;
     });
 
+    // Plot options
     let opt = {
         title: title,
         width: 800,
@@ -75,9 +80,11 @@ function Grafico({ jsonReference, title, custom }: PlotProps) {
         }
     }
 
+    // Actual plot
     let grafico = new uPlot(opt, data, div);
     let pointsPlotted = 0;
 
+    // Append plot to page
     useEffect(() => {
         document.getElementById("plotContainer")?.appendChild(div);
         grafico.setSize({
@@ -86,6 +93,7 @@ function Grafico({ jsonReference, title, custom }: PlotProps) {
         });
     }, []);
 
+    // Socket event on new data
     socket.on("data", (data) => {
         let data1 = grafico.data; 
         jsonReference.forEach((ref, i) => {
@@ -93,15 +101,17 @@ function Grafico({ jsonReference, title, custom }: PlotProps) {
             let value = ((ref).split(".")).reduce((a, c) => a[c], data);
 
             // Add y-data to series
-            data1[i+1].push(value);
+            (data1[i+1] as Number[]).push(value);
 
-            if(/*pointsPlotted >= MAX_POINT &&*/ i == 0) data1[0].push(/*pointsPlotted + 1*/ Number(data.timestamp));
+            // Add x
+            if(i == 0) (data1[0] as Number[]).push(Number(data.timestamp));
         });
+
+        // Start sliding
         if(pointsPlotted >= MAX_POINT){
-            data1.forEach((dat) => {
-                dat.shift();
-            })
+            data1.map(el => (el as Number[]).shift())
         }
+
         grafico.setData(data1);
         pointsPlotted++;
 

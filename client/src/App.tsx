@@ -22,22 +22,23 @@ import PreloadedPlots from './pages/PreloadedPlots';
 import { optionsGroup } from './PlotterOptions';
 
 function App() {
+  // Socket
   const socket = useContext(SocketContext)!;
 
+  // Connection state
   const [connected, setConnected] = useState(false);
+  socket.on("connect", () => {
+    setConnected(true);
+  });
+  socket.on('connect_error', function() {
+    setConnected(false);
+  });
 
+  // Page displayed
   const [page, setPage] = useState('HV');
   const handleChange = (_event: SyntheticEvent, newPage: string) => {
     setPage(newPage);
   };
-
-  socket.on("connect", () => {
-    setConnected(true);
-  });
-
-  socket.on('connect_error', function() {
-    setConnected(false);
-  });
 
   return (
     <div className="App">

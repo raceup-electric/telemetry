@@ -3,38 +3,18 @@ export const plotterOptions = [
   {
       value: 'temperature.motors.fl',
       label: 'Front left motor temperature',
-      max: 75,
-      function: {
-        arguments: "value, ref",
-        body: "(value < 75) ? document.getElementById(ref)?.setAttribute('style', 'fill: green') : document.getElementById(ref)?.setAttribute('style', 'fill: red');"
-      }
     },
     {
       value: 'temperature.motors.fr',
       label: 'Right right motor temperature',
-      max: 75,
-      function: {
-        arguments: "value, ref",
-        body: "(value < 75) ? document.getElementById(ref)?.setAttribute('style', 'fill: green') : document.getElementById(ref)?.setAttribute('style', 'fill: red');"
-      }
     },
     {
       value: 'temperature.motors.rl',
       label: 'Rear left motor temperature',
-      max: 75,
-      function: {
-        arguments: "value, ref",
-        body: "(value < 75) ? document.getElementById(ref)?.setAttribute('style', 'fill: green') : document.getElementById(ref)?.setAttribute('style', 'fill: red');"
-      }
     },
     {
       value: 'temperature.motors.rr',
       label: 'Rear right motor temperature',
-      max: 75,
-      function: {
-        arguments: "value, ref",
-        body: "(value < 75) ? document.getElementById(ref)?.setAttribute('style', 'fill: green') : document.getElementById(ref)?.setAttribute('style', 'fill: red');"
-      }
     },
 
     // Temperature IGBT

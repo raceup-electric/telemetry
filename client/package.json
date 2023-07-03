@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview --port 80 --host"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -15,8 +15,11 @@
     "@mui/lab": "^5.0.0-alpha.129",
     "@mui/material": "^5.12.1",
     "bootstrap": "^5.2.3",
+    "build": "^0.1.4",
+    "npm": "^9.7.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "run": "^1.4.0",
     "socket.io-client": "^4.6.1",
     "uplot": "^1.6.24",
     "uplot-react": "^1.1.4"
