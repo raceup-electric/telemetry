@@ -30,12 +30,12 @@ function CustomPlot() {
         );
     };
 
-    // Fialog statis
+    // Dialog status
     const [open, setOpen] = useState(false);
     const handleClickOpen = () => { setOpen(true); };
     const handleClose = () => { setOpen(false); };
 
-    // Store for every plot
+    // Plot storing
     const [grafici, setGrafici] = useState<JSX.Element[]>([]);
     const addPlot = (newPlot: JSX.Element) => {
         let temp: JSX.Element[] = [...grafici];
@@ -46,7 +46,8 @@ function CustomPlot() {
     // Append now plots on click
     const handlePlot = () => {
         if(value.length == 0) return;
-        addPlot(<Grafico jsonReference={value} custom={true} _range={[0, 300]} title="Custom" />);
+        addPlot(<Grafico jsonReference={value} custom={true} _range={undefined} title="Custom" />);
+        // Close dialog and reset selection
         setOpen(false);
         setValue([]);
     }

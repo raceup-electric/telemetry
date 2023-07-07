@@ -22,7 +22,8 @@ from struct import *
 FORMAT_PAYLOAD = "i" + "f" + "I" + ("f" * 3 + "B") * 4 + ("f" * 6) + ("f" * 3) + ("H" * 4) * 2
 size_payload = struct.calcsize(FORMAT_PAYLOAD)
 
-port = 'COM14'
+# Default Arduino serial port on RPi
+port = '/dev/ttyACM0'
 baud = 115200
 
 app = Flask(__name__)
@@ -35,20 +36,14 @@ socketio = SocketIO(app, cors_allowed_origins='*')
 
 ser = serial.Serial(port, baud, timeout=10)
 
-@app.route("/greet")
-def greet():
-  return """
-    {
-      "greeting": "Tommy"
-    }
-  """
-
 @scheduler.task('interval', id='send_task', seconds=.2, misfire_grace_time=5)
-def send_data():    
-    # print(globals.data)
+def send_data():
   globals.lock.acquire()
-  if (time.time() - globals.last_received < 2):
+  globals.data["timestamp"] = time.time() - globals.start_time
+  if (time.time() - globals.last_received < 2) and not (globals.lora_error):
     socketio.emit('data', globals.data)
+  else:
+    socketio.emit('lora_error')
   
   globals.lock.release()
   

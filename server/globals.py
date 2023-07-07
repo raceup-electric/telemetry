@@ -4,8 +4,8 @@ import time
 start_time = time.time()
 data = {
     "timestamp": time.time() - start_time,
-    "RSSI": 0,
-    "SNR": 0,
+    "RSSI": -500,
+    "SNR": -500,
     "car_status": 0,
     "temperature": {
       "motors": {
@@ -37,13 +37,13 @@ data = {
     },
     "voltage": {
       "hv": {
-        "max": 0,
-        "min": 0,
-        "mean": 0
+        "max": 3000,
+        "min": 3000,
+        "mean": 3000
         },
         "lv": {
-          "min": 0,
-          "tot": 0
+          "min": 3000,
+          "tot": 3000
         }
     },
     "temp": {
@@ -71,3 +71,4 @@ data = {
 }
 lock = Lock()
 last_received = time.time()
+lora_error = False

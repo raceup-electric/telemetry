@@ -17,7 +17,6 @@ class SerialReader(Packetizer):
       decodedPacket = cobs.decode(packet)
       data_unpacked = unpack(FORMAT_PAYLOAD, decodedPacket)
       globals.data = {
-        "timestamp": time.time() - globals.start_time,
         "RSSI": data_unpacked[0],
         "SNR": data_unpacked[1],
         "car_status": data_unpacked[2],
@@ -83,7 +82,9 @@ class SerialReader(Packetizer):
           }
         },
       }
-    except:
-      pass
+      globals.lora_error = False
+    except Exception as e:
+      # print(e)
+      globals.lora_error = True
     finally:
       globals.lock.release()
