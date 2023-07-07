@@ -46,7 +46,7 @@ function CustomPlot() {
     // Append now plots on click
     const handlePlot = () => {
         if(value.length == 0) return;
-        addPlot(<Grafico jsonReference={value} title="Custom" />);
+        addPlot(<Grafico jsonReference={value} custom={true} _range={[0, 300]} title="Custom" />);
         setOpen(false);
         setValue([]);
     }

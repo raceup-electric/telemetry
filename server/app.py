@@ -48,7 +48,6 @@ def send_data():
     # print(globals.data)
   globals.lock.acquire()
   if (time.time() - globals.last_received < 2):
-    globals.data["timestamp"] = time.time()
     socketio.emit('data', globals.data)
   
   globals.lock.release()

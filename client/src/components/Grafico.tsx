@@ -1,11 +1,13 @@
 import { useContext, useEffect } from "react";
 import { SocketContext } from "../main";
-import uPlot, { AlignedData, TypedArray } from "uplot";
+import uPlot, { AlignedData, Range, Scale, TypedArray } from "uplot";
 import { plotterOptions } from "../PlotterOptions";
 
 interface PlotProps {
     jsonReference: string[],
     title: string,
+    custom: boolean
+    _range: number[]
 }
 
 const MAX_POINT = 150;
@@ -24,7 +26,7 @@ const COLORS: String[] = [
     "888888"
 ];
 
-function Grafico({ jsonReference, title }: PlotProps) {
+function Grafico({ jsonReference, title, custom, _range }: PlotProps) {
     // Resize event for plots
     function getSize() {
         return {
@@ -47,7 +49,7 @@ function Grafico({ jsonReference, title }: PlotProps) {
     div.style.marginBottom = "5%";
     
     // Init array for plot data
-    let series: uPlot.Series[] = [{
+    let _series: uPlot.Series[] = [{
         label: "Time"
     }];
     let i = 0;
@@ -55,7 +57,7 @@ function Grafico({ jsonReference, title }: PlotProps) {
         if (!jsonReference.includes(opt.value)) return;
         // Add an array foreach option to plot
         //data.push([]);
-        series.push({
+        _series.push({
             label: opt.value,
             paths: uPlot.paths.spline!(),
             points: {
@@ -72,13 +74,19 @@ function Grafico({ jsonReference, title }: PlotProps) {
         width: 800,
         height: 600,
         pxAlign: 0,
-        series: series,
+        series: _series,
         scales: {
             x: {
                 time: false
+            },
+            y: {
+                auto: (custom),
+                range: (_range as Range.MinMax),
             }
         }
     }
+
+    let dio: Scale;
 
     // Actual plot
     let grafico = new uPlot(opt, data, div);
