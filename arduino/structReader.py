@@ -19,13 +19,15 @@ ser = serial.Serial(port="COM15", baudrate=115200, timeout=1)
 while(True):
     # ser.flush()
 
-    data = ser.read_until(b'\xFF\xFF\xFF\xFF')
+    print(ser.read())
+
+    # data = ser.read_until(b'\xFF\xFF\xFF\xFF')
     # print(data)
 
-    data = data[:-4]
-    if(len(data) == size_payload):
-        # print(data)
-        data_unpacked = unpack(FORMAT_PAYLOAD, data)
-        print(data_unpacked)
-        print()
+    # data = data[:-4]
+    # if(len(data) == size_payload):
+    #     # print(data)
+    #     data_unpacked = unpack(FORMAT_PAYLOAD, data)
+    #     print(data_unpacked)
+    #     print()
         

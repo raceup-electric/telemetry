@@ -1,9 +1,6 @@
 import { useContext, useState, SyntheticEvent } from 'react'
 import { SocketContext } from './main';
 
-import ConnectionAlert from './components/ConnectionAlert';
-import CustomPlot from './pages/CustomPlot';
-
 import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt';
 import NetworkCheckIcon from '@mui/icons-material/NetworkCheck';
 
@@ -18,30 +15,49 @@ import {
   TabPanel
 } from '@mui/lab/';
 
-import PreloadedPlots from './pages/PreloadedPlots';
+import ConnectionAlert from './components/ConnectionAlert';
+
 import { optionsGroup } from './PlotterOptions';
+import CustomPlot from './pages/CustomPlot';
+import PreloadedPlots from './pages/PreloadedPlots';
 
 function App() {
+  // Socket
   const socket = useContext(SocketContext)!;
 
-  const [connected, setConnected] = useState(false);
+  // Connection state
+  // 0 -> connected
+  // 1 -> RPI error
+  // 2 -> LoRa error
+  const [error, setError] = useState(1);
+  socket.on("connect", () => {
+    setError(0);
+  });
+  socket.on('connect_error', function() {
+    setError(1);
+  });
+  socket.on('lora_error', () => {
+    setError(2);
+  })
+  socket.on('data', () => {
+    setError(0);
+  })
 
+  // Page displayed
   const [page, setPage] = useState('HV');
   const handleChange = (_event: SyntheticEvent, newPage: string) => {
     setPage(newPage);
   };
 
-  socket.on("connect", () => {
-    setConnected(true);
-  });
-
-  socket.on('connect_error', function() {
-    setConnected(false);
-  });
-
   return (
     <div className="App">
-      {connected ? <></> : <ConnectionAlert />}
+      {(error == 0) ? 
+        <></> : 
+        <ConnectionAlert 
+          title={(error == 1) ? "Connection Error" : "LoRa Error"} 
+          info={ (error == 1) ? "Check the RPi"    : "Check LoRa conneciton"} 
+        />
+      }
       <SignalCellularAltIcon id="rssi" fontSize="large" style={{
         'position': 'fixed', 
         'top': '10%', 

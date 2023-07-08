@@ -9,19 +9,19 @@ import {
     MenuItem,
     OutlinedInput,
     Select,
-    Stack
+    Stack,
+    Box,
+    Chip
 } from "@mui/material/";
-
 import AddIcon from '@mui/icons-material/Add';
 
-import { plotterOptions } from '../PlotterOptions';
-
 import { useState } from "react"
-import Box from "@mui/material/Box"
-import Chip from "@mui/material/Chip"
+
+import { plotterOptions } from '../PlotterOptions';
 import Grafico from "../components/Grafico";
 
 function CustomPlot() {
+    // Selected options
     const [value, setValue] = useState([]);
     const handleChange = (event: any) => {
         const { target: { value }, } = event;
@@ -30,10 +30,12 @@ function CustomPlot() {
         );
     };
 
+    // Dialog status
     const [open, setOpen] = useState(false);
     const handleClickOpen = () => { setOpen(true); };
     const handleClose = () => { setOpen(false); };
 
+    // Plot storing
     const [grafici, setGrafici] = useState<JSX.Element[]>([]);
     const addPlot = (newPlot: JSX.Element) => {
         let temp: JSX.Element[] = [...grafici];
@@ -41,9 +43,11 @@ function CustomPlot() {
         setGrafici(temp)
     }
 
+    // Append now plots on click
     const handlePlot = () => {
         if(value.length == 0) return;
-        addPlot(<Grafico jsonReference={value} title="Custom" custom={false} />);
+        addPlot(<Grafico jsonReference={value} custom={true} _range={undefined} title="Custom" />);
+        // Close dialog and reset selection
         setOpen(false);
         setValue([]);
     }

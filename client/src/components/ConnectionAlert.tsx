@@ -1,12 +1,20 @@
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
+import {
+    Alert,
+    AlertTitle
+}from "@mui/material/";
 
-function ConnectionAlert() {
+interface Error {
+    title: string,
+    info: string
+}
+
+// Connection error 
+function ConnectionAlert({ title, info }: Error) {
     return (
         <div className="alert">
             <Alert severity="error">
-                <AlertTitle>Server error</AlertTitle>
-                Connection error — <strong>check the RPi</strong>
+                <AlertTitle>{title}</AlertTitle>
+                <strong>{info}</strong>
             </Alert>
         </div>
     )

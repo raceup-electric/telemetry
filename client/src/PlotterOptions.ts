@@ -3,38 +3,18 @@ export const plotterOptions = [
   {
       value: 'temperature.motors.fl',
       label: 'Front left motor temperature',
-      max: 75,
-      function: {
-        arguments: "value, ref",
-        body: "(value < 75) ? document.getElementById(ref)?.setAttribute('style', 'fill: green') : document.getElementById(ref)?.setAttribute('style', 'fill: red');"
-      }
     },
     {
       value: 'temperature.motors.fr',
       label: 'Right right motor temperature',
-      max: 75,
-      function: {
-        arguments: "value, ref",
-        body: "(value < 75) ? document.getElementById(ref)?.setAttribute('style', 'fill: green') : document.getElementById(ref)?.setAttribute('style', 'fill: red');"
-      }
     },
     {
       value: 'temperature.motors.rl',
       label: 'Rear left motor temperature',
-      max: 75,
-      function: {
-        arguments: "value, ref",
-        body: "(value < 75) ? document.getElementById(ref)?.setAttribute('style', 'fill: green') : document.getElementById(ref)?.setAttribute('style', 'fill: red');"
-      }
     },
     {
       value: 'temperature.motors.rr',
       label: 'Rear right motor temperature',
-      max: 75,
-      function: {
-        arguments: "value, ref",
-        body: "(value < 75) ? document.getElementById(ref)?.setAttribute('style', 'fill: green') : document.getElementById(ref)?.setAttribute('style', 'fill: red');"
-      }
     },
 
     // Temperature IGBT
@@ -187,6 +167,8 @@ export const optionsGroup = [
           'voltage.hv.min',
           'voltage.hv.mean',
         ],
+        range: [3000, 4200],
+        unit: "V"
       },
       {
         id: 'temp.hv.',
@@ -195,8 +177,10 @@ export const optionsGroup = [
           'temp.hv.max',
           'temp.hv.min',
         ],
+        range: [10, 60],
+        unit: "C"
       }
-    ]
+    ],
   },
   {
     id: 'LV',
@@ -209,6 +193,8 @@ export const optionsGroup = [
           'voltage.lv.tot',
           'voltage.lv.min',
         ],
+        range: [3000, 4200],
+        unit: "V"
       },
       {
         id: 'temp.lv.',
@@ -216,6 +202,8 @@ export const optionsGroup = [
         values: [
           'temp.lv.max',
         ],
+        range: [10, 60],
+        unit: "T"
       }
     ]
   },
@@ -232,6 +220,8 @@ export const optionsGroup = [
           'temperature.motors.rl',
           'temperature.motors.rr'
         ],
+        range: [10, 90],
+        unit: "T"
       },
       {
         id: 'temperature.IGBT.',
@@ -242,6 +232,8 @@ export const optionsGroup = [
           'temperature.IGBT.rl',
           'temperature.IGBT.rr'
         ],
+        range: [10, 90],
+        unit: "T"
       },
       {
         id: 'temperature.inverter.',
@@ -252,6 +244,8 @@ export const optionsGroup = [
           'temperature.inverter.rl',
           'temperature.inverter.rr'
         ],
+        range: [10, 90],
+        unit: "T"
       }
     ]
   },
@@ -268,6 +262,8 @@ export const optionsGroup = [
           'temp.dx.premot',
           'temp.dx.postmot',
         ],
+        range: [10, 120],
+        unit: "T"
       },
       {  
         id: 'temp.sx.',
@@ -278,6 +274,8 @@ export const optionsGroup = [
           'temp.sx.premot',
           'temp.sx.postmot',
         ],
+        range: [10, 120],
+        unit: "T"
       }
     ]
   },
