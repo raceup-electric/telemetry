@@ -42,8 +42,8 @@ def send_data():
   globals.data["timestamp"] = time.time() - globals.start_time
   if (time.time() - globals.last_received < 2) and not (globals.lora_error):
     socketio.emit('data', globals.data)
-  else:
-    socketio.emit('lora_error')
+  # else:
+  #   socketio.emit('lora_error')
   
   globals.lock.release()
   
