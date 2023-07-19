@@ -7,14 +7,12 @@
 #include <stdint.h>
 
 struct LoRa_Log logged_values;
-int counter = 0;
 
-int failed_packets = 0;
 PacketSerial_<COBS> myPacketSerial;
 
 void setup() {
   myPacketSerial.begin(115200);
-
+  
   while (!LoRa.begin(868e6)) {
     Serial.write("Starting LoRa failed!");
     digitalWrite(LED_BUILTIN, HIGH);
@@ -52,6 +50,8 @@ void loop() {
       parse_to_struct(received_buffer);
       logged_values.RSSI = LoRa.packetRssi();
       logged_values.SNR = LoRa.packetSnr();
+
+      logged_values.errors = LoRa.failed_packets;
 
       //if(received_buffer[0] == 31)
       #ifndef PRINT_DEBUG

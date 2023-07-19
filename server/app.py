@@ -12,18 +12,9 @@ import random
 
 import struct
 from struct import *
-# i -> RSSI
-# f -> SNR
-# I -> uint32_t status
-# (f * 3 + B) * 4 -> motors 
-# f * 6 -> HV
-# f * 3 -> LV
-# (H * 4) * 2 -> Temps 
-FORMAT_PAYLOAD = "i" + "f" + "I" + ("f" * 3 + "B") * 4 + ("f" * 6) + ("f" * 3) + ("H" * 4) * 2
-size_payload = struct.calcsize(FORMAT_PAYLOAD)
 
 # Default Arduino serial port on RPi
-port = '/dev/ttyACM0'
+port = 'COM15'
 baud = 115200
 
 app = Flask(__name__)

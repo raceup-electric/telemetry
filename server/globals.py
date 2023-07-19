@@ -6,6 +6,7 @@ data = {
     "timestamp": time.time() - start_time,
     "RSSI": -500,
     "SNR": -500,
+    "ERROR_PKT": 0,
     "car_status": 0,
     "temperature": {
       "motors": {
@@ -72,3 +73,4 @@ data = {
 lock = Lock()
 last_received = time.time()
 lora_error = False
+reader_error = False

@@ -152,6 +152,18 @@ export const plotterOptions = [
       value: 'temp.sx.postmot',
       label: 'Dx postmot temp',
     },
+    {
+      value: 'RSSI',
+      label: 'RSSI',
+    },
+    {
+      value: 'SNR',
+      label: 'SNR',
+    },
+    {
+      value: 'ERROR_PKT',
+      label: 'ERROR_PKT',
+    }
 ];
 
 export const optionsGroup = [

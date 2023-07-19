@@ -11,9 +11,12 @@ import {
     Select,
     Stack,
     Box,
-    Chip
+    Chip,
+    Tooltip,
+    IconButton
 } from "@mui/material/";
 import AddIcon from '@mui/icons-material/Add';
+import DownloadIcon from '@mui/icons-material/Download';
 
 import { useState } from "react"
 
@@ -46,7 +49,7 @@ function CustomPlot() {
     // Append now plots on click
     const handlePlot = () => {
         if(value.length == 0) return;
-        addPlot(<Grafico jsonReference={value} custom={true} _range={undefined} title="Custom" />);
+        addPlot(<Grafico jsonReference={value} custom={true} _range={undefined} key={grafici.length} title="Custom" />);
         // Close dialog and reset selection
         setOpen(false);
         setValue([]);

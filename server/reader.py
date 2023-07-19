@@ -5,7 +5,7 @@ import time
 import struct
 from struct import *
 
-FORMAT_PAYLOAD = "i" + "f" + "I" + ("f" * 3 + "B") * 4 + ("f" * 6) + ("f" * 3) + ("H" * 4) * 2
+FORMAT_PAYLOAD = "i" + "f" + "I" + ("f" * 3 + "B") * 4 + ("f" * 6) + ("f" * 3) + ("H" * 4) * 2 + "I"
 size_payload = struct.calcsize(FORMAT_PAYLOAD)
 
 class SerialReader(Packetizer):
@@ -15,10 +15,13 @@ class SerialReader(Packetizer):
     # globals.data = []
     try:
       decodedPacket = cobs.decode(packet)
+      if len(decodedPacket) <= 21: raise cobs.DecodeError
       data_unpacked = unpack(FORMAT_PAYLOAD, decodedPacket)
+      print(data_unpacked)
       globals.data = {
         "RSSI": data_unpacked[0],
         "SNR": data_unpacked[1],
+        "ERROR_PKT": data_unpacked[36],
         "car_status": data_unpacked[2],
         "temperature": {
           "motors": {
@@ -83,8 +86,12 @@ class SerialReader(Packetizer):
         },
       }
       globals.lora_error = False
-    except Exception as e:
-      # print(e)
+    except struct.error as e:
+      print(e)
+      globals.reader_error = True
+    except cobs.DecodeError as e:
+      print("Starting LoRa failed!")
       globals.lora_error = True
     finally:
       globals.lock.release()
+      

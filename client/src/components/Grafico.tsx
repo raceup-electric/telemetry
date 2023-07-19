@@ -2,6 +2,8 @@ import { useContext, useEffect } from "react";
 import { SocketContext } from "../main";
 import uPlot, { AlignedData, Range } from "uplot";
 import { plotterOptions } from "../PlotterOptions";
+import { Fab } from "@mui/material";
+import DownloadIcon from '@mui/icons-material/Download'
 
 interface PlotProps {
     jsonReference: string[],
@@ -21,6 +23,22 @@ const COLORS: String[] = [
 ];
 
 function Grafico({ jsonReference, title, custom, _range }: PlotProps) {
+    let EXPORT = [[]];
+
+    function exportArrayToCsv() {
+        let csvContent = "data:text/csv;charset=utf-8," + EXPORT.map(e => e.join(",")).join("\n");
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "my_data.csv");
+        document.body.appendChild(link); // Required for FF
+
+        link.click();
+    }
+  
+    // Before page unload download file
+    if(custom) window.addEventListener("beforeunload", exportArrayToCsv);
+
     // Resize event for plots
     window.addEventListener("resize", () => {
         grafico.setSize({
@@ -47,7 +65,8 @@ function Grafico({ jsonReference, title, custom, _range }: PlotProps) {
     plotterOptions.forEach(opt => {
         if (!jsonReference.includes(opt.value)) return;
         // Add an array foreach option to plot
-        (data as [[], []]).push([])
+        (data as [[], []]).push([]);
+        (EXPORT.push([]));
         _series.push({
             label: opt.value,
             paths: uPlot.paths.spline!(),
@@ -99,9 +118,13 @@ function Grafico({ jsonReference, title, custom, _range }: PlotProps) {
 
             // Add y-data to series
             (newPlotData[i+1] as Number[]).push(value);
+            (EXPORT[i+1] as Number[]).push(value);
 
             // Add x
-            if(i == 0) (newPlotData[0] as Number[]).push(Number(incomingData.timestamp));
+            if(i == 0) {
+                (newPlotData[0] as Number[]).push(Number(incomingData.timestamp));
+                (EXPORT[0] as Number[]).push(Number(incomingData.timestamp));
+            };
         });
 
         // Start sliding
@@ -130,8 +153,15 @@ function Grafico({ jsonReference, title, custom, _range }: PlotProps) {
             document.getElementById("snr")!.style.color = 'green';
     });
 
+    let download = (custom) ? 
+        <Fab onClick={exportArrayToCsv!} style={{'position': 'fixed', 'bottom': '15%', 'right': '3%'}} color="primary" aria-label="add"><DownloadIcon /></Fab> :
+        <> </>
+
     return (
-        <div id="plotContainer" className="plot" />
+        <>
+            {download}
+            <div id="plotContainer" className="plot" />
+        </>
     );
 }
 
