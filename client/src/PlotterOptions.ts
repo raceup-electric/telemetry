@@ -1,6 +1,6 @@
 export const plotterOptions = [
-  // Temperature motori
-  {
+    // Temperature motori
+    {
       value: 'temperature.motors.fl',
       label: 'Front left motor temperature',
     },
@@ -179,7 +179,7 @@ export const optionsGroup = [
           'voltage.hv.min',
           'voltage.hv.mean',
         ],
-        range: [3000, 4200],
+        range: [3.0, 4.5],
         unit: "V"
       },
       {
@@ -205,7 +205,10 @@ export const optionsGroup = [
           'voltage.lv.tot',
           'voltage.lv.min',
         ],
-        range: [3000, 4200],
+        range: [3.0, 25.0
+        
+        
+        ],
         unit: "V"
       },
       {
@@ -214,7 +217,7 @@ export const optionsGroup = [
         values: [
           'temp.lv.max',
         ],
-        range: [10, 60],
+        range: [10, 90],
         unit: "T"
       }
     ]

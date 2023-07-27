@@ -14,7 +14,7 @@ import struct
 from struct import *
 
 # Default Arduino serial port on RPi
-port = 'COM15'
+port = '/dev/ttyACM0'
 baud = 115200
 
 app = Flask(__name__)

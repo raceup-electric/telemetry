@@ -21,7 +21,6 @@ class SerialReader(Packetizer):
       globals.data = {
         "RSSI": data_unpacked[0],
         "SNR": data_unpacked[1],
-        "ERROR_PKT": data_unpacked[36],
         "car_status": data_unpacked[2],
         "temperature": {
           "motors": {
@@ -84,6 +83,7 @@ class SerialReader(Packetizer):
             "postmot": data_unpacked[35],
           }
         },
+        "ERROR_PKT": data_unpacked[36],
       }
       globals.lora_error = False
     except struct.error as e:

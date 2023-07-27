@@ -232,7 +232,7 @@ int LoRaClass::parsePacket(int size)
   //Controls error on CRC to check for errors
   if((irqFlags & IRQ_PAYLOAD_CRC_ERROR_MASK) == 1){
     this->failed_packets++;  
-    Serial.println("CRC non corretto");
+    //Serial.println("CRC non corretto");
   }
   // clear IRQ's
   writeRegister(REG_IRQ_FLAGS, irqFlags);
