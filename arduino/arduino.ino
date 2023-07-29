@@ -23,8 +23,8 @@ void setup() {
 
   LoRa.setSignalBandwidth(250e3);
   LoRa.setSpreadingFactor(6);
-  LoRa.setCodingRate4(4);
-  //LoRa.enableCrc();
+  LoRa.setCodingRate4(5);
+  LoRa.enableCrc();
 }
 
 void loop() {
@@ -52,6 +52,7 @@ void loop() {
       logged_values.SNR = LoRa.packetSnr();
 
       logged_values.errors = LoRa.failed_packets;
+      logged_values.totPackets = LoRa.tot_packets;
 
       //if(received_buffer[0] == 31)
       #ifndef PRINT_DEBUG

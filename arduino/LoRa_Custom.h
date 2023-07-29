@@ -34,6 +34,7 @@ class LoRaClass : public Stream {
 public:
 
   int failed_packets = 0;
+  uint32_t tot_packets = 0;
   LoRaClass();
 
   int begin(long frequency);

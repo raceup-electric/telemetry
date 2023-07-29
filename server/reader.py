@@ -5,7 +5,7 @@ import time
 import struct
 from struct import *
 
-FORMAT_PAYLOAD = "i" + "f" + "I" + ("f" * 3 + "B") * 4 + ("f" * 6) + ("f" * 3) + ("H" * 4) * 2 + "I"
+FORMAT_PAYLOAD = "i" + "f" + "I" + ("f" * 3 + "B") * 4 + ("f" * 6) + ("f" * 3) + ("H" * 4) * 2 + "I" + "I"
 size_payload = struct.calcsize(FORMAT_PAYLOAD)
 
 class SerialReader(Packetizer):
@@ -84,6 +84,7 @@ class SerialReader(Packetizer):
           }
         },
         "ERROR_PKT": data_unpacked[36],
+        "TOTAL_PKT": data_unpacked[37]
       }
       globals.lora_error = False
     except struct.error as e:

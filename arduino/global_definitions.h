@@ -55,5 +55,6 @@ struct LoRa_Log {
     struct Temps temp_dx_log;
     struct Temps temp_sx_log;
     uint32_t errors;
+    uint32_t totPackets;
 };
 #endif

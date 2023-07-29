@@ -100,7 +100,7 @@ export const plotterOptions = [
     },
     {
       value: 'temp.hv.mean',
-      label: 'High Voltage min temperature',
+      label: 'High Voltage mean temperature',
     },
 
     // LV
@@ -162,7 +162,11 @@ export const plotterOptions = [
     },
     {
       value: 'ERROR_PKT',
-      label: 'ERROR_PKT',
+      label: 'Pacchetti errati',
+    },
+    {
+      value: 'TOTAL_PKT',
+      label: 'Pacchetti totali',
     }
 ];
 

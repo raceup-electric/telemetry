@@ -223,14 +223,13 @@ int LoRaClass::parsePacket(int size)
 
   if (size > 0) {
     implicitHeaderMode();
-
     writeRegister(REG_PAYLOAD_LENGTH, size & 0xff);
   } else {
     explicitHeaderMode();
   }
 
   //Controls error on CRC to check for errors
-  if((irqFlags & IRQ_PAYLOAD_CRC_ERROR_MASK) == 1){
+  if((irqFlags & IRQ_PAYLOAD_CRC_ERROR_MASK) == IRQ_PAYLOAD_CRC_ERROR_MASK){
     this->failed_packets++;  
     //Serial.println("CRC non corretto");
   }
@@ -240,6 +239,8 @@ int LoRaClass::parsePacket(int size)
   if ((irqFlags & IRQ_RX_DONE_MASK) && (irqFlags & IRQ_PAYLOAD_CRC_ERROR_MASK) == 0) {
     // received a packet
     _packetIndex = 0;
+
+    this->tot_packets++;
 
     // read packet length
     if (_implicitHeaderMode) {
@@ -253,6 +254,8 @@ int LoRaClass::parsePacket(int size)
 
     // put in standby mode
     idle();
+
+
   } else if (readRegister(REG_OP_MODE) != (MODE_LONG_RANGE_MODE | MODE_RX_SINGLE)) {
     // not currently in RX mode
 
