@@ -1,15 +1,15 @@
 import React, { createContext } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
-import { io, Socket } from 'socket.io-client' 
 import './index.css'
 
-export const SocketContext = createContext<Socket | null>(null);
+import { SupabaseClient, createClient } from '@supabase/supabase-js'
+export const SB_CONTEXT = createContext<SupabaseClient | null>(null);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   //<React.StrictMode>
-    <SocketContext.Provider value={io(import.meta.env.VITE_SERVER_URL)}>
-      <App />
-    </SocketContext.Provider>
+  <SB_CONTEXT.Provider value={createClient(import.meta.env.VITE_SB_URL, import.meta.env.VITE_SB_KEY)}>
+    <App />
+  </SB_CONTEXT.Provider>
   //</React.StrictMode>,
 )

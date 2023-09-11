@@ -1,8 +1,4 @@
-import { useContext, useState, SyntheticEvent } from 'react'
-import { SocketContext } from './main';
-
-import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt';
-import NetworkCheckIcon from '@mui/icons-material/NetworkCheck';
+import { useState, SyntheticEvent } from 'react'
 
 import { 
   Tab,
@@ -15,70 +11,43 @@ import {
   TabPanel
 } from '@mui/lab/';
 
-import ConnectionAlert from './components/ConnectionAlert';
-
-import { optionsGroup } from './PlotterOptions';
 import CustomPlot from './pages/CustomPlot';
-import PreloadedPlots from './pages/PreloadedPlots';
+import Dashboard from './pages/DashBoard';
+
+import { LOG_DEFS } from './log_defs';
+import DefaultPlots from './pages/DefaultPlots';
 
 function App() {
-  // Socket
-  const socket = useContext(SocketContext)!;
-
-  // Connection state
-  // 0 -> connected
-  // 1 -> RPI error
-  // 2 -> LoRa error
-  const [error, setError] = useState(1);
-  socket.on("connect", () => {
-    setError(0);
-  });
-  socket.on('connect_error', function() {
-    setError(1);
-  });
-  socket.on('lora_error', () => {
-    setError(2);
-  })
-  socket.on('data', () => {
-    setError(0);
-  })
 
   // Page displayed
-  const [page, setPage] = useState('HV');
+  const [page, setPage] = useState('dashboard');
   const handleChange = (_event: SyntheticEvent, newPage: string) => {
     setPage(newPage);
   };
 
   return (
     <div className="App">
-      {(error == 0) ? 
-        <></> : 
-        <ConnectionAlert 
-          title={(error == 1) ? "Connection Error" : "LoRa Error"} 
-          info={ (error == 1) ? "Check the RPi"    : "Check LoRa conneciton"} 
-        />
-      }
-      <SignalCellularAltIcon id="rssi" fontSize="large" style={{
-        'position': 'fixed', 
-        'top': '10%', 
-        'right': '3%'
-      }} />
-      <NetworkCheckIcon id="snr" fontSize="large" style={{
-        'position': 'fixed', 
-        'top': '17%', 
-        'right': '3%'
-      }} />
       <Box sx={{ width: '100%', typography: 'body1' }} />
       <TabContext value={page}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange} aria-label="" variant="scrollable">
-            {optionsGroup.map(opt => <Tab label={opt.label} value={opt.id} key={opt.id} />)}
+            <Tab label="Dashboard" value="dashboard" />
+            {LOG_DEFS.map((def) => (
+              <Tab key={def.id} label={def.label} value={def.id} />
+            ))}
             <Tab label="Custom plot" value="customPlot" />
           </TabList>
         </Box>
-        {optionsGroup.map(opt => (
-          <TabPanel value={opt.id} key={opt.id}>
-            <PreloadedPlots jRef={opt.values} ></PreloadedPlots>
+        <TabPanel value="dashboard">
+          <div className='innerBody'>
+            <Dashboard />
+          </div>
+        </TabPanel>
+        {LOG_DEFS.map((def) => (
+          <TabPanel key={def.id} value={def.id}>
+            <div className='innerBody'>
+              <DefaultPlots jRef={def.values}></DefaultPlots>
+            </div>
           </TabPanel>
         ))}
         <TabPanel value="customPlot">

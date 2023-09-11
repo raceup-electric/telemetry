@@ -1,88 +1,31 @@
-#include <PacketSerial.h>
+#include <ESP32_Supabase.h>
+#include "WiFi.h"
 
-#include <SPI.h>
-#include "LoRa_Custom.h"
-#include "global_definitions.h"
-#include "utils.h"
-#include <stdint.h>
+#include "dblink.h"
 
-struct LoRa_Log logged_values;
+Database db("ecu");
 
-PacketSerial_<COBS> myPacketSerial;
+log_struct d;
 
 void setup() {
-  myPacketSerial.begin(115200);
-  
-  while (!LoRa.begin(868e6)) {
-    Serial.write("Starting LoRa failed!");
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(300);
-  }
+    Serial.begin(115200);
 
-  digitalWrite(LED_BUILTIN, LOW);
+    WiFi.begin(".", "8caratteri");
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+    Serial.print("\nIP address: ");
+    Serial.println(WiFi.localIP());
 
-  LoRa.setSignalBandwidth(250e3);
-  LoRa.setSpreadingFactor(6);
-  LoRa.setCodingRate4(5);
-  LoRa.enableCrc();
+    db.init("ecu@raceup.it", "Centralina");
 }
 
 void loop() {
-  // try to parse packet
-  int packetSize = LoRa.parsePacket(LORA_IMPLICIT_LENGTH);
+    d.timestamp = millis();
+    d.amk_status_fl = random(0, 255);
 
-  if (packetSize) {
-    // received a packet
-    #ifdef LORA_STRING_MODE
-      String incoming = "";
+    Serial.println(db.push_struct(d));
 
-      while (LoRa.available()) 
-        incoming += (char)LoRa.read();
-    #endif
-
-    #ifdef LORA_BYTE_MODE
-      uint8_t received_buffer[LORA_IMPLICIT_LENGTH];
-      int i = 0;
-
-      while(LoRa.available())
-        received_buffer[i++] = (uint8_t)LoRa.read();
-
-      parse_to_struct(received_buffer);
-      logged_values.RSSI = LoRa.packetRssi();
-      logged_values.SNR = LoRa.packetSnr();
-
-      logged_values.errors = LoRa.failed_packets;
-      logged_values.totPackets = LoRa.tot_packets;
-
-      //if(received_buffer[0] == 31)
-      #ifndef PRINT_DEBUG
-        myPacketSerial.send((const uint8_t *)&logged_values, sizeof(logged_values)); 
-        /*Serial.write(0xFF);
-        Serial.write(0xFF);
-        Serial.write(0xFF);
-        Serial.write(0xFF);*/
-      #endif
-
-      #ifdef PRINT_DEBUG
-        Serial.print("ID: ");
-        Serial.write(received_buffer[0]);
-        //Serial.print("Value: ");
-        //Serial.println(uint32_to_float(buffer_to_uint32(received_buffer)));
-        //Serial.println("RSSI: " + String(LoRa.packetRssi()));
-        //Serial.println("SNR: " + String(LoRa.packetSnr()));
-      #endif
-    #endif
-  }
-
-  #ifdef PRINT_DEBUG
-    if(counter % 10 == 0){
-      //send_JSON();
-      Serial.println(LoRa.failed_packets);
-      //Serial.write((const char *)&logged_values.temp_dx_log, sizeof(logged_values.temp_dx_log) + 1024); 
-      counter = 0;
-    }
-    counter++;
-  #endif
-  
-  delay(1);
+    delay(1500);
 }

@@ -1,4 +1,4 @@
-import { 
+import {
     Button,
     Dialog,
     DialogActions,
@@ -11,20 +11,43 @@ import {
     Select,
     Stack,
     Box,
-    Chip,
-    Tooltip,
-    IconButton
+    Chip
 } from "@mui/material/";
 import AddIcon from '@mui/icons-material/Add';
-import DownloadIcon from '@mui/icons-material/Download';
 
-import { useState } from "react"
+import { useContext, useEffect, useState } from "react"
 
-import { plotterOptions } from '../PlotterOptions';
 import Grafico from "../components/Grafico";
+import { SB_CONTEXT } from "../main";
 
 function CustomPlot() {
-    // Selected options
+    const [columns, setColumns] = useState([] as JSX.Element[]);
+
+    // Get columns from supabase
+    const supabase = useContext(SB_CONTEXT)!;
+    useEffect(() => {
+        async function get_columns() {
+            // Columns from test row
+            let { data: result, error } = await supabase.from('ecu').select('*').eq('log_name', 'STEST0');
+            let cols = Object.keys(result![0]).sort().filter(function(k) {
+                // remove not plottable
+                return !(k === "timestamp" || k === "log_name");
+            }).map((option) => (
+                // Map for dropdown
+                <MenuItem key={option} value={option}>
+                    {option}
+                </MenuItem>
+            ));
+            setColumns(cols);
+        };
+
+        // trigger getter
+        if (columns.length <= 0) {
+            get_columns();
+        }
+    }, []);
+
+    // Dropdown elected options
     const [value, setValue] = useState([]);
     const handleChange = (event: any) => {
         const { target: { value }, } = event;
@@ -48,8 +71,8 @@ function CustomPlot() {
 
     // Append now plots on click
     const handlePlot = () => {
-        if(value.length == 0) return;
-        addPlot(<Grafico jsonReference={value} custom={true} _range={undefined} key={grafici.length} title="Custom" />);
+        if (value.length == 0) return;
+        addPlot(<Grafico jsonReference={value.sort()} key={grafici.length} title="Custom" />);
         // Close dialog and reset selection
         setOpen(false);
         setValue([]);
@@ -59,15 +82,15 @@ function CustomPlot() {
         <>
             {grafici}
             <Fab onClick={handleClickOpen} style={{
-                'position': 'fixed', 
-                'bottom': '5%', 
+                'position': 'fixed',
+                'bottom': '5%',
                 'right': '3%'
             }} color="primary" aria-label="add">
                 <AddIcon />
             </Fab>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Nuovo grafico</DialogTitle>
-                <DialogContent> 
+                <DialogContent>
                     <Stack spacing={2}>
                         <DialogContentText> Seleziona il dato che vuoi plottare </DialogContentText>
                         <Select id="reference" label="Option" fullWidth multiple
@@ -81,11 +104,7 @@ function CustomPlot() {
                                     ))}
                                 </Box>
                             )}>
-                            {plotterOptions.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                            ))}
+                            {columns}
                         </Select>
                     </Stack>
                 </DialogContent>
