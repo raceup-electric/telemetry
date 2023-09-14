@@ -4,7 +4,13 @@ import { useEffect, useState } from "react";
 
 import { DASHBOARD } from "../log_defs";
 
-function Dashboard() {
+interface PayLoad {
+    payload: {
+        new: { [key: string]: number };
+    }
+}
+
+function Dashboard({ payload }: PayLoad) {
     const [width, setWidth] = useState(document.body.clientWidth);
     const [height, setHeight] = useState(document.body.clientHeight);
     const setWindowDimensions = () => {
@@ -26,6 +32,7 @@ function Dashboard() {
                     <Grid item xs={3} key={inc.reference}>
                         <Indicatore 
                             text={inc.text} 
+                            payload={payload}
                             reference={inc.reference} 
                             isText={inc.isText} 
                             unit={inc.unit} 

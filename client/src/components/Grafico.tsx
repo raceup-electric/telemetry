@@ -1,115 +1,89 @@
-import { useContext, useEffect } from "react";
-import uPlot, { AlignedData, Range } from "uplot";
-import { SB_CONTEXT } from "../main";
-
-interface PlotProps {
-    jsonReference: string[],
-    title: string
-}
+import { useEffect, useState } from "react";
+import Plot from "react-plotly.js";
 
 interface Payload {
     new: { [key: string]: number };
 }
 
+interface PlotData {
+    x: number[],
+    y: number[],
+    mode: string,
+    name: string
+}
+
+interface PlotProps {
+    jsonReference: string[],
+    title: string,
+    payload: Payload
+}
+
 // Max displayable points
 const MAX_POINT = 150;
 
-// Line colors
-const COLORS: String[] = [
-    "FF0000", "00FF00", "0000FF", "FFFF00", "FF00FF", "00FFFF",
-    "800000", "008000", "000080", "808000", "800080", "008080",
-    "C0C0C0", "808080", "FF8000", "800040", "FF0080", "FF80FF",
-    "004080", "FFC0C0", "FFD700", "FF00C0", "00FFC0", "C0FF00",
-    "FF40FF", "004040", "FF4000", "408080", "40FF00", "4000FF",
-    "40C0FF", "40FFC0", "FF40C0", "C040FF", "C0FF40", "FFC040"
-];
-
-function Grafico({ jsonReference, title }: PlotProps) {
-    const supabase = useContext(SB_CONTEXT)!;
-    
-    // Init data with an array for x-points
-    let data: AlignedData = [[]];
-
-    // Plot container
-    let div = document.createElement("div");
-    div.style.marginBottom = "5%";
-    
-    // Init array for plot data
-    let _series: uPlot.Series[] = [{
-        label: "Time"
-    }];
-    let i = 0;
-    jsonReference.forEach(opt => {
-        // Add an array foreach option to plot
-        (data as [[], []]).push([]);
-        _series.push({
-            label: opt,
-            paths: uPlot.paths.spline!(),
-            points: {
-                show: true,
-            },
-            stroke: "#" + COLORS[i],
-        });
-        i++;
-    });
-
-    // Plot options
-    let opt = {
-        title: title,
-        width: 800,
-        height: 600,
-        pxAlign: 0,
-        series: _series,
-        scales: {
-            x: {
-                time: false
-            },
-            y: {
-                auto: true
-            }
-        }
+function Grafico({ jsonReference, title, payload }: PlotProps) {
+    const [width, setWidth] = useState(document.body.clientWidth*4/5);
+    const [height, setHeight] = useState(document.body.clientHeight*4/5);
+    const setWindowDimensions = () => {
+        setWidth(document.getElementById("plotContainer")?.clientWidth!);
+        setHeight(document.getElementById("plotContainer")?.clientHeight! + 100);
     }
 
-    // Actual plot
-    let grafico = new uPlot(opt, data, div);
-    let pointsPlotted = 0;
-
-    // Append plot to page
     useEffect(() => {
-        document.getElementById("plotContainer")?.appendChild(div);
-        grafico.setSize({
-            width: document.getElementById("plotContainer")!.clientWidth, 
-            height: document.getElementById("plotContainer")!.clientHeight
-        });
-    }, []);
+        window.addEventListener('resize', setWindowDimensions);
+        return () => {
+          window.removeEventListener('resize', setWindowDimensions)
+        }
+    }, [])
 
-    // Supabase event
-    const ecu = supabase.channel('custom-insert-channel').on('postgres_changes', { 
-        event: 'INSERT', 
-        schema: 'public', 
-        table: 'ecu' 
-      },
-      (payload) => {
-        let newPlotData = grafico.data; 
-        jsonReference.forEach((ref, i) => {
-            // Add y-data to series
-            (newPlotData[i+1] as Number[]).push((payload as Payload).new[ref]);
-
-            // Add x
-            if(i == 0) (newPlotData[0] as Number[]).push(Number(payload.new["timestamp"]));
+    const [data, setData] = useState(() => {
+        let tempData = [] as PlotData[];
+        jsonReference.forEach((ref) => {
+            let trace = {
+                x: [],
+                y: [],
+                mode: 'lines+markers',
+                name: ref
+            }
+            tempData.push(trace);
         });
 
-        // Start sliding
-        if(pointsPlotted >= MAX_POINT) newPlotData.map(el => (el as Number[]).shift())
+        return tempData;
+    });
 
-        grafico.setData(newPlotData);
-        pointsPlotted++;
-      }
-    ).subscribe();
+    let layout = {
+        title: title,
+        width: width,
+        height: height,
+        margin: { t: 30, b: 100 },
+        showlegend: true
+    };
+
+    useEffect(() => {
+        let _data = [] as PlotData[];
+
+        data.forEach((d) => {
+            if (typeof payload.new[d.name] === 'undefined') return;
+
+            _data.push({
+                x: [...d.x, payload.new["timestamp"]],
+                y: [...d.y, payload.new[d.name]],
+                mode: 'lines+markers',
+                name: d.name
+            });
+        });
+
+        setData(_data);
+    }, [payload]);
 
     return (
         <>
-            <div id="plotContainer" className="plot" />
+            <div id="plotContainer" className="plot">
+                <Plot
+                    data={data}
+                    layout={layout}
+                ></Plot>
+            </div>
         </>
     );
 }

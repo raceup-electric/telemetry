@@ -6,15 +6,18 @@ interface Options {
 }
 
 interface DefaultPlot {
-    jRef: Options[]
+    jRef: Options[],
+    payload: {
+        new: { [key: string]: number };
+    }
 }
 
 // Default plots
-function DefaultPlots({ jRef }: DefaultPlot) {
+function DefaultPlots({ jRef, payload }: DefaultPlot) {
     return (
         <div className='innerBody'>
             {jRef.map((el) => (
-                <Grafico key={el.identifier.replace(/\s/g, '').toLowerCase()} jsonReference={el.jsonReferences.sort()} title={el.identifier}></Grafico>
+                <Grafico key={el.identifier.replace(/\s/g, '').toLowerCase()} payload={payload} jsonReference={el.jsonReferences.sort()} title={el.identifier}></Grafico>
             ))}
         </div>
     );

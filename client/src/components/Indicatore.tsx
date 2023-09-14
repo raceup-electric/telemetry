@@ -6,12 +6,16 @@ import {
     CardContent,
     Typography
 } from "@mui/material";
-import { useContext, useState } from 'react';
-import { SB_CONTEXT } from '../main';
+import { useEffect, useState } from 'react';
+
+interface Payload {
+    new: { [key: string]: number };
+}
 
 interface Indicator {
     text: string,
     isText: boolean,
+    payload: Payload,
     reference: string,
     unit: string,
     max: number,
@@ -19,28 +23,25 @@ interface Indicator {
     cl_heigth: number
 }
 
-interface Payload {
-    new: { [key: string]: number };
-}
-
-function Indicatore({ text, isText, reference, unit, max, cl_width, cl_heigth }: Indicator) {
-    const supabase = useContext(SB_CONTEXT)!;
-
+function Indicatore({ text, isText, payload, reference, unit, max, cl_width, cl_heigth }: Indicator) {
     const [value, setValue] = useState(0);
 
-    // Supabase event
-    const ecu = supabase.channel('custom-insert-channel').on('postgres_changes', { 
-        event: 'INSERT', 
-        schema: 'public', 
-        table: 'ecu' 
-      },
-      (payload) => {
-        if(reference === "amk_s") setValue(Math.max(payload.new["amk_status_fl"], payload.new["amk_status_fr"], payload.new["amk_status_rl"], payload.new["amk_status_rr"]))
-        else if (reference === "temp_mot") setValue(Math.max(payload.new["temp_motor_fl"], payload.new["temp_motor_fr"], payload.new["temp_motor_rl"], payload.new["temp_motor_rr"]))
-        else if (reference === "temp_inv") setValue(Math.max(payload.new["temp_inverter_fl"], payload.new["temp_inverter_fr"], payload.new["temp_inverter_rl"], payload.new["temp_inverter_rr"]))
-        else setValue((payload as Payload).new[reference]);
-      }
-    ).subscribe();
+    useEffect(() => {
+        let newValue = 0;
+
+        newValue = (typeof payload.new[reference] === 'undefined') ? 0 : payload.new[reference];
+        switch(reference) {
+            case 'amk_s':
+                newValue = Math.max(
+                    (typeof payload.new['amk_status_fl'] === 'undefined') ? -Infinity : payload.new['amk_status_fl'],
+                    (typeof payload.new['amk_status_fr'] === 'undefined') ? -Infinity : payload.new['amk_status_fr'],
+                    (typeof payload.new['amk_status_rl'] === 'undefined') ? -Infinity : payload.new['amk_status_rl'],
+                    (typeof payload.new['amk_status_rr'] === 'undefined') ? -Infinity : payload.new['amk_status_rr'],
+                );
+        }
+
+        setValue(newValue)
+    }, [payload]);
 
     let content = <div></div>;
 

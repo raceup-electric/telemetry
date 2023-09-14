@@ -4,8 +4,10 @@
 #include <ESP32_Supabase.h>
 
 struct log_struct {
+    float ping;
     long timestamp;
     uint8_t amk_status_fl;
+    uint8_t throttle;
 };
 
 class Database {

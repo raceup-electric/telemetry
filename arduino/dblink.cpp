@@ -34,7 +34,8 @@ int Database::push_struct(log_struct logs) {
 
     json += "\"log_name\": \"STEST" + String(log_name) + "\",";
     json += "\"timestamp\": \"" + String(logs.timestamp) + "\",";
-    json += "\"amk_status_fl\": \"" + String(logs.amk_status_fl) + "\"";
+    json += "\"amk_status_fl\": \"" + String(logs.amk_status_fl) + "\",";
+    json += "\"throttle\": \"" + String(logs.throttle) + "\""; 
 
     json += "}";
 

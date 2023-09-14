@@ -20,7 +20,17 @@ import { useContext, useEffect, useState } from "react"
 import Grafico from "../components/Grafico";
 import { SB_CONTEXT } from "../main";
 
-function CustomPlot() {
+interface Payload {
+    payload: {
+        new: { [key: string]: number };
+    }
+}
+
+interface Plot {
+    values: string[]
+}
+
+function CustomPlot( { payload }: Payload ) {
     const [columns, setColumns] = useState([] as JSX.Element[]);
 
     // Get columns from supabase
@@ -61,26 +71,23 @@ function CustomPlot() {
     const handleClickOpen = () => { setOpen(true); };
     const handleClose = () => { setOpen(false); };
 
-    // Plot storing
-    const [grafici, setGrafici] = useState<JSX.Element[]>([]);
-    const addPlot = (newPlot: JSX.Element) => {
-        let temp: JSX.Element[] = [...grafici];
-        temp.push(newPlot)
-        setGrafici(temp)
-    }
-
-    // Append now plots on click
+    
+    const [grafici, setGrafici] = useState([] as Plot[]);
     const handlePlot = () => {
         if (value.length == 0) return;
-        addPlot(<Grafico jsonReference={value.sort()} key={grafici.length} title="Custom" />);
-        // Close dialog and reset selection
+
+        let newGrafici = [...grafici, {"values": value.sort()}];
+
+        setGrafici(newGrafici);
         setOpen(false);
         setValue([]);
     }
 
     return (
         <>
-            {grafici}
+            {grafici.map((grafico) => (
+                <Grafico jsonReference={grafico.values} payload={payload} key={grafici.length} title="Custom" />
+            ))}
             <Fab onClick={handleClickOpen} style={{
                 'position': 'fixed',
                 'bottom': '5%',

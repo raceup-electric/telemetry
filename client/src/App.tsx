@@ -1,6 +1,6 @@
-import { useState, SyntheticEvent } from 'react'
+import { useState, useContext, SyntheticEvent } from 'react'
 
-import { 
+import {
   Tab,
   Box,
 } from "@mui/material/";
@@ -16,14 +16,35 @@ import Dashboard from './pages/DashBoard';
 
 import { LOG_DEFS } from './log_defs';
 import DefaultPlots from './pages/DefaultPlots';
+import { SB_CONTEXT } from './main';
+
+interface Payload {
+    payload: {
+      new: { [key: string]: number };
+  }
+}
 
 function App() {
+  const supabase = useContext(SB_CONTEXT)!;
 
   // Page displayed
   const [page, setPage] = useState('dashboard');
   const handleChange = (_event: SyntheticEvent, newPage: string) => {
     setPage(newPage);
   };
+
+  const [lastPayload, setNewPayload] = useState({new: {}});
+
+  // Supabase event
+  const ecu = supabase.channel('custom-insert-channel').on('postgres_changes', {
+    event: 'INSERT',
+    schema: 'public',
+    table: import.meta.env.VITE_SB_TABLE,
+  },
+    (payload) => {
+      setNewPayload(payload);
+    }
+  ).subscribe();
 
   return (
     <div className="App">
@@ -40,19 +61,19 @@ function App() {
         </Box>
         <TabPanel value="dashboard">
           <div className='innerBody'>
-            <Dashboard />
+            <Dashboard payload={lastPayload} />
           </div>
         </TabPanel>
         {LOG_DEFS.map((def) => (
           <TabPanel key={def.id} value={def.id}>
             <div className='innerBody'>
-              <DefaultPlots jRef={def.values}></DefaultPlots>
+              <DefaultPlots jRef={def.values} payload={lastPayload}></DefaultPlots>
             </div>
           </TabPanel>
         ))}
         <TabPanel value="customPlot">
           <div className='innerBody'>
-            <CustomPlot />
+            <CustomPlot payload={lastPayload} />
           </div>
         </TabPanel>
       </TabContext>
