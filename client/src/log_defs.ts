@@ -159,14 +159,14 @@ export const LOG_DEFS = [
       {
         identifier: 'Temperature',
         jsonReferences: [
-          'temp_0',
-          'temp_1',
-          'temp_2',
-          'temp_3',
-          'temp_4',
-          'temp_5',
-          'temp_6',
-          'temp_7',
+          'temp_inv_dx_2',
+          'temp_inv_sx_1',
+          'temp_inv_dx_1',
+          'temp_inv_sx_2',
+          'temp_mot_rr_1',
+          'temp_mot_rl_1',
+          'temp_mot_rl_2',
+          'temp_mot_rr_2',
         ]
       }
     ]
