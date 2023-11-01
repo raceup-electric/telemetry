@@ -12,7 +12,7 @@
 #include "esp_log.h"
 #define WIFI_SSID "."
 #define WIFI_PASSWORD "8caratteri"
-bool connected = true;
+bool connected = false;
 #define WIFI_MAXIMUM_RETRY 10
 #define WIFI_CONNECTED_BIT BIT0
 #define WIFI_FAIL_BIT BIT1
@@ -26,6 +26,15 @@ static EventGroupHandle_t s_wifi_event_group;
 #define BEARER_VALUE "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind2aml3dGJ4dmVoZ2Jkc2tlcGRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTM4MjEzNzMsImV4cCI6MjAwOTM5NzM3M30.-QJcyNwn_4Dtkvohg-g3GJPb0jCoePxB1MEH7tzFbbo"
 extern const char ssl_cert_pem_start[] asm("_binary_ssl_cert_pem_start");
 extern const char ssl_cert_pem_end[] asm("_binary_ssl_cert_pem_end");
+esp_http_client_handle_t http_client;
+esp_http_client_config_t http_cfg = {
+    .url = HTTP_SERVER_URL,
+    .timeout_ms = 5000,
+    .buffer_size = 1024,
+    .buffer_size_tx = 2048,
+    .method = HTTP_METHOD_POST,
+    .transport_type = HTTP_TRANSPORT_OVER_SSL,
+    .cert_pem = ssl_cert_pem_start};
 
 // UART CONFIGURATION
 #include "driver/uart.h"
@@ -45,7 +54,12 @@ static QueueHandle_t uart_queue;
 
 // LOGS CONFIGURATION
 #include "logs.h"
+
+// CPU CONFIGURATION
 struct logs ecu;
+struct logs ecu2;
+QueueHandle_t supabase_q;
+SemaphoreHandle_t can_insert;
 
 static void event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data)
 {
@@ -104,55 +118,47 @@ void wifi_init_sta(void)
     connected = true;
   }
   else if (bits & WIFI_FAIL_BIT)
+  {
     ESP_LOGI("WiFi", "Failed to connect to SSID:%s, password:%s", WIFI_SSID, WIFI_PASSWORD);
+    connected = false;
+  }
   else
+  {
     ESP_LOGE("WiFi", "UNEXPECTED EVENT");
+    connected = false;
+  }
 }
 
-void serial_receive()
+void serial_init(void)
 {
-  char *data = (char *)malloc(BUF_SIZE);
+  uart_config_t uart_config = {
+      .baud_rate = UART_BAUD,
+      .data_bits = UART_DATA_8_BITS,
+      .parity = UART_PARITY_DISABLE,
+      .stop_bits = UART_STOP_BITS_1,
+      .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+      .source_clk = UART_SCLK_DEFAULT,
+  };
+  int intr_alloc_flags = 0;
 
-  esp_http_client_config_t http_cfg = {
-      .url = HTTP_SERVER_URL,
-      .timeout_ms = 5000,
-      .buffer_size = 1024,
-      .buffer_size_tx = 2048,
-      .method = HTTP_METHOD_POST,
-      .transport_type = HTTP_TRANSPORT_OVER_SSL,
-      .cert_pem = ssl_cert_pem_start};
-  esp_http_client_handle_t http_client = esp_http_client_init(&http_cfg);
-  esp_http_client_set_header(http_client, "apikey", API_KEY);
-  esp_http_client_set_header(http_client, "Authorization", BEARER_VALUE);
-  esp_http_client_set_header(http_client, "Content-Type", "application/json");
-  esp_http_client_set_header(http_client, "Prefer", "return=minimal");
+  ESP_ERROR_CHECK(uart_driver_install(UART_NUM, BUF_SIZE, BUF_SIZE, 10, &uart_queue, intr_alloc_flags));
+  ESP_ERROR_CHECK(uart_param_config(UART_NUM, &uart_config));
+  ESP_ERROR_CHECK(uart_set_pin(UART_NUM, UART_TX, UART_RX, UART_RTS, UART_CTS));
+  ESP_ERROR_CHECK(uart_enable_pattern_det_baud_intr(UART_NUM, '\0', 1, 10, 100, 0));
+  ESP_ERROR_CHECK(uart_pattern_queue_reset(UART_NUM, 2));
+}
 
-  uart_event_t uart_event;
+void supabase_insert()
+{
+  char *body = (char *)malloc(24500);
   while (1)
   {
-    if (xQueueReceive(uart_queue, (void *)&uart_event, pdMS_TO_TICKS(100)))
+    if (connected && body != NULL && xQueueReceive(supabase_q, &ecu2, (TickType_t)10) == pdPASS)
     {
-      switch (uart_event.type)
+      if (xSemaphoreTake(can_insert, 1) == pdTRUE)
       {
-      case UART_PATTERN_DET:
-        // case UART_DATA:
-        {
-          int pattern_pos = uart_pattern_pop_pos(UART_NUM);
-          int read_len = uart_read_bytes(UART_NUM, data, pattern_pos, pdMS_TO_TICKS(100));
-          uart_flush_input(UART_NUM);
-
-          if (read_len - 1 == sizeof(struct logs))
-          {
-            uint8_t decoded[read_len - 1];
-            cobs_decode(decoded, sizeof(decoded), data, read_len);
-            memcpy(&ecu, &decoded, sizeof(decoded));
-
-            if (!connected)
-              return;
-
-            char *body = malloc(24500);
-            // Controllare decimali
-            int body_len = sprintf(body, "{\
+        // Controllare decimali
+        int body_len = sprintf(body, "{\
               \"bms_lv0\": \"%.2f\", \
               \"bms_lv1\": \"%.2f\", \
               \"bms_lv2\": \"%.2f\", \
@@ -269,183 +275,201 @@ void serial_receive()
               \"acc_pot_2\": \"%.2f\", \
               \"brk_pot\": \"%.2f\" \
             }",
-                                   ecu.bms_lv[0],
-                                   ecu.bms_lv[1],
-                                   ecu.bms_lv[2],
-                                   ecu.bms_lv[3],
-                                   ecu.bms_lv[4],
-                                   ecu.bms_lv[5],
-                                   ecu.bms_lv[6],
-                                   ecu.bms_lv[7],
+                               ecu2.bms_lv[0],
+                               ecu2.bms_lv[1],
+                               ecu2.bms_lv[2],
+                               ecu2.bms_lv[3],
+                               ecu2.bms_lv[4],
+                               ecu2.bms_lv[5],
+                               ecu2.bms_lv[6],
+                               ecu2.bms_lv[7],
 
-                                   (
-                                       ecu.motorVal1[0].AMK_bSystemReady << 7 &
-                                       ecu.motorVal1[0].AMK_bError << 6 &
-                                       ecu.motorVal1[0].AMK_bWarn << 5 &
-                                       ecu.motorVal1[0].AMK_bQuitDcOn << 4 &
-                                       ecu.motorVal1[0].AMK_bDcOn << 3 &
-                                       ecu.motorVal1[0].AMK_bQuitInverterOn << 2 &
-                                       ecu.motorVal1[0].AMK_bInverterOn << 1 &
-                                       ecu.motorVal1[0].AMK_bDerating),
-                                   ecu.motorVal1[0].AMK_ActualVelocity,
-                                   ecu.motorVal1[0].AMK_TorqueCurrent,
-                                   ecu.motorVal1[0].AMK_Voltage,
-                                   ecu.motorVal1[0].AMK_Current,
+                               (
+                                   ecu2.motorVal1[0].AMK_bSystemReady << 7 &
+                                   ecu2.motorVal1[0].AMK_bError << 6 &
+                                   ecu2.motorVal1[0].AMK_bWarn << 5 &
+                                   ecu2.motorVal1[0].AMK_bQuitDcOn << 4 &
+                                   ecu2.motorVal1[0].AMK_bDcOn << 3 &
+                                   ecu2.motorVal1[0].AMK_bQuitInverterOn << 2 &
+                                   ecu2.motorVal1[0].AMK_bInverterOn << 1 &
+                                   ecu2.motorVal1[0].AMK_bDerating),
+                               ecu2.motorVal1[0].AMK_ActualVelocity,
+                               ecu2.motorVal1[0].AMK_TorqueCurrent,
+                               ecu2.motorVal1[0].AMK_Voltage,
+                               ecu2.motorVal1[0].AMK_Current,
 
-                                   (
-                                       ecu.motorVal1[1].AMK_bSystemReady << 7 &
-                                       ecu.motorVal1[1].AMK_bError << 6 &
-                                       ecu.motorVal1[1].AMK_bWarn << 5 &
-                                       ecu.motorVal1[1].AMK_bQuitDcOn << 4 &
-                                       ecu.motorVal1[1].AMK_bDcOn << 3 &
-                                       ecu.motorVal1[1].AMK_bQuitInverterOn << 2 &
-                                       ecu.motorVal1[1].AMK_bInverterOn << 1 &
-                                       ecu.motorVal1[1].AMK_bDerating),
-                                   ecu.motorVal1[1].AMK_ActualVelocity,
-                                   ecu.motorVal1[1].AMK_TorqueCurrent,
-                                   ecu.motorVal1[1].AMK_Voltage,
-                                   ecu.motorVal1[1].AMK_Current,
-                                   (
-                                       ecu.motorVal1[2].AMK_bSystemReady << 7 &
-                                       ecu.motorVal1[2].AMK_bError << 6 &
-                                       ecu.motorVal1[2].AMK_bWarn << 5 &
-                                       ecu.motorVal1[2].AMK_bQuitDcOn << 4 &
-                                       ecu.motorVal1[2].AMK_bDcOn << 3 &
-                                       ecu.motorVal1[2].AMK_bQuitInverterOn << 2 &
-                                       ecu.motorVal1[2].AMK_bInverterOn << 1 &
-                                       ecu.motorVal1[2].AMK_bDerating),
-                                   ecu.motorVal1[2].AMK_ActualVelocity,
-                                   ecu.motorVal1[2].AMK_TorqueCurrent,
-                                   ecu.motorVal1[2].AMK_Voltage,
-                                   ecu.motorVal1[2].AMK_Current,
-                                   (
-                                       ecu.motorVal1[3].AMK_bSystemReady << 7 &
-                                       ecu.motorVal1[3].AMK_bError << 6 &
-                                       ecu.motorVal1[3].AMK_bWarn << 5 &
-                                       ecu.motorVal1[3].AMK_bQuitDcOn << 4 &
-                                       ecu.motorVal1[3].AMK_bDcOn << 3 &
-                                       ecu.motorVal1[3].AMK_bQuitInverterOn << 2 &
-                                       ecu.motorVal1[3].AMK_bInverterOn << 1 &
-                                       ecu.motorVal1[3].AMK_bDerating),
-                                   ecu.motorVal1[3].AMK_ActualVelocity,
-                                   ecu.motorVal1[3].AMK_TorqueCurrent,
-                                   ecu.motorVal1[3].AMK_Voltage,
-                                   ecu.motorVal1[3].AMK_Current,
+                               (
+                                   ecu2.motorVal1[1].AMK_bSystemReady << 7 &
+                                   ecu2.motorVal1[1].AMK_bError << 6 &
+                                   ecu2.motorVal1[1].AMK_bWarn << 5 &
+                                   ecu2.motorVal1[1].AMK_bQuitDcOn << 4 &
+                                   ecu2.motorVal1[1].AMK_bDcOn << 3 &
+                                   ecu2.motorVal1[1].AMK_bQuitInverterOn << 2 &
+                                   ecu2.motorVal1[1].AMK_bInverterOn << 1 &
+                                   ecu2.motorVal1[1].AMK_bDerating),
+                               ecu2.motorVal1[1].AMK_ActualVelocity,
+                               ecu2.motorVal1[1].AMK_TorqueCurrent,
+                               ecu2.motorVal1[1].AMK_Voltage,
+                               ecu2.motorVal1[1].AMK_Current,
+                               (
+                                   ecu2.motorVal1[2].AMK_bSystemReady << 7 &
+                                   ecu2.motorVal1[2].AMK_bError << 6 &
+                                   ecu2.motorVal1[2].AMK_bWarn << 5 &
+                                   ecu2.motorVal1[2].AMK_bQuitDcOn << 4 &
+                                   ecu2.motorVal1[2].AMK_bDcOn << 3 &
+                                   ecu2.motorVal1[2].AMK_bQuitInverterOn << 2 &
+                                   ecu2.motorVal1[2].AMK_bInverterOn << 1 &
+                                   ecu2.motorVal1[2].AMK_bDerating),
+                               ecu2.motorVal1[2].AMK_ActualVelocity,
+                               ecu2.motorVal1[2].AMK_TorqueCurrent,
+                               ecu2.motorVal1[2].AMK_Voltage,
+                               ecu2.motorVal1[2].AMK_Current,
+                               (
+                                   ecu2.motorVal1[3].AMK_bSystemReady << 7 &
+                                   ecu2.motorVal1[3].AMK_bError << 6 &
+                                   ecu2.motorVal1[3].AMK_bWarn << 5 &
+                                   ecu2.motorVal1[3].AMK_bQuitDcOn << 4 &
+                                   ecu2.motorVal1[3].AMK_bDcOn << 3 &
+                                   ecu2.motorVal1[3].AMK_bQuitInverterOn << 2 &
+                                   ecu2.motorVal1[3].AMK_bInverterOn << 1 &
+                                   ecu2.motorVal1[3].AMK_bDerating),
+                               ecu2.motorVal1[3].AMK_ActualVelocity,
+                               ecu2.motorVal1[3].AMK_TorqueCurrent,
+                               ecu2.motorVal1[3].AMK_Voltage,
+                               ecu2.motorVal1[3].AMK_Current,
 
-                                   ecu.motorVal2[0].AMK_TempMotor,
-                                   ecu.motorVal2[0].AMK_TempInverter,
-                                   ecu.motorVal2[0].AMK_TempIGBT,
-                                   ecu.motorVal2[0].AMK_ErrorInfo,
+                               ecu2.motorVal2[0].AMK_TempMotor,
+                               ecu2.motorVal2[0].AMK_TempInverter,
+                               ecu2.motorVal2[0].AMK_TempIGBT,
+                               ecu2.motorVal2[0].AMK_ErrorInfo,
 
-                                   ecu.motorVal2[1].AMK_TempMotor,
-                                   ecu.motorVal2[1].AMK_TempInverter,
-                                   ecu.motorVal2[1].AMK_TempIGBT,
-                                   ecu.motorVal2[1].AMK_ErrorInfo,
+                               ecu2.motorVal2[1].AMK_TempMotor,
+                               ecu2.motorVal2[1].AMK_TempInverter,
+                               ecu2.motorVal2[1].AMK_TempIGBT,
+                               ecu2.motorVal2[1].AMK_ErrorInfo,
 
-                                   ecu.motorVal2[2].AMK_TempMotor,
-                                   ecu.motorVal2[2].AMK_TempInverter,
-                                   ecu.motorVal2[2].AMK_TempIGBT,
-                                   ecu.motorVal2[2].AMK_ErrorInfo,
+                               ecu2.motorVal2[2].AMK_TempMotor,
+                               ecu2.motorVal2[2].AMK_TempInverter,
+                               ecu2.motorVal2[2].AMK_TempIGBT,
+                               ecu2.motorVal2[2].AMK_ErrorInfo,
 
-                                   ecu.motorVal2[3].AMK_TempMotor,
-                                   ecu.motorVal2[3].AMK_TempInverter,
-                                   ecu.motorVal2[3].AMK_TempIGBT,
-                                   ecu.motorVal2[3].AMK_ErrorInfo,
+                               ecu2.motorVal2[3].AMK_TempMotor,
+                               ecu2.motorVal2[3].AMK_TempInverter,
+                               ecu2.motorVal2[3].AMK_TempIGBT,
+                               ecu2.motorVal2[3].AMK_ErrorInfo,
 
-                                   ecu.motorSetP[0].AMK_TorqueLimitPositive,
-                                   ecu.motorSetP[0].AMK_TorqueLimitNegative,
-                                   ecu.motorSetP[1].AMK_TorqueLimitPositive,
-                                   ecu.motorSetP[1].AMK_TorqueLimitNegative,
-                                   ecu.motorSetP[2].AMK_TorqueLimitPositive,
-                                   ecu.motorSetP[2].AMK_TorqueLimitNegative,
-                                   ecu.motorSetP[3].AMK_TorqueLimitPositive,
-                                   ecu.motorSetP[3].AMK_TorqueLimitNegative,
+                               ecu2.motorSetP[0].AMK_TorqueLimitPositive,
+                               ecu2.motorSetP[0].AMK_TorqueLimitNegative,
+                               ecu2.motorSetP[1].AMK_TorqueLimitPositive,
+                               ecu2.motorSetP[1].AMK_TorqueLimitNegative,
+                               ecu2.motorSetP[2].AMK_TorqueLimitPositive,
+                               ecu2.motorSetP[2].AMK_TorqueLimitNegative,
+                               ecu2.motorSetP[3].AMK_TorqueLimitPositive,
+                               ecu2.motorSetP[3].AMK_TorqueLimitNegative,
 
-                                   ecu.status.throttle_shared,
-                                   ecu.status.steering_shared,
-                                   ecu.status.brake_shared,
-                                   ecu.status.brakePress_shared,
-                                   ecu.status.status_shared,
-                                   ecu.status.actualVelocityKMH_shared,
-                                   ecu.pedals.brk_req_shared,
-                                   ecu.pedals.throttle_req_shared,
+                               ecu2.status.throttle_shared,
+                               ecu2.status.steering_shared,
+                               ecu2.status.brake_shared,
+                               ecu2.status.brakePress_shared,
+                               ecu2.status.status_shared,
+                               ecu2.status.actualVelocityKMH_shared,
+                               ecu2.pedals.brk_req_shared,
+                               ecu2.pedals.throttle_req_shared,
 
-                                   ecu.bms.max_bms_voltage_shared,
-                                   ecu.bms.min_bms_voltage_shared,
-                                   ecu.bms.mean_bms_voltage_shared,
-                                   ecu.bms.max_bms_temp_shared,
-                                   ecu.bms.min_bms_temp_shared,
-                                   ecu.bms.mean_bms_temp_shared,
-                                   ecu.bms.bms_bitmap_shared,
+                               ecu2.bms.max_bms_voltage_shared,
+                               ecu2.bms.min_bms_voltage_shared,
+                               ecu2.bms.mean_bms_voltage_shared,
+                               ecu2.bms.max_bms_temp_shared,
+                               ecu2.bms.min_bms_temp_shared,
+                               ecu2.bms.mean_bms_temp_shared,
+                               ecu2.bms.bms_bitmap_shared,
 
-                                   ecu.power.batteryPack_voltage_shared,
-                                   ecu.power.lem_current_shared,
-                                   ecu.power.curr_sens_shared,
-                                   ecu.power.total_power_shared,
+                               ecu2.power.batteryPack_voltage_shared,
+                               ecu2.power.lem_current_shared,
+                               ecu2.power.curr_sens_shared,
+                               ecu2.power.total_power_shared,
 
-                                   ecu.fanSpeed.rightFanSpeed_shared,
-                                   ecu.fanSpeed.leftFanSpeed_shared,
+                               ecu2.fanSpeed.rightFanSpeed_shared,
+                               ecu2.fanSpeed.leftFanSpeed_shared,
 
-                                   ecu.imu.accelerations_shared[0],
-                                   ecu.imu.accelerations_shared[1],
-                                   ecu.imu.accelerations_shared[2],
-                                   ecu.imu.omegas_shared[0],
-                                   ecu.imu.omegas_shared[1],
-                                   ecu.imu.omegas_shared[2],
+                               ecu2.imu.accelerations_shared[0],
+                               ecu2.imu.accelerations_shared[1],
+                               ecu2.imu.accelerations_shared[2],
+                               ecu2.imu.omegas_shared[0],
+                               ecu2.imu.omegas_shared[1],
+                               ecu2.imu.omegas_shared[2],
 
-                                   ecu.imu.suspensions_shared[0],
-                                   ecu.imu.suspensions_shared[1],
-                                   ecu.imu.suspensions_shared[2],
-                                   ecu.imu.suspensions_shared[3],
+                               ecu2.imu.suspensions_shared[0],
+                               ecu2.imu.suspensions_shared[1],
+                               ecu2.imu.suspensions_shared[2],
+                               ecu2.imu.suspensions_shared[3],
 
-                                   ecu.imu.temperatures_shared[0],
-                                   ecu.imu.temperatures_shared[1],
-                                   ecu.imu.temperatures_shared[2],
-                                   ecu.imu.temperatures_shared[3],
-                                   ecu.imu.temperatures_shared[4],
-                                   ecu.imu.temperatures_shared[5],
-                                   ecu.imu.temperatures_shared[6],
-                                   ecu.imu.temperatures_shared[7],
+                               ecu2.imu.temperatures_shared[0],
+                               ecu2.imu.temperatures_shared[1],
+                               ecu2.imu.temperatures_shared[2],
+                               ecu2.imu.temperatures_shared[3],
+                               ecu2.imu.temperatures_shared[4],
+                               ecu2.imu.temperatures_shared[5],
+                               ecu2.imu.temperatures_shared[6],
+                               ecu2.imu.temperatures_shared[7],
 
-                                   ecu.gpio.Bms_shared,
-                                   ecu.gpio.Imd_shared,
-                                   ecu.bms.max_bms_temp_nslave_shared,
+                               ecu2.gpio.Bms_shared,
+                               ecu2.gpio.Imd_shared,
+                               ecu2.bms.max_bms_temp_nslave_shared,
 
-                                   ecu.pedals.acc_pot1_shared,
-                                   ecu.pedals.acc_pot2_shared,
-                                   ecu.pedals.brk_pot_shared);
+                               ecu2.pedals.acc_pot1_shared,
+                               ecu2.pedals.acc_pot2_shared,
+                               ecu2.pedals.brk_pot_shared);
 
-            esp_http_client_set_post_field(http_client, body, body_len);
-            esp_http_client_perform(http_client);
-            esp_http_client_cleanup(http_client);
-          }
+        esp_http_client_set_post_field(http_client, body, body_len);
+        esp_http_client_perform(http_client);
+
+        ESP_LOGI("DONE", "SUPABASE DONE");
+
+        memset(body, 0, 24500);
+        xSemaphoreGive(can_insert);
+      }
+      else
+        ESP_LOGI("S", "Semaphore not taken");
+    }
+    else
+      ESP_LOGI("Q", "Nothing in queue");
+  }
+}
+
+void serial_receive()
+{
+  char *data = (char *)malloc(BUF_SIZE);
+
+  uart_event_t uart_event;
+  while (1)
+  {
+    if (xQueueReceive(uart_queue, (void *)&uart_event, portTICK_PERIOD_MS))
+    {
+      switch (uart_event.type)
+      {
+      case UART_PATTERN_DET:
+      {
+        int pattern_pos = uart_pattern_pop_pos(UART_NUM);
+        int read_len = uart_read_bytes(UART_NUM, data, pattern_pos, pdMS_TO_TICKS(100));
+        uart_flush_input(UART_NUM);
+
+        if (read_len - 1 == sizeof(struct logs))
+        {
+          uint8_t decoded[read_len - 1];
+          cobs_decode(decoded, sizeof(decoded), data, read_len);
+          memcpy(&ecu, &decoded, sizeof(decoded));
+
+          xQueueSend(supabase_q, &ecu, 0);
 
           memset(data, 0, BUF_SIZE);
         }
+      }
       default:
         break;
       }
     }
   }
-}
-
-void serial_init(void)
-{
-  uart_config_t uart_config = {
-      .baud_rate = UART_BAUD,
-      .data_bits = UART_DATA_8_BITS,
-      .parity = UART_PARITY_DISABLE,
-      .stop_bits = UART_STOP_BITS_1,
-      .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
-      .source_clk = UART_SCLK_DEFAULT,
-  };
-  int intr_alloc_flags = 0;
-
-  ESP_ERROR_CHECK(uart_driver_install(UART_NUM, BUF_SIZE, BUF_SIZE, 1000, &uart_queue, intr_alloc_flags));
-  ESP_ERROR_CHECK(uart_param_config(UART_NUM, &uart_config));
-  ESP_ERROR_CHECK(uart_set_pin(UART_NUM, UART_TX, UART_RX, UART_RTS, UART_CTS));
-  ESP_ERROR_CHECK(uart_enable_pattern_det_baud_intr(UART_NUM, '\0', 1, 10, 0, 0));
-  ESP_ERROR_CHECK(uart_pattern_queue_reset(UART_NUM, 1000));
 }
 
 void app_main(void)
@@ -461,5 +485,16 @@ void app_main(void)
   wifi_init_sta();
   serial_init();
 
-  xTaskCreatePinnedToCore(serial_receive, "serial_receive", 32798, NULL, tskIDLE_PRIORITY, NULL, 0);
+  supabase_q = xQueueCreate(1, sizeof(struct logs));
+  can_insert = xSemaphoreCreateBinary();
+  xSemaphoreGive(can_insert);
+
+  http_client = esp_http_client_init(&http_cfg);
+  esp_http_client_set_header(http_client, "apikey", API_KEY);
+  esp_http_client_set_header(http_client, "Authorization", BEARER_VALUE);
+  esp_http_client_set_header(http_client, "Content-Type", "application/json");
+  esp_http_client_set_header(http_client, "Prefer", "return=minimal");
+
+  xTaskCreatePinnedToCore(serial_receive, "serial_receive", BUF_SIZE * 2, NULL, 1, NULL, 0);
+  xTaskCreatePinnedToCore(supabase_insert, "supabase_insert", 65536, NULL, tskIDLE_PRIORITY, NULL, 1);
 }
