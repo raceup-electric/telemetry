@@ -18,6 +18,7 @@ extern esp_http_client_config_t http_cfg;
 
 extern bool connected;
 extern struct logs ecu2;
+extern int64_t stest;
 extern QueueHandle_t supabase_q;
 extern SemaphoreHandle_t can_insert;
 

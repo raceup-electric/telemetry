@@ -11,9 +11,11 @@ void supabase_insert()
       if (xSemaphoreTake(can_insert, 1) == pdTRUE)
       {
         if (connected)
-        {
+        { 
           // Controllare decimali
           int body_len = sprintf(body, "{\
+              \"stest\": \"%lli\", \
+              \
               \"bms_lv0\": \"%.2f\", \
               \"bms_lv1\": \"%.2f\", \
               \"bms_lv2\": \"%.2f\", \
@@ -130,6 +132,7 @@ void supabase_insert()
               \"acc_pot_2\": \"%.2f\", \
               \"brk_pot\": \"%.2f\" \
             }",
+                                 stest,
                                  ecu2.bms_lv[0],
                                  ecu2.bms_lv[1],
                                  ecu2.bms_lv[2],

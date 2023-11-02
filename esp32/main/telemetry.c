@@ -30,6 +30,7 @@ esp_http_client_config_t http_cfg = {
 // CPU
 struct logs ecu;
 struct logs ecu2;
+int64_t stest = -1;
 QueueHandle_t supabase_q;
 SemaphoreHandle_t can_insert;
 
@@ -42,6 +43,13 @@ void app_main(void)
     ret = nvs_flash_init();
   }
   ESP_ERROR_CHECK(ret);
+
+  nvs_handle_t nsv_stest_handle;
+  nvs_open("storage", NVS_READWRITE, &nsv_stest_handle);
+  nvs_get_i64(nsv_stest_handle, "stest", &stest);
+  ESP_LOGI("TEST", "STEST %lli", stest);
+  stest++;
+  nvs_set_i64(nsv_stest_handle, "stest", stest);
 
   connected = wifi_init();
   serial_init();

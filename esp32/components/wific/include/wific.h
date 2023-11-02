@@ -7,8 +7,8 @@
 #include "esp_event.h"
 #include "esp_log.h"
 
-#define WIFI_SSID           "BomboWiFi"
-#define WIFI_PASSWORD       "@Melbourne1960"
+#define WIFI_SSID           "."
+#define WIFI_PASSWORD       "8caratteri"
 #define WIFI_MAXIMUM_RETRY  10
 #define WIFI_CONNECTED_BIT  BIT0
 #define WIFI_FAIL_BIT       BIT1
