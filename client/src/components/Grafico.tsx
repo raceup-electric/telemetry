@@ -19,7 +19,7 @@ interface PlotProps {
 }
 
 // Max displayable points
-const MAX_POINT = 150;
+const MAX_POINT = 100;
 
 function Grafico({ jsonReference, title, payload }: PlotProps) {
     const [width, setWidth] = useState(document.body.clientWidth*4/6);
@@ -72,6 +72,13 @@ function Grafico({ jsonReference, title, payload }: PlotProps) {
                 name: d.name
             });
         });
+
+        _data.forEach((d) => {
+            if(d.x.length > MAX_POINT){
+                d.x.shift();
+                d.y.shift();
+            }
+        })
 
         setData(_data);
     }, [payload]);
