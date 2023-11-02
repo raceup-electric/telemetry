@@ -66,7 +66,7 @@ function Indicatore({ text, isText, payload, reference, unit, max, cl_width, cl_
 
     return (
         <Box sx={{ minWidth: '100%', minHeight: '100%', userSelect: 'none' }}>
-            <Card variant="outlined">
+            <Card variant="outlined" >
                 <CardContent>
                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                         {text}

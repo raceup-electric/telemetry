@@ -51,7 +51,7 @@ function App() {
       <Box sx={{ width: '100%', typography: 'body1' }} />
       <TabContext value={page}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList onChange={handleChange} aria-label="" variant="scrollable">
+          <TabList onChange={handleChange} aria-label="" variant="scrollable" orientation="vertical">
             <Tab label="Dashboard" value="dashboard" />
             {LOG_DEFS.map((def) => (
               <Tab key={def.id} label={def.label} value={def.id} />

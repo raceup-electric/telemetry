@@ -1,15 +1,27 @@
+import { 
+  Thermostat,
+  Build,
+  Person,
+  Bolt,
+  Explore,
+  TireRepair,
+  AcUnit,
+  ModeFanOff
+} from "@mui/icons-material";
+
 export const LOG_DEFS = [
   {
     id: 'tempmotor',
     label: 'Temperatura motori',
+    icon: Thermostat,
     values: [
       {
         identifier: 'Temperatura motori',
         jsonReferences: [
-          'temperature_motor_fl',
-          'temperature_motor_fr',
-          'temperature_motor_rl',
-          'temperature_motor_rr'
+          'amk_temp_motor_fl',
+          'amk_temp_motor_fr',
+          'amk_temp_motor_rl',
+          'amk_temp_motor_rr'
         ],
         range: [10, 90],
         unit: "T"
@@ -17,10 +29,10 @@ export const LOG_DEFS = [
       {
         identifier: 'Temperatura IGBT',
         jsonReferences: [
-          'temperature_igbt_fl',
-          'temperature_igbt_fr',
-          'temperature_igbt_rl',
-          'temperature_igbt_rr'
+          'amk_temp_igbt_fl',
+          'amk_temp_igbt_fr',
+          'amk_temp_igbt_rl',
+          'amk_temp_igbt_rr'
         ],
         range: [10, 90],
         unit: "T"
@@ -28,10 +40,10 @@ export const LOG_DEFS = [
       {
         identifier: 'Temperatura inverter',
         jsonReferences: [
-          'temperature_inverter_fl',
-          'temperature_inverter_fr',
-          'temperature_inverter_rl',
-          'temperature_inverter_rr'
+          'amk_temp_inverter_fl',
+          'amk_temp_inverter_fr',
+          'amk_temp_inverter_rl',
+          'amk_temp_inverter_rr'
         ],
         range: [10, 90],
         unit: "T"
@@ -41,14 +53,15 @@ export const LOG_DEFS = [
   {
     id: 'torque',
     label: 'Torque limits',
+    icon: Build,
     values: [
       {
         identifier: 'Torque positivo',
         jsonReferences: [
-          'torque_limit_positive_fl',
-          'torque_limit_positive_fr',
-          'torque_limit_positive_rl',
-          'torque_limit_positive_rr'
+          'amk_torque_limit_positive_fl',
+          'amk_torque_limit_positive_fr',
+          'amk_torque_limit_positive_rl',
+          'amk_torque_limit_positive_rr'
         ],
         range: [10, 90],
         unit: "Nm"
@@ -56,10 +69,10 @@ export const LOG_DEFS = [
       {
         identifier: 'Torque negativo',
         jsonReferences: [
-          'torque_limit_negative_fl',
-          'torque_limit_negative_fr',
-          'torque_limit_negative_rl',
-          'torque_limit_negative_rr'
+          'amk_torque_limit_negative_fl',
+          'amk_torque_limit_negative_fr',
+          'amk_torque_limit_negative_rl',
+          'amk_torque_limit_negative_rr'
         ],
         range: [10, 90],
         unit: "Nm"
@@ -69,6 +82,7 @@ export const LOG_DEFS = [
   {
     id: 'guida',
     label: 'Interfacce pilota',
+    icon: Person,
     values: [
       {
         identifier: 'Acceleratore',
@@ -100,6 +114,7 @@ export const LOG_DEFS = [
   {
     id: 'power',
     label: 'Potenze',
+    icon: Bolt,
     values: [
       {
         identifier: 'Tensione macchina - corrente - potenza',
@@ -115,6 +130,7 @@ export const LOG_DEFS = [
   {
     id: 'accelerations',
     label: 'Accelerazioni',
+    icon: Explore,
     values: [
       {
         identifier: 'Accelerazioni',
@@ -140,6 +156,7 @@ export const LOG_DEFS = [
   {
     id: 'suspensions',
     label: 'Sospensioni',
+    icon: TireRepair,
     values: [
       {
         identifier: 'Sospensioni',
@@ -155,6 +172,7 @@ export const LOG_DEFS = [
   {
     id: 'temperatures',
     label: 'Temperature',
+    icon: AcUnit,
     values: [
       {
         identifier: 'Temperature',
@@ -174,6 +192,7 @@ export const LOG_DEFS = [
   {
     id: 'ventoles',
     label: 'Ventole',
+    icon: ModeFanOff,
     values: [
       {
         identifier: 'Ventole',
@@ -224,7 +243,7 @@ export const DASHBOARD = [
   },
   {
     text: "Status",
-    reference: "status",
+    reference: "car_status",
     isText: true,
     unit: "",
     max: 100

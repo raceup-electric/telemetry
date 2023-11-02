@@ -22,8 +22,8 @@ interface PlotProps {
 const MAX_POINT = 150;
 
 function Grafico({ jsonReference, title, payload }: PlotProps) {
-    const [width, setWidth] = useState(document.body.clientWidth*4/5);
-    const [height, setHeight] = useState(document.body.clientHeight*4/5);
+    const [width, setWidth] = useState(document.body.clientWidth*4/6);
+    const [height, setHeight] = useState(document.body.clientHeight*4/6);
     const setWindowDimensions = () => {
         setWidth(document.getElementById("plotContainer")?.clientWidth!);
         setHeight(document.getElementById("plotContainer")?.clientHeight! + 100);
@@ -66,7 +66,7 @@ function Grafico({ jsonReference, title, payload }: PlotProps) {
             if (typeof payload.new[d.name] === 'undefined') return;
 
             _data.push({
-                x: [...d.x, payload.new["timestamp"]],
+                x: [...d.x, payload.new["millis"]],
                 y: [...d.y, payload.new[d.name]],
                 mode: 'lines+markers',
                 name: d.name

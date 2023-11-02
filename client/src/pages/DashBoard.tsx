@@ -37,8 +37,8 @@ function Dashboard({ payload }: PayLoad) {
                             isText={inc.isText} 
                             unit={inc.unit} 
                             max={inc.max} 
-                            cl_width={width/5} 
-                            cl_heigth={height/4}></Indicatore>
+                            cl_width={width/6} 
+                            cl_heigth={height/6}></Indicatore>
                     </Grid>
                 ))}
             </Grid>
