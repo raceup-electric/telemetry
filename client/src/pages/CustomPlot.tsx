@@ -30,7 +30,7 @@ interface Plot {
     values: string[]
 }
 
-function CustomPlot( { payload }: Payload ) {
+function CustomPlot({ payload }: Payload) {
     const [columns, setColumns] = useState([] as JSX.Element[]);
 
     // Get columns from supabase
@@ -38,10 +38,10 @@ function CustomPlot( { payload }: Payload ) {
     useEffect(() => {
         async function get_columns() {
             // Columns from test row
-            let { data: result, error } = await supabase.from('ecu').select('*').eq('log_name', 'STEST0');
-            let cols = Object.keys(result![0]).sort().filter(function(k) {
+            let { data: result, error } = await supabase.from(import.meta.env.VITE_SB_TABLE).select('*').range(0, 9);
+            let cols = Object.keys(result![0]).sort().filter(function (k) {
                 // remove not plottable
-                return !(k === "timestamp" || k === "log_name");
+                return !(k === "id" || k === "millis" || k === "stest");
             }).map((option) => (
                 // Map for dropdown
                 <MenuItem key={option} value={option}>
@@ -71,12 +71,12 @@ function CustomPlot( { payload }: Payload ) {
     const handleClickOpen = () => { setOpen(true); };
     const handleClose = () => { setOpen(false); };
 
-    
+
     const [grafici, setGrafici] = useState([] as Plot[]);
     const handlePlot = () => {
         if (value.length == 0) return;
 
-        let newGrafici = [...grafici, {"values": value.sort()}];
+        let newGrafici = [...grafici, { "values": value.sort() }];
 
         setGrafici(newGrafici);
         setOpen(false);
@@ -85,9 +85,20 @@ function CustomPlot( { payload }: Payload ) {
 
     return (
         <>
-            {grafici.map((grafico) => (
-                <Grafico jsonReference={grafico.values} payload={payload} key={grafici.length} title="Custom" />
-            ))}
+            <Stack
+                justifyContent="center"
+                alignItems="center"
+                spacing={0}
+                sx={{
+                    width: '95%',
+                    height: '95%',
+                    padding: '5%',
+                    boxSizing: 'border-box'
+                }}>
+                    {grafici.map((grafico) => (
+                        <Grafico jsonReference={grafico.values} payload={payload} key={grafici.length} title="Custom" />
+                    ))}
+            </Stack>
             <Fab onClick={handleClickOpen} style={{
                 'position': 'fixed',
                 'bottom': '5%',

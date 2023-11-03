@@ -125,6 +125,7 @@ function App() {
                             </TabPanel>
                         ))}
                         <TabPanel value="customPlot" sx={{
+                            width: '100vw',
                             height: '100%',
                             overflow: 'auto'
                         }}>

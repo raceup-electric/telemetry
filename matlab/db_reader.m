@@ -1,0 +1,197 @@
+clear all
+close all
+
+import supabase.*
+
+sb_host = "https://wvjiwtbxvehgbdskepdn.supabase.co";
+sb_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind2aml3dGJ4dmVoZ2Jkc2tlcGRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTM4MjEzNzMsImV4cCI6MjAwOTM5NzM3M30.-QJcyNwn_4Dtkvohg-g3GJPb0jCoePxB1MEH7tzFbbo";
+sb_table = "test";
+
+sup = supabase(sb_host, sb_key);
+
+[table, filters] = get_all_table_entries(sup, sb_table);
+
+title = populateGUI(table,filters);
+
+function title = populateGUI(table,filters)
+    uifig = uifigure('Position',[200,100,1000,720], 'Name', 'log_reader');
+
+    configPanel = uipanel(uifig,"Title","Database");
+    configPanel.Position = [0, 655, 1000, 65];
+    gridLayout = uigridlayout(configPanel,[1,3]);
+
+    fieldsPanel = uipanel(uifig,"Title","Fields");
+    fieldsPanel.Position = [0, 0, 1000, 655];
+    
+    dayTests = filters(1,2);
+
+    dayDropdown = uidropdown(gridLayout, "Items", string(filters(:,1)), "ItemsData", (1:length(string(filters(:,1)))));
+    testDropdown = uidropdown(gridLayout, "Items", dayTests{1}, "ItemsData", (1:length(dayTests{1})));
+    loadTestButton = uibutton(gridLayout);
+
+    dayDropdown.ValueChangedFcn = @(src,event)updateTests(src,event,filters,testDropdown);
+
+    loadTestButton.Text = 'Load test';
+    loadTestButton.ButtonPushedFcn = @(src,event)loadTest(src,event,table,fieldsPanel,testDropdown);
+    
+    title = dayDropdown.Items(dayDropdown.Value);
+end
+
+function updateTests(src,event,filters,testD)
+    dayTests = filters(src.Value,2);
+    testD.Items = dayTests{1};
+    testD.ItemsData = (1:length(dayTests{1}));
+end
+
+function loadTest(scr,event,table,fieldsP,testD)
+    t = table(strcmp(string({table.('stest')}), string(testD.Items(testD.Value))));
+    t = rmfield(t,{'id','stest','day'});
+
+    gridLayout = uigridlayout(fieldsP,[15, 7]);
+
+    t_field = fieldnames(t);
+    n_fieldname = 1;
+
+    checkBoxes = [];
+    for i = 1:7
+        for j = 2:15
+            if strcmp(t_field(n_fieldname), "millis")
+                break;
+            end
+
+            newCheck = uicheckbox(gridLayout);
+            newCheck.Layout.Row = j;
+            newCheck.Layout.Column = i;
+            newCheck.Text = t_field(n_fieldname);
+
+            checkBoxes = [checkBoxes; newCheck];
+            n_fieldname = n_fieldname + 1;
+        end
+    end
+
+    actionButton = uibutton(gridLayout);
+    actionButton.Text = 'Show Figure';
+    actionButton.ButtonPushedFcn = @(btn,event) plotButtonPushed(btn,checkBoxes,t);
+    actionButton.Layout.Row = 1;
+    actionButton.Layout.Column = 2;
+    
+    actionButton = uibutton(gridLayout);
+    actionButton.Text = 'Close Figures';
+    actionButton.ButtonPushedFcn = @(btn,event) closeFigButtonPushed(btn);
+    actionButton.Layout.Row = 1;
+    actionButton.Layout.Column = 3;
+    
+    actionButton = uibutton(gridLayout);
+    actionButton.Text = 'Show FFT';
+    actionButton.ButtonPushedFcn = @(btn,event) fftButtonPushed(btn,checkBoxes,t);
+    actionButton.Layout.Row = 1;
+    actionButton.Layout.Column = 4;
+    
+    actionButton = uibutton(gridLayout);
+    actionButton.Text = 'Real Time Figure';
+    actionButton.ButtonPushedFcn = @(btn,event) animButtonPushed(btn,checkBoxes,t);
+    actionButton.Layout.Row = 1;
+    actionButton.Layout.Column = 5;
+    
+    actionButton = uibutton(gridLayout);
+    actionButton.Text = 'Clear Selection';
+    actionButton.ButtonPushedFcn = @(btn,event) clearButtonPushed(btn,checkBoxes);
+    actionButton.Layout.Row = 1;
+    actionButton.Layout.Column = 6;
+end
+
+function plotButtonPushed(btn,checkBoxes,table)
+    t = table;
+
+    millis = double(string(posixtime(datetime({t(:).millis},'InputFormat','yyyy-MM-dd''T''HH:mm:ss.SSSSSS'))));
+    t = rmfield(t,{'millis'});
+
+    millis = millis - millis(1);
+
+    fn = fieldnames(t);
+    figure();
+    hold on;
+    grid on;
+
+    titles = [];
+    for i = 1:length(fn)
+        if checkBoxes(i).Value
+            titles = [titles, string(fn(i))];
+            plot(millis, double(string({t(:).(string(fn(i)))})));
+        end
+    end
+    legend(titles);
+end
+
+function closeFigButtonPushed(btn)
+    close all;
+end
+
+function fftButtonPushed(btn,checkBoxes,table)
+    t = table;
+
+    millis = double(string(posixtime(datetime({t(:).millis},'InputFormat','yyyy-MM-dd''T''HH:mm:ss.SSSSSS'))));
+    t = rmfield(t,{'millis'});
+
+    millis = millis - millis(1);
+
+    L = length(millis);
+    Fs = 1/mean(diff(millis));
+    f = Fs * (0:(L/2))/L;
+
+    fn = fieldnames(t);
+    figure();
+    hold on;
+    grid on;
+
+    titles = [];
+    for i = 1:length(fn)
+        if checkBoxes(i).Value
+            titles = [titles, string(fn(i))];
+
+            fftvalues = fft(double(string({t(:).(string(fn(i)))})));
+            fftvalues = abs(fftvalues/L);
+            fftvalues = fftvalues(1:L/2+1);
+            fftvalues(2:end-1) = 2 * fftvalues(2:end-1);
+
+            plot(f,fftvalues);
+        end
+    end
+    legend(titles);
+end
+
+function animButtonPushed(btn,checkBoxes,table)
+    t = table;
+
+    millis = double(string(posixtime(datetime({t(:).millis},'InputFormat','yyyy-MM-dd''T''HH:mm:ss.SSSSSS'))));
+    t = rmfield(t,{'millis'});
+
+    millis = millis - millis(1);
+
+    fn = fieldnames(t);
+    figure();
+
+    titles = [];
+
+    for time = 1:length(millis)-1
+        for i = 1:length(fn)
+            if checkBoxes(i).Value
+                if time == 1
+                    titles = [titles, string(fn(i))];
+                end
+                value = double(string({t(:).(string(fn(i)))}));
+                plot(millis(1:time), value(1:time));
+            end
+        end
+
+        grid on;
+        legend(titles);
+        pause((millis(time+1) - millis(time)));
+    end
+end
+
+function clearButtonPushed(btn,checkBoxes)
+    for i = 1:length(checkBoxes)
+        checkBoxes(i).Value = 0;
+    end
+end
