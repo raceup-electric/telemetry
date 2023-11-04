@@ -1,13 +1,153 @@
-import { 
+import {
   Thermostat,
   Build,
   Person,
   Bolt,
   Explore,
-  TireRepair,
+  Animation,
   AcUnit,
   ModeFanOff
 } from "@mui/icons-material";
+
+export const BSMHV_values = {
+  segments: [
+    [
+      {
+        text: "Seg 0, Cell 0",
+        reference: "cell_0_0",
+        isText: false,
+        unit: "V",
+        max: 5
+      },
+      {
+        text: "Seg 0, Cell 1",
+        reference: "cell_0_1",
+        isText: false,
+        unit: "V",
+        max: 5
+      },
+      {
+        text: "Seg 0, Cell 2",
+        reference: "cell_0_2",
+        isText: false,
+        unit: "V",
+        max: 5
+      },
+      {
+        text: "Seg 0, Cell 3",
+        reference: "cell_0_3",
+        isText: false,
+        unit: "V",
+        max: 5
+      },
+      {
+        text: "Seg 0, Cell 4",
+        reference: "cell_0_4",
+        isText: false,
+        unit: "V",
+        max: 5
+      },
+      {
+        text: "Seg 0, Cell 5",
+        reference: "cell_0_5",
+        isText: false,
+        unit: "V",
+        max: 5
+      },
+      {
+        text: "Seg 0, Cell 6",
+        reference: "cell_0_6",
+        isText: false,
+        unit: "V",
+        max: 5
+      },
+      {
+        text: "Seg 0, Cell 7",
+        reference: "cell_0_7",
+        isText: false,
+        unit: "V",
+        max: 5
+      },
+      {
+        text: "Seg 0, Cell 8",
+        reference: "cell_0_8",
+        isText: false,
+        unit: "V",
+        max: 5
+      },
+      {
+        text: "Seg 0, Cell 9",
+        reference: "cell_0_9",
+        isText: false,
+        unit: "V",
+        max: 5
+      },
+      {
+        text: "Seg 0, Cell 10",
+        reference: "cell_0_10",
+        isText: false,
+        unit: "V",
+        max: 5
+      },
+      {
+        text: "Seg 0, Cell 11",
+        reference: "cell_0_11",
+        isText: false,
+        unit: "V",
+        max: 5
+      },
+      {
+        text: "Seg 0, Cell 12",
+        reference: "cell_0_12",
+        isText: false,
+        unit: "V",
+        max: 5
+      },
+      {
+        text: "Seg 0, Cell 13",
+        reference: "cell_0_13",
+        isText: false,
+        unit: "V",
+        max: 5
+      },
+      {
+        text: "Seg 0, Cell 14",
+        reference: "cell_0_14",
+        isText: false,
+        unit: "V",
+        max: 5
+      },
+      {
+        text: "Seg 0, Cell 15",
+        reference: "cell_0_15",
+        isText: false,
+        unit: "V",
+        max: 5
+      },
+      {
+        text: "Seg 0, Temp 1",
+        reference: "temp_0_1",
+        isText: false,
+        unit: "°C",
+        max: 50
+      },
+      {
+        text: "Seg 0, Temp 2",
+        reference: "temp_0_2",
+        isText: false,
+        unit: "°C",
+        max: 50
+      },
+      {
+        text: "Seg 0, Temp 3",
+        reference: "temp_0_3",
+        isText: false,
+        unit: "°C",
+        max: 50
+      },
+    ]
+  ]
+}
 
 export const LOG_DEFS = [
   {
@@ -156,7 +296,7 @@ export const LOG_DEFS = [
   {
     id: 'suspensions',
     label: 'Sospensioni',
-    icon: TireRepair,
+    icon: Animation,
     values: [
       {
         identifier: 'Sospensioni',

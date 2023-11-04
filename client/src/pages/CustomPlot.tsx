@@ -38,7 +38,7 @@ function CustomPlot({ payload }: Payload) {
     useEffect(() => {
         async function get_columns() {
             // Columns from test row
-            let { data: result, error } = await supabase.from(import.meta.env.VITE_SB_TABLE).select('*').range(0, 9);
+            let { data: result, error } = await supabase.from(import.meta.env.VITE_SB_zTABLE).select('*').range(0, 1);
             let cols = Object.keys(result![0]).sort().filter(function (k) {
                 // remove not plottable
                 return !(k === "id" || k === "millis" || k === "stest");

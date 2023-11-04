@@ -38,7 +38,9 @@ function Dashboard({ payload }: PayLoad) {
                             unit={inc.unit} 
                             max={inc.max} 
                             cl_width={width/6} 
-                            cl_heigth={height/6}></Indicatore>
+                            cl_heigth={height/6}
+                            mode={"gauge+number"}
+                            type={"indicator"}></Indicatore>
                     </Grid>
                 ))}
             </Grid>

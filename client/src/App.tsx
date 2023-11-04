@@ -17,12 +17,14 @@ import DashBoard from './pages/DashBoard';
 
 import {
     AutoFixHigh,
+    BatteryCharging90,
     Dashboard
 } from '@mui/icons-material';
 
 import { LOG_DEFS } from './log_defs';
 import DefaultPlots from './pages/DefaultPlots';
 import { SB_CONTEXT } from './main';
+import Bms2 from './pages/Bms';
 
 interface Payload {
     payload: {
@@ -39,16 +41,28 @@ function App() {
         setPage(newPage);
     };
 
-    const [lastPayload, setNewPayload] = useState({ new: {} });
+    const [ecuPayload, setEcuPayload] = useState({ new: {} });
+    const [bmshvPayload, setBmsHvPayload] = useState({ new: {} });
 
     // Supabase event
     const ecu = supabase.channel('custom-insert-channel').on('postgres_changes', {
         event: 'INSERT',
         schema: 'public',
-        table: import.meta.env.VITE_SB_TABLE,
+        table: import.meta.env.VITE_SB_ECU_TABLE,
     },
         (payload) => {
-            setNewPayload(payload);
+            setEcuPayload(payload);
+        }
+    ).subscribe();
+
+    const bmshv = supabase.channel('custom-insert-channel').on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: import.meta.env.VITE_SB_BMSHV_TABLE,
+    },
+        (payload) => {
+            setBmsHvPayload(payload);
+            console.log(payload);
         }
     ).subscribe();
 
@@ -89,6 +103,7 @@ function App() {
                             }}
                         >
                             <Tab icon={<Dashboard />} iconPosition="start" label="Dashboard" value="dashboard" />
+                            <Tab icon={<BatteryCharging90 />} iconPosition="start" label="Bms HV" value="bmshv" />
                             {LOG_DEFS.map((def) => (
                                 <Tab key={def.id} icon={createElement(def.icon)} iconPosition="start" label={def.label} value={def.id} />
                             ))}
@@ -110,7 +125,16 @@ function App() {
                             overflow: 'auto'
                         }}>
                             <div style={{ marginTop: '5%' }}>
-                                <DashBoard payload={lastPayload} />
+                                <DashBoard payload={ecuPayload} />
+                            </div>
+                        </TabPanel>
+                        <TabPanel value="bmshv" sx={{
+                            width: '79vw',
+                            height: '100%',
+                            overflow: 'auto'
+                        }}>
+                            <div style={{ marginTop: '0%', marginBottom: '4%', width: '100%' }}>
+                                <Bms2 payload={bmshvPayload} />
                             </div>
                         </TabPanel>
                         {LOG_DEFS.map((def) => (
@@ -120,7 +144,7 @@ function App() {
                                 overflow: 'auto'
                             }}>
                                 <div style={{ marginTop: '5%' }}>
-                                    <DefaultPlots jRef={def.values} payload={lastPayload}></DefaultPlots>
+                                    <DefaultPlots jRef={def.values} payload={ecuPayload}></DefaultPlots>
                                 </div>
                             </TabPanel>
                         ))}
@@ -130,7 +154,7 @@ function App() {
                             overflow: 'auto'
                         }}>
                             <div style={{ marginTop: '5%' }}>
-                                <CustomPlot payload={lastPayload} />
+                                <CustomPlot payload={ecuPayload} />
                             </div>
                         </TabPanel>
                     </TabContext>

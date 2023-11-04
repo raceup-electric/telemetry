@@ -8,10 +8,20 @@ sb_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6I
 sb_table = "test";
 
 sup = supabase(sb_host, sb_key);
-
 [table, filters] = get_all_table_entries(sup, sb_table);
 
 title = populateGUI(table,filters);
+
+%% AREA DI CALCOLO
+% Qui si possono fare tutte le operazioni del caso accedendo ai dati
+% semplicemente con il nome della colonna:
+%   Ad esempio per accedere alla colonna total_power si può fare: {table(:).total_power}
+% I nomi delle colonne si possono vedere aprendo la variabile table dalla
+% workspace
+
+
+
+%%
 
 function title = populateGUI(table,filters)
     uifig = uifigure('Position',[200,100,1000,720], 'Name', 'log_reader');
@@ -33,6 +43,9 @@ function title = populateGUI(table,filters)
 
     loadTestButton.Text = 'Load test';
     loadTestButton.ButtonPushedFcn = @(src,event)loadTest(src,event,table,fieldsPanel,testDropdown);
+
+    loadTest(0, 0, table,fieldsPanel,testDropdown);
+    fieldsPanel.Enable = false;
     
     title = dayDropdown.Items(dayDropdown.Value);
 end
@@ -44,6 +57,8 @@ function updateTests(src,event,filters,testD)
 end
 
 function loadTest(scr,event,table,fieldsP,testD)
+    fieldsP.Enable = true;
+
     t = table(strcmp(string({table.('stest')}), string(testD.Items(testD.Value))));
     t = rmfield(t,{'id','stest','day'});
 

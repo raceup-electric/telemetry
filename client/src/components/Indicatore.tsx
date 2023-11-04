@@ -21,9 +21,11 @@ interface Indicator {
     max: number,
     cl_width: number,
     cl_heigth: number
+    mode: "number" | "text" | "delta" | "gauge" | "lines" | "markers" | "lines+markers" | "text+markers" | "text+lines" | "text+lines+markers" | "none" | "number+delta" | "gauge+number" | "gauge+number+delta" | "gauge+delta" | undefined,
+    type: any | undefined
 }
 
-function Indicatore({ text, isText, payload, reference, unit, max, cl_width, cl_heigth }: Indicator) {
+function Indicatore({ text, isText, payload, reference, unit, max, cl_width, cl_heigth, mode, type }: Indicator) {
     const [value, setValue] = useState(0);
 
     useEffect(() => {
@@ -53,8 +55,8 @@ function Indicatore({ text, isText, payload, reference, unit, max, cl_width, cl_
                     domain: { x: [0, 1], y: [0, 1] },
                     value: value,
                     title: { text: text },
-                    type: "indicator",
-                    mode: "gauge+number",
+                    type: type,
+                    mode: mode,
                     gauge: {
                         axis: { range: [null, max] }
                     }
