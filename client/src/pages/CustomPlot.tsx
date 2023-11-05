@@ -39,6 +39,7 @@ function CustomPlot({ payload }: Payload) {
         async function get_columns() {
             // Columns from test row
             let { data: result, error } = await supabase.from(import.meta.env.VITE_SB_zTABLE).select('*').range(0, 1);
+            if(result?.length == 0) return;
             let cols = Object.keys(result![0]).sort().filter(function (k) {
                 // remove not plottable
                 return !(k === "id" || k === "millis" || k === "stest");

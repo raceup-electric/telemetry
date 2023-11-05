@@ -13,7 +13,7 @@ const TEMPS = 3;
 
 let dataMatrix: number[][] = new Array(CELLS + TEMPS).fill(0).map(() => new Array(SEGMENTS).fill(0));
 
-function Bms2({ payload }: PayLoad) {
+function Bms({ payload }: PayLoad) {
     const [width, setWidth] = useState(document.body.clientWidth);
     const [height, setHeight] = useState(document.body.clientHeight);
     const setWindowDimensions = () => {
@@ -47,7 +47,7 @@ function Bms2({ payload }: PayLoad) {
                     <TableHead>
                         <TableRow>
                             {Array.from(Array(SEGMENTS).keys()).map((seg) => (
-                                <TableCell align="center" key={"header" + seg}><b>Seg {seg}</b></TableCell>
+                                <TableCell align="center" key={"header" + seg}><b>Seg. {seg}</b></TableCell>
                             ))}
                         </TableRow>
                     </TableHead>
@@ -80,7 +80,7 @@ function Bms2({ payload }: PayLoad) {
                     <TableHead>
                         <TableRow>
                             {Array.from(Array(SEGMENTS).keys()).map((seg) => (
-                                <TableCell align="center" key={"header" + seg}><b>Seg {seg}</b></TableCell>
+                                <TableCell align="center" key={"header" + seg}><b>Seg. {seg}</b></TableCell>
                             ))}
                         </TableRow>
                     </TableHead>
@@ -112,4 +112,4 @@ function Bms2({ payload }: PayLoad) {
     )
 }
 
-export default Bms2
+export default Bms

@@ -31,7 +31,7 @@ function Indicatore({ text, isText, payload, reference, unit, max, cl_width, cl_
     useEffect(() => {
         let newValue = 0;
 
-        newValue = (typeof payload.new[reference] === 'undefined') ? 0 : payload.new[reference];
+        newValue = (typeof payload.new[reference] === 'undefined' || payload.new[reference] === null) ? 0 : payload.new[reference];
         switch(reference) {
             case 'amk_s':
                 newValue = Math.max(

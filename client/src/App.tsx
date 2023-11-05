@@ -24,7 +24,7 @@ import {
 import { LOG_DEFS } from './log_defs';
 import DefaultPlots from './pages/DefaultPlots';
 import { SB_CONTEXT } from './main';
-import Bms2 from './pages/Bms';
+import Bms from './pages/Bms';
 
 interface Payload {
     payload: {
@@ -45,24 +45,24 @@ function App() {
     const [bmshvPayload, setBmsHvPayload] = useState({ new: {} });
 
     // Supabase event
-    const ecu = supabase.channel('custom-insert-channel').on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
+
+    const ecu = supabase.channel('ecu_channel').on('postgres_changes', { 
+        event: 'INSERT', 
+        schema: 'public', 
         table: import.meta.env.VITE_SB_ECU_TABLE,
     },
         (payload) => {
-            setEcuPayload(payload);
+            setEcuPayload(payload)
         }
     ).subscribe();
 
-    const bmshv = supabase.channel('custom-insert-channel').on('postgres_changes', {
+    const bmshv = supabase.channel('bms_channel').on('postgres_changes', {
         event: 'INSERT',
         schema: 'public',
         table: import.meta.env.VITE_SB_BMSHV_TABLE,
     },
         (payload) => {
             setBmsHvPayload(payload);
-            console.log(payload);
         }
     ).subscribe();
 
@@ -134,7 +134,7 @@ function App() {
                             overflow: 'auto'
                         }}>
                             <div style={{ marginTop: '0%', marginBottom: '4%', width: '100%' }}>
-                                <Bms2 payload={bmshvPayload} />
+                                <Bms payload={bmshvPayload} />
                             </div>
                         </TabPanel>
                         {LOG_DEFS.map((def) => (

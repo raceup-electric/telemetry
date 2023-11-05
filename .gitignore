@@ -27,3 +27,5 @@ esp32/.devcontainer
 esp32/.vscode
 esp32/build
 arduino/.vscode
+
+config
