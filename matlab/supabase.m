@@ -33,5 +33,56 @@ classdef supabase
                 filters = [filters; filter];
             end
         end
+
+        function test_info = get_all_test_infos(obj, test)
+            % get request
+            uri = strcat(obj.SB_HOST, '/rest/v1/tests_info?test=eq.', string(test), '&select=*');
+    
+            options = weboptions(...
+                'HeaderFields', [matlab.net.http.HeaderField('apikey', obj.SB_KEY), matlab.net.http.HeaderField('Authorization', strcat('Bearer ', obj.SB_KEY)) ]...
+            );
+        
+            % extract table
+            test_info = webread(uri, options);
+        end
+
+        function update_test_info(obj, test, updatedText)
+%             % get request
+%             uri = strcat(obj.SB_HOST, '/rest/v1/tests_info?test=eq.', string(test));
+%     
+%             options = weboptions(...
+%                 'HeaderFields', [ ...
+%                     matlab.net.http.HeaderField('apikey', obj.SB_KEY), ...
+%                     matlab.net.http.HeaderField('Authorization', strcat('Bearer ', obj.SB_KEY)), ...
+%                     matlab.net.http.HeaderField('Content-Type', 'application/json'), ...
+%                     matlab.net.http.HeaderField('Prefer', 'return=minimal') ...
+%                 ] ...
+%             );
+% 
+%             body = struct(...
+%                 'description', string(updatedText) ...
+%             );
+%             disp(body);
+%         
+%             % extract table
+%             response = webwrite(uri, body, options);
+%             disp(response);
+            import matlab.net.*
+            import matlab.net.http.*
+            import matlab.net.http.io.*
+            
+            params = {'test' strcat('eq.', string(test))};
+            header = [
+                HeaderField('apikey', obj.SB_KEY)
+                HeaderField('Authorization', strcat('Bearer', obj.SB_KEY))
+                HeaderField('Content-Type', 'application/json')
+                HeaderField('Prefer', 'return=minimal')
+            ]';
+            uri = URI(strcat(obj.SB_HOST,'/rest/v1/tests_info'), QueryParameter(params'));
+            body = JSONProvider(struct(...
+                'description', updatedText...
+            ));
+            response = RequestMessage('patch', header, body).send(uri.EncodedURI);
+        end
     end
 end
