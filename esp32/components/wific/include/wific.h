@@ -11,6 +11,7 @@
 #define WIFI_PASSWORD       "8caratteri"
 #define WIFI_MAXIMUM_RETRY  10
 #define WIFI_CONNECTED_BIT  BIT0
+
 #define WIFI_FAIL_BIT       BIT1
 
 bool wifi_init();

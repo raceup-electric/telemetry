@@ -85,27 +85,11 @@ export const LOG_DEFS = [
     icon: Person,
     values: [
       {
-        identifier: 'Acceleratore',
+        identifier: 'Pilota',
         jsonReferences: [
           'throttle',
-          'actual_velocity_kmh',
-          'thr_req',
-          'acc_pot_1',
-          'acc_pot_2'
-        ]
-      },
-      {
-        identifier: 'Freno',
-        jsonReferences: [
           'brake',
-          'brake_press',
-          'brk_req',
-          'brk_pot',
-        ]
-      },
-      {
-        identifier: 'Volante',
-        jsonReferences: [
+          'actual_velocity_kmh',
           'steering_angle'
         ]
       }

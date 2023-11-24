@@ -88,9 +88,6 @@ function loadTest(scr,event,table,fieldsP,testD)
         end
     end
 
-    showInfos = uibutton(gridLayout);
-    showInfos.Text = 'Infos on test';
-
     actionButton = uibutton(gridLayout);
     actionButton.Text = 'Show Figure';
     actionButton.ButtonPushedFcn = @(btn,event) plotButtonPushed(btn,checkBoxes,t);

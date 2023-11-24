@@ -28,4 +28,5 @@ esp32/.vscode
 esp32/build
 arduino/.vscode
 
-config
+config/privateKey.txt
+config/publicKey.txt
