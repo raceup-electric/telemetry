@@ -1,5 +1,0 @@
-{
-    "sketch": "arduino.ino",
-    "board": "arduino:sam:arduino_due_x_dbg",
-    "port": "COM15"
-}

@@ -1,166 +1,96 @@
-import { useContext, useEffect } from "react";
-import { SocketContext } from "../main";
-import uPlot, { AlignedData, Range } from "uplot";
-import { plotterOptions } from "../PlotterOptions";
-import { Fab } from "@mui/material";
-import DownloadIcon from '@mui/icons-material/Download'
+import { useEffect, useState } from "react";
+import Plot from "react-plotly.js";
+
+interface Payload {
+    new: { [key: string]: number };
+}
+
+interface PlotData {
+    x: number[],
+    y: number[],
+    mode: string,
+    name: string
+}
 
 interface PlotProps {
     jsonReference: string[],
     title: string,
-    custom: boolean
-    _range: number[] | undefined
+    payload: Payload
 }
 
-const MAX_POINT = 150;
-const COLORS: String[] = [
-    "FF0000", "00FF00", "0000FF", "FFFF00", "FF00FF", "00FFFF",
-    "800000", "008000", "000080", "808000", "800080", "008080",
-    "C0C0C0", "808080", "FF8000", "800040", "FF0080", "FF80FF",
-    "004080", "FFC0C0", "FFD700", "FF00C0", "00FFC0", "C0FF00",
-    "FF40FF", "004040", "FF4000", "408080", "40FF00", "4000FF",
-    "40C0FF", "40FFC0", "FF40C0", "C040FF", "C0FF40", "FFC040"
-];
+// Max displayable points
+const MAX_POINT = 100;
 
-function Grafico({ jsonReference, title, custom, _range }: PlotProps) {
-    let EXPORT = [[]];
-
-    function exportArrayToCsv() {
-        let csvContent = "data:text/csv;charset=utf-8," + EXPORT.map(e => e.join(",")).join("\n");
-        var encodedUri = encodeURI(csvContent);
-        var link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "my_data.csv");
-        document.body.appendChild(link); // Required for FF
-
-        link.click();
-    }
-  
-    // Before page unload download file
-    if(custom) window.addEventListener("beforeunload", exportArrayToCsv);
-
-    // Resize event for plots
-    window.addEventListener("resize", () => {
-        grafico.setSize({
-            width: document.getElementById("plotContainer")?.clientWidth!,
-            height: document.getElementById("plotContainer")?.clientHeight!,
-        });
-    });
-
-    // SocketIo handler
-    const socket = useContext(SocketContext)!;
-    
-    // Init data with an array for x-points
-    let data: AlignedData = [[]];
-
-    // Plot container
-    let div = document.createElement("div");
-    div.style.marginBottom = "5%";
-    
-    // Init array for plot data
-    let _series: uPlot.Series[] = [{
-        label: "Time"
-    }];
-    let i = 0;
-    plotterOptions.forEach(opt => {
-        if (!jsonReference.includes(opt.value)) return;
-        // Add an array foreach option to plot
-        (data as [[], []]).push([]);
-        (EXPORT.push([]));
-        _series.push({
-            label: opt.value,
-            paths: uPlot.paths.spline!(),
-            points: {
-                show: true,
-            },
-            stroke: "#" + COLORS[i],
-        });
-        i++;
-    });
-
-    // Plot options
-    let opt = {
-        title: title,
-        width: 800,
-        height: 600,
-        pxAlign: 0,
-        series: _series,
-        scales: {
-            x: {
-                time: false
-            },
-            y: {
-                auto: (custom),
-                range: (_range as Range.MinMax),
-            }
-        }
+function Grafico({ jsonReference, title, payload }: PlotProps) {
+    const [width, setWidth] = useState(document.body.clientWidth*4/6);
+    const [height, setHeight] = useState(document.body.clientHeight*4/6);
+    const setWindowDimensions = () => {
+        setWidth(document.getElementById("plotContainer")?.clientWidth!);
+        setHeight(document.getElementById("plotContainer")?.clientHeight! + 100);
     }
 
-    // Actual plot
-    let grafico = new uPlot(opt, data, div);
-    let pointsPlotted = 0;
-
-    // Append plot to page
     useEffect(() => {
-        document.getElementById("plotContainer")?.appendChild(div);
-        grafico.setSize({
-            width: document.getElementById("plotContainer")!.clientWidth, 
-            height: document.getElementById("plotContainer")!.clientHeight
-        });
-    }, []);
-
-    // Socket event on new data
-    socket.on("data", (incomingData) => {
-        let newPlotData = grafico.data; 
-        jsonReference.forEach((ref, i) => {
-            // Get data from json
-            let value = ((ref).split(".")).reduce((a, c) => a[c], incomingData);
-
-            // Add y-data to series
-            (newPlotData[i+1] as Number[]).push(value);
-            (EXPORT[i+1] as Number[]).push(value);
-
-            // Add x
-            if(i == 0) {
-                (newPlotData[0] as Number[]).push(Number(incomingData.timestamp));
-                (EXPORT[0] as Number[]).push(Number(incomingData.timestamp));
-            };
-        });
-
-        // Start sliding
-        if(pointsPlotted >= MAX_POINT){
-            newPlotData.map(el => (el as Number[]).shift())
+        window.addEventListener('resize', setWindowDimensions);
+        return () => {
+          window.removeEventListener('resize', setWindowDimensions)
         }
+    }, [])
 
-        grafico.setData(newPlotData);
-        pointsPlotted++;
+    const [data, setData] = useState(() => {
+        let tempData = [] as PlotData[];
+        jsonReference.forEach((ref) => {
+            let trace = {
+                x: [],
+                y: [],
+                mode: 'lines+markers',
+                name: ref
+            }
+            tempData.push(trace);
+        });
 
-        //Status 
-        // RSSI -> -50:-130
-        // SNR -> 10:-20
-        if(incomingData.RSSI < -130)
-            document.getElementById("rssi")!.style.color = 'red';
-        if(incomingData.RSSI >= -130 && incomingData.RSSI < -85)
-            document.getElementById("rssi")!.style.color = 'yellow';
-        if(incomingData.RSSI >= -85)
-            document.getElementById("rssi")!.style.color = 'green';
-
-        if(incomingData.SNR < -20)
-            document.getElementById("snr")!.style.color = 'red';
-        if(incomingData.SNR >= -20 && incomingData.SNR < -5)
-            document.getElementById("snr")!.style.color = 'yellow';
-        if(incomingData.SNR >= -5)
-            document.getElementById("snr")!.style.color = 'green';
+        return tempData;
     });
 
-    let download = (custom) ? 
-        <Fab onClick={exportArrayToCsv!} style={{'position': 'fixed', 'bottom': '15%', 'right': '3%'}} color="primary" aria-label="add"><DownloadIcon /></Fab> :
-        <> </>
+    let layout = {
+        title: title,
+        width: width,
+        height: height,
+        margin: { t: 30, b: 100 },
+        showlegend: true
+    };
+
+    useEffect(() => {
+        let _data = [] as PlotData[];
+
+        data.forEach((d) => {
+            if (typeof payload.new[d.name] === 'undefined') return;
+
+            _data.push({
+                x: [...d.x, payload.new["millis"]],
+                y: [...d.y, payload.new[d.name]],
+                mode: 'lines+markers',
+                name: d.name
+            });
+        });
+
+        _data.forEach((d) => {
+            if(d.x.length > MAX_POINT){
+                d.x.shift();
+                d.y.shift();
+            }
+        })
+
+        setData(_data);
+    }, [payload]);
 
     return (
         <>
-            {download}
-            <div id="plotContainer" className="plot" />
+            <div id="plotContainer" className="plot">
+                <Plot
+                    data={data}
+                    layout={layout}
+                ></Plot>
+            </div>
         </>
     );
 }
