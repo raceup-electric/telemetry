@@ -17,6 +17,7 @@
 
 // EXTERN DEFINITIONS
 bool connected = false;
+nvs_handle_t nsv_stest_handle;
 esp_http_client_handle_t http_client;
 esp_http_client_config_t http_cfg = {
     .url = HTTP_SERVER_URL,
@@ -36,6 +37,7 @@ SemaphoreHandle_t can_insert;
 
 void app_main(void)
 {
+  // Non Volatile Storage setup
   esp_err_t ret = nvs_flash_init();
   if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
   {
@@ -43,27 +45,35 @@ void app_main(void)
     ret = nvs_flash_init();
   }
   ESP_ERROR_CHECK(ret);
-
-  nvs_handle_t nsv_stest_handle;
   nvs_open("storage", NVS_READWRITE, &nsv_stest_handle);
+
+  // Reset NVS for test counting
+  #ifdef RESET
+    nvs_set_i64(nsv_stest_handle, "stest", -1);
+  #endif
+
+  // Get current test number
   nvs_get_i64(nsv_stest_handle, "stest", &stest);
-  ESP_LOGI("TEST", "STEST %lli", stest);
   stest++;
   nvs_set_i64(nsv_stest_handle, "stest", stest);
 
+  // Init uart and wifi
   connected = wifi_init();
   serial_init();
 
+  // Init queue
   supabase_q = xQueueCreate(1, sizeof(struct logs));
   can_insert = xSemaphoreCreateBinary();
   xSemaphoreGive(can_insert);
 
+  // Init http client
   http_client = esp_http_client_init(&http_cfg);
   esp_http_client_set_header(http_client, "apikey", API_KEY);
   esp_http_client_set_header(http_client, "Authorization", BEARER_VALUE);
   esp_http_client_set_header(http_client, "Content-Type", "application/json");
   esp_http_client_set_header(http_client, "Prefer", "return=minimal");
 
+  // Set tasks to cores
   xTaskCreatePinnedToCore(serial_receive, "serial_receive", BUF_SIZE * 2, NULL, 1, NULL, 0);
   xTaskCreatePinnedToCore(supabase_insert, "supabase_insert", 65536, NULL, tskIDLE_PRIORITY, NULL, 1);
 }

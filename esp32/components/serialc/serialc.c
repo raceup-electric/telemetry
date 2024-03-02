@@ -27,8 +27,9 @@ void serial_receive()
   uart_event_t uart_event;
   while (1)
   {
-    if (xQueueReceive(uart_queue, (void *)&uart_event, portTICK_PERIOD_MS))
+    if (xQueueReceive(uart_queue, (void *)&uart_event, portTICK_PERIOD_MS) == pdTRUE)
     {
+      //ESP_LOGI("Serial", "%i", uart_event.type);
       switch (uart_event.type)
       {
       case UART_PATTERN_DET:

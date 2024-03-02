@@ -6,6 +6,8 @@
 #include "driver/uart.h"
 #include "driver/gpio.h"
 
+#include "esp_log.h"
+
 #include "logs.h"
 extern struct logs ecu;
 
@@ -14,12 +16,12 @@ extern struct logs ecu;
 extern QueueHandle_t supabase_q;
 
 #define UART_TX GPIO_NUM_17
-#define UART_RX GPIO_NUM_16
+#define UART_RX GPIO_NUM_18 // esp32 = 16, esp32-s3 = 18
 #define UART_RTS UART_PIN_NO_CHANGE
 #define UART_CTS UART_PIN_NO_CHANGE
 
-#define UART_NUM UART_NUM_2
-#define UART_BAUD 115200
+#define UART_NUM UART_NUM_1
+#define UART_BAUD 460800 //115200
 #define BUF_SIZE (1024)
 
 static QueueHandle_t uart_queue;
