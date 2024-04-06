@@ -3,6 +3,7 @@
 
 void serial_init(void)
 {
+  // uart configuration
   uart_config_t uart_config = {
       .baud_rate = UART_BAUD,
       .data_bits = UART_DATA_8_BITS,
@@ -13,6 +14,7 @@ void serial_init(void)
   };
   int intr_alloc_flags = 0;
 
+  // uart initialization
   ESP_ERROR_CHECK(uart_driver_install(UART_NUM, BUF_SIZE, BUF_SIZE, 10, &uart_queue, intr_alloc_flags));
   ESP_ERROR_CHECK(uart_param_config(UART_NUM, &uart_config));
   ESP_ERROR_CHECK(uart_set_pin(UART_NUM, UART_TX, UART_RX, UART_RTS, UART_CTS));
@@ -22,35 +24,41 @@ void serial_init(void)
 
 void serial_receive()
 {
+  // reserve memory for incoming bytes
   char *data = (char *)malloc(BUF_SIZE);
 
   uart_event_t uart_event;
   while (1)
   {
+    // if data in uart queue
     if (xQueueReceive(uart_queue, (void *)&uart_event, portTICK_PERIOD_MS) == pdTRUE)
     {
-      //ESP_LOGI("Serial", "%i", uart_event.type);
       switch (uart_event.type)
       {
-      case UART_PATTERN_DET:
-      {
-        int pattern_pos = uart_pattern_pop_pos(UART_NUM);
-        int read_len = uart_read_bytes(UART_NUM, data, pattern_pos, pdMS_TO_TICKS(100));
-        uart_flush_input(UART_NUM);
-
-        if (read_len - 1 == sizeof(struct logs))
+        // event: detect terminator
+        case UART_PATTERN_DET:
         {
-          uint8_t decoded[read_len - 1];
-          cobs_decode(decoded, sizeof(decoded), data, read_len);
-          memcpy(&ecu, &decoded, sizeof(decoded));
+          int pattern_pos = uart_pattern_pop_pos(UART_NUM);
+          int read_len = uart_read_bytes(UART_NUM, data, pattern_pos, pdMS_TO_TICKS(100));
+          // clean buffer
+          uart_flush_input(UART_NUM);
 
-          xQueueSend(supabase_q, &ecu, 0);
+          // check struct completness
+          if (read_len - 1 == sizeof(struct logs))
+          {
+            uint8_t decoded[read_len - 1];
+            cobs_decode(decoded, sizeof(decoded), data, read_len);
+            // structure decoded buffer
+            memcpy(&ecu, &decoded, sizeof(decoded));
 
-          memset(data, 0, BUF_SIZE);
+            // send struct to task
+            xQueueSend(supabase_q, &ecu, 0);
+
+            memset(data, 0, BUF_SIZE);
+          }
         }
-      }
-      default:
-        break;
+        default:
+          break;
       }
     }
   }
