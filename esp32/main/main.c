@@ -14,7 +14,7 @@
 #include "wific.h"
 #include "serialc.h"
 #include "cobs.h"
-#include "supabasec.h"
+#include "databasec.h"
 
 // EXTERN DEFINITIONS
 bool connected = false;                             // connected to wifi?
@@ -27,7 +27,9 @@ esp_http_client_config_t http_cfg = {               // HTTP client configuration
     .buffer_size_tx = 2048,
     .method = HTTP_METHOD_POST,
     .transport_type = HTTP_TRANSPORT_OVER_SSL,
+    #ifndef REDIS_WITH_DEFLATE 
     .cert_pem = ssl_cert_pem_start
+    #endif
 };
 
 // DEFINItioNS
@@ -65,13 +67,12 @@ void app_main(void)
 
     // Init http client
     http_client = esp_http_client_init(&http_cfg);
-    //esp_http_client_set_header(http_client, "apikey", API_KEY);
-    //esp_http_client_set_header(http_client, "Authorization", BEARER_VALUE);
+    esp_http_client_set_header(http_client, "apikey", API_KEY);
+    esp_http_client_set_header(http_client, "Authorization", BEARER_VALUE);
     esp_http_client_set_header(http_client, "Content-Type", "application/json");
-    //esp_http_client_set_header(http_client, "Prefer", "return=minimal");
-    esp_http_client_set_header(http_client, "Content-Encoding", "gzip");
-
+    esp_http_client_set_header(http_client, "Prefer", "return=minimal");
+    
     // Set tasks to cores
     xTaskCreatePinnedToCore(serial_receive, "serial_receive", BUF_SIZE * 2, NULL, 1, NULL, 0);
-    xTaskCreatePinnedToCore(supabase_insert, "supabase_insert", 4096, NULL, tskIDLE_PRIORITY, NULL, 1);
+    xTaskCreatePinnedToCore(database_insert, "supabase_insert", 4096, NULL, tskIDLE_PRIORITY, NULL, 1);
 }

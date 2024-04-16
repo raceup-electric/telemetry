@@ -1,5 +1,5 @@
-#ifndef SUPABASEC_H_
-#define SUPABASEC_H_
+#ifndef DATABASEC_H_
+#define DATABASEC_H_
 
 // import components
 #include "structures.h"
@@ -8,8 +8,12 @@
 // import esp32 libraries
 #include "esp_http_client.h"
 #include "esp_log.h"
+#include "driver/gpio.h"
 // VERY IMPORTANT: edit 'zconf.h' line 263 'MAX_MEM_LEVEL' and set it to 7
 #include "zlib.h"
+
+// LED GPIO for errors
+#define DB_ERROR_GPIO 20
 
 // import ssl certificate for supabase connection
 extern const char ssl_cert_pem_start[] asm("_binary_ssl_cert_pem_start");
@@ -24,6 +28,6 @@ extern int64_t stest;                       // test identifier
 extern QueueHandle_t supabase_q;            // received new struct on uart
 extern SemaphoreHandle_t can_insert;        // already using ecu2?
 
-void supabase_insert();
+void database_insert();
 
 #endif

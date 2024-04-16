@@ -193,7 +193,7 @@ struct logs
   \"suspensions_rl\": \"%.2f\", \
   \"suspensions_fl\": \"%.2f\", \
   \"suspensions_fr\": \"%.2f\", \
-  \"suspensions_rr\": \"%.2f\", \
+  \"suspensions_rr\": \"%.2f\"\
 }"
 
 // second json for less important data
