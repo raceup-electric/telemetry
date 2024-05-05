@@ -1,0 +1,34 @@
+services:
+  # Database
+  db:
+    image: 'influxdb:2'
+    volumes:
+      - data-influx:/var/lib/influxdb2
+      - config-influx:/etc/influxdb2
+    ports:
+      - 8086:8086
+  # Telegraf
+  broker:
+    image: 'telegraf:1.30'
+    volumes:
+      - ./config/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+  # Grafana
+  dashboard:
+    image: 'grafana/grafana-enterprise'
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - data-grafana:/var/lib/grafana:rw
+    environment:
+      - GF_SERVER_ROOT_URL=http://telemetryed.raceup.it/
+      - GF_DASHBOARDS_MIN_REFRESH_INTERVAL=100ms
+
+volumes:
+  data-influx:
+  config-influx:
+  data-grafana:

@@ -26,9 +26,11 @@ esp_http_client_config_t http_cfg = {               // HTTP client configuration
     .buffer_size = 1024,
     .buffer_size_tx = 2048,
     .method = HTTP_METHOD_POST,
+    #ifdef WITH_DEFLATE 
     .transport_type = HTTP_TRANSPORT_OVER_SSL,
-    #ifndef REDIS_WITH_DEFLATE 
     .cert_pem = ssl_cert_pem_start
+    #else
+    .transport_type = HTTP_TRANSPORT_OVER_TCP,
     #endif
 };
 
@@ -67,8 +69,8 @@ void app_main(void)
 
     // Init http client
     http_client = esp_http_client_init(&http_cfg);
-    esp_http_client_set_header(http_client, "apikey", API_KEY);
-    esp_http_client_set_header(http_client, "Authorization", BEARER_VALUE);
+    //esp_http_client_set_header(http_client, "apikey", API_KEY);
+    //esp_http_client_set_header(http_client, "Authorization", BEARER_VALUE);
     esp_http_client_set_header(http_client, "Content-Type", "application/json");
     esp_http_client_set_header(http_client, "Prefer", "return=minimal");
     

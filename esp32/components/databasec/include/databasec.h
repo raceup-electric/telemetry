@@ -12,6 +12,8 @@
 // VERY IMPORTANT: edit 'zconf.h' line 263 'MAX_MEM_LEVEL' and set it to 7
 #include "zlib.h"
 
+#include "mbedtls/base64.h"
+
 // LED GPIO for errors
 #define DB_ERROR_GPIO 20
 

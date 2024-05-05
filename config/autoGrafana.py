@@ -1,13 +1,12 @@
 import pandas as pd
 
-df = pd.read_csv('./si.CSV', sep=';', names=['cognome', 'nome', 'email'])
+df = pd.read_csv('./members.CSV', sep=';', names=['cognome', 'nome', 'email'])
 
 df['g_name'] = df['nome'] + " " + df['cognome']
 
-
 import requests
 
-url = "http://admin:G2dmHaDNA5r5YECg24BZDe46om6BpWzf@204.216.214.158:3000/api/admin/users"
+url = "http://admin:password@204.216.214.158:3000/api/admin/users"
 
 for index, row in df.iterrows():
     data = { 

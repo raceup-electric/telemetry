@@ -134,138 +134,265 @@ struct logs
   struct Power_Setup_Log power_setup;
 };
 
+// oneJSON
+#define JSON "{\
+  \"stest\": %lli, \
+  \
+  \"bms_lv0\": %.2f, \
+  \"bms_lv1\": %.2f, \
+  \"bms_lv2\": %.2f, \
+  \"bms_lv3\": %.2f, \
+  \"bms_lv4\": %.2f, \
+  \"bms_lv5\": %.2f, \
+  \"bms_lv6\": %.2f, \
+  \"bms_lv7\": %.2f, \
+  \
+  \"amk_status_fl\": %i, \
+  \"amk_actual_velocity_fl\": %.2f, \
+  \
+  \"amk_status_fr\": %i, \
+  \"amk_actual_velocity_fr\": %.2f, \
+  \
+  \"amk_status_rr\": %i, \
+  \"amk_actual_velocity_rr\": %.2f, \
+  \
+  \"amk_status_rl\": %i, \
+  \"amk_actual_velocity_rl\": %.2f, \
+  \
+  \"amk_torque_limit_positive_fl\": %i, \
+  \"amk_torque_limit_negative_fl\": %i, \
+  \"amk_torque_limit_positive_fr\": %i, \
+  \"amk_torque_limit_negative_fr\": %i, \
+  \"amk_torque_limit_positive_rr\": %i, \
+  \"amk_torque_limit_negative_rr\": %i, \
+  \"amk_torque_limit_positive_rl\": %i, \
+  \"amk_torque_limit_negative_rl\": %i, \
+  \
+  \"throttle\": %i, \
+  \"steering_angle\": %i, \
+  \"brake\": %i, \
+  \"actual_velocity_kmh\": %i, \
+  \
+  \"max_hv_volt\": %.2f, \
+  \"min_hv_volt\": %.2f, \
+  \"avg_hv_volt\": %.2f, \
+  \"max_hv_temp\": %.2f, \
+  \"min_hv_temp\": %.2f, \
+  \"avg_hv_temp\": %.2f, \
+  \
+  \"car_voltage\": %.2f, \
+  \"lem_current\": %.2f, \
+  \
+  \"acceleration_x\": %.2f, \
+  \"acceleration_y\": %.2f, \
+  \"acceleration_z\": %.2f, \
+  \"omega_x\": %.2f, \
+  \"omega_y\": %.2f, \
+  \"omega_z\": %.2f, \
+  \
+  \"suspensions_rl\": %.2f, \
+  \"suspensions_fl\": %.2f, \
+  \"suspensions_fr\": %.2f, \
+  \"suspensions_rr\": %.2f, \
+  \
+  \"amk_torque_current_fl\": %.2f, \
+  \"amk_voltage_fl\": %i, \
+  \"amk_current_fl\": %.2f, \
+  \
+  \"amk_torque_current_fr\": %.2f, \
+  \"amk_voltage_fr\": %i, \
+  \"amk_current_fr\": %.2f, \
+  \
+  \"amk_torque_current_rr\": %.2f, \
+  \"amk_voltage_rr\": %i, \
+  \"amk_current_rr\": %.2f, \
+  \
+  \"amk_torque_current_rl\": %.2f, \
+  \"amk_voltage_rl\": %i, \
+  \"amk_current_rl\": %.2f, \
+  \
+  \"amk_temp_motor_fl\": %.2f, \
+  \"amk_temp_inverter_fl\": %.2f, \
+  \"amk_temp_igbt_fl\": %.2f, \
+  \"amk_error_info_fl\": %i, \
+  \
+  \"amk_temp_motor_fr\": %.2f, \
+  \"amk_temp_inverter_fr\": %.2f, \
+  \"amk_temp_igbt_fr\": %.2f, \
+  \"amk_error_info_fr\": %i, \
+  \
+  \"amk_temp_motor_rr\": %.2f, \
+  \"amk_temp_inverter_rr\": %.2f, \
+  \"amk_temp_igbt_rr\": %.2f, \
+  \"amk_error_info_rr\": %i, \
+  \
+  \"amk_temp_motor_rl\": %.2f, \
+  \"amk_temp_inverter_rl\": %.2f, \
+  \"amk_temp_igbt_rl\": %.2f, \
+  \"amk_error_info_rl\": %i, \
+  \
+  \"brake_press\": %i, \
+  \"car_status\": \"%lu\", \
+  \"brk_req\": %i, \
+  \"thr_req\": %i, \
+  \
+  \"bms_error_map\": %i, \
+  \
+  \"current_sens\": %.2f, \
+  \"total_power\": %.2f, \
+  \
+  \"fan_speed_r\": %i, \
+  \"fan_speed_l\": %i, \
+  \
+  \"temp_inv_dx_2\": %.2f, \
+  \"temp_inv_sx_1\": %.2f, \
+  \"temp_inv_dx_1\": %.2f, \
+  \"temp_inv_sx_2\": %.2f, \
+  \"temp_mot_rr_1\": %.2f, \
+  \"temp_mot_rl_1\": %.2f, \
+  \"temp_mot_rl_2\": %.2f, \
+  \"temp_mot_rr_2\": %.2f, \
+  \
+  \"gpio_bms\": %i, \
+  \"gpio_imd\": %i, \
+  \"max_temp_n_slave\": %i, \
+  \
+  \"acc_pot_1\": %.2f, \
+  \"acc_pot_2\": %.2f, \
+  \"brk_pot\": %.2f \
+}"
+
 // first json for very important data
 #define JSON_1 "{\
-  \"stest\": \"%lli\", \
+  \"stest\": %lli, \
   \
-  \"bms_lv0\": \"%.2f\", \
-  \"bms_lv1\": \"%.2f\", \
-  \"bms_lv2\": \"%.2f\", \
-  \"bms_lv3\": \"%.2f\", \
-  \"bms_lv4\": \"%.2f\", \
-  \"bms_lv5\": \"%.2f\", \
-  \"bms_lv6\": \"%.2f\", \
-  \"bms_lv7\": \"%.2f\", \
+  \"bms_lv0\": %.2f, \
+  \"bms_lv1\": %.2f, \
+  \"bms_lv2\": %.2f, \
+  \"bms_lv3\": %.2f, \
+  \"bms_lv4\": %.2f, \
+  \"bms_lv5\": %.2f, \
+  \"bms_lv6\": %.2f, \
+  \"bms_lv7\": %.2f, \
   \
-  \"amk_status_fl\": \"%i\", \
-  \"amk_actual_velocity_fl\": \"%.2f\", \
+  \"amk_status_fl\": %i, \
+  \"amk_actual_velocity_fl\": %.2f, \
   \
-  \"amk_status_fr\": \"%i\", \
-  \"amk_actual_velocity_fr\": \"%.2f\", \
+  \"amk_status_fr\": %i, \
+  \"amk_actual_velocity_fr\": %.2f, \
   \
-  \"amk_status_rr\": \"%i\", \
-  \"amk_actual_velocity_rr\": \"%.2f\", \
+  \"amk_status_rr\": %i, \
+  \"amk_actual_velocity_rr\": %.2f, \
   \
-  \"amk_status_rl\": \"%i\", \
-  \"amk_actual_velocity_rl\": \"%.2f\", \
+  \"amk_status_rl\": %i, \
+  \"amk_actual_velocity_rl\": %.2f, \
   \
-  \"amk_torque_limit_positive_fl\": \"%i\", \
-  \"amk_torque_limit_negative_fl\": \"%i\", \
-  \"amk_torque_limit_positive_fr\": \"%i\", \
-  \"amk_torque_limit_negative_fr\": \"%i\", \
-  \"amk_torque_limit_positive_rr\": \"%i\", \
-  \"amk_torque_limit_negative_rr\": \"%i\", \
-  \"amk_torque_limit_positive_rl\": \"%i\", \
-  \"amk_torque_limit_negative_rl\": \"%i\", \
+  \"amk_torque_limit_positive_fl\": %i, \
+  \"amk_torque_limit_negative_fl\": %i, \
+  \"amk_torque_limit_positive_fr\": %i, \
+  \"amk_torque_limit_negative_fr\": %i, \
+  \"amk_torque_limit_positive_rr\": %i, \
+  \"amk_torque_limit_negative_rr\": %i, \
+  \"amk_torque_limit_positive_rl\": %i, \
+  \"amk_torque_limit_negative_rl\": %i, \
   \
-  \"throttle\": \"%i\", \
-  \"steering_angle\": \"%i\", \
-  \"brake\": \"%i\", \
-  \"actual_velocity_kmh\": \"%i\", \
+  \"throttle\": %i, \
+  \"steering_angle\": %i, \
+  \"brake\": %i, \
+  \"actual_velocity_kmh\": %i, \
   \
-  \"max_hv_volt\": \"%.2f\", \
-  \"min_hv_volt\": \"%.2f\", \
-  \"avg_hv_volt\": \"%.2f\", \
-  \"max_hv_temp\": \"%.2f\", \
-  \"min_hv_temp\": \"%.2f\", \
-  \"avg_hv_temp\": \"%.2f\", \
+  \"max_hv_volt\": %.2f, \
+  \"min_hv_volt\": %.2f, \
+  \"avg_hv_volt\": %.2f, \
+  \"max_hv_temp\": %.2f, \
+  \"min_hv_temp\": %.2f, \
+  \"avg_hv_temp\": %.2f, \
   \
-  \"car_voltage\": \"%.2f\", \
-  \"lem_current\": \"%.2f\", \
+  \"car_voltage\": %.2f, \
+  \"lem_current\": %.2f, \
   \
-  \"acceleration_x\": \"%.2f\", \
-  \"acceleration_y\": \"%.2f\", \
-  \"acceleration_z\": \"%.2f\", \
-  \"omega_x\": \"%.2f\", \
-  \"omega_y\": \"%.2f\", \
-  \"omega_z\": \"%.2f\", \
+  \"acceleration_x\": %.2f, \
+  \"acceleration_y\": %.2f, \
+  \"acceleration_z\": %.2f, \
+  \"omega_x\": %.2f, \
+  \"omega_y\": %.2f, \
+  \"omega_z\": %.2f, \
   \
-  \"suspensions_rl\": \"%.2f\", \
-  \"suspensions_fl\": \"%.2f\", \
-  \"suspensions_fr\": \"%.2f\", \
-  \"suspensions_rr\": \"%.2f\"\
+  \"suspensions_rl\": %.2f, \
+  \"suspensions_fl\": %.2f, \
+  \"suspensions_fr\": %.2f, \
+  \"suspensions_rr\": %.2f\
 }"
 
 // second json for less important data
 #define JSON_2 "{\
   \"stest\": \"%lli\", \
   \
-  \"amk_torque_current_fl\": \"%.2f\", \
-  \"amk_voltage_fl\": \"%i\", \
-  \"amk_current_fl\": \"%.2f\", \
+  \"amk_torque_current_fl\": %.2f, \
+  \"amk_voltage_fl\": %i, \
+  \"amk_current_fl\": %.2f, \
   \
-  \"amk_torque_current_fr\": \"%.2f\", \
-  \"amk_voltage_fr\": \"%i\", \
-  \"amk_current_fr\": \"%.2f\", \
+  \"amk_torque_current_fr\": %.2f, \
+  \"amk_voltage_fr\": %i, \
+  \"amk_current_fr\": %.2f, \
   \
-  \"amk_torque_current_rr\": \"%.2f\", \
-  \"amk_voltage_rr\": \"%i\", \
-  \"amk_current_rr\": \"%.2f\", \
+  \"amk_torque_current_rr\": %.2f, \
+  \"amk_voltage_rr\": %i, \
+  \"amk_current_rr\": %.2f, \
   \
-  \"amk_torque_current_rl\": \"%.2f\", \
-  \"amk_voltage_rl\": \"%i\", \
-  \"amk_current_rl\": \"%.2f\", \
+  \"amk_torque_current_rl\": %.2f, \
+  \"amk_voltage_rl\": %i, \
+  \"amk_current_rl\": %.2f, \
   \
-  \"amk_temp_motor_fl\": \"%.2f\", \
-  \"amk_temp_inverter_fl\": \"%.2f\", \
-  \"amk_temp_igbt_fl\": \"%.2f\", \
-  \"amk_error_info_fl\": \"%i\", \
+  \"amk_temp_motor_fl\": %.2f, \
+  \"amk_temp_inverter_fl\": %.2f, \
+  \"amk_temp_igbt_fl\": %.2f, \
+  \"amk_error_info_fl\": %i, \
   \
-  \"amk_temp_motor_fr\": \"%.2f\", \
-  \"amk_temp_inverter_fr\": \"%.2f\", \
-  \"amk_temp_igbt_fr\": \"%.2f\", \
-  \"amk_error_info_fr\": \"%i\", \
+  \"amk_temp_motor_fr\": %.2f, \
+  \"amk_temp_inverter_fr\": %.2f, \
+  \"amk_temp_igbt_fr\": %.2f, \
+  \"amk_error_info_fr\": %i, \
   \
-  \"amk_temp_motor_rr\": \"%.2f\", \
-  \"amk_temp_inverter_rr\": \"%.2f\", \
-  \"amk_temp_igbt_rr\": \"%.2f\", \
-  \"amk_error_info_rr\": \"%i\", \
+  \"amk_temp_motor_rr\": %.2f, \
+  \"amk_temp_inverter_rr\": %.2f, \
+  \"amk_temp_igbt_rr\": %.2f, \
+  \"amk_error_info_rr\": %i, \
   \
-  \"amk_temp_motor_rl\": \"%.2f\", \
-  \"amk_temp_inverter_rl\": \"%.2f\", \
-  \"amk_temp_igbt_rl\": \"%.2f\", \
-  \"amk_error_info_rl\": \"%i\", \
+  \"amk_temp_motor_rl\": %.2f, \
+  \"amk_temp_inverter_rl\": %.2f, \
+  \"amk_temp_igbt_rl\": %.2f, \
+  \"amk_error_info_rl\": %i, \
   \
-  \"brake_press\": \"%i\", \
+  \"brake_press\": %i, \
   \"car_status\": \"%lu\", \
-  \"actual_velocity_kmh\": \"%i\", \
-  \"brk_req\": \"%i\", \
-  \"thr_req\": \"%i\", \
+  \"brk_req\": %i, \
+  \"thr_req\": %i, \
   \
-  \"bms_error_map\": \"%i\", \
+  \"bms_error_map\": %i, \
   \
-  \"current_sens\": \"%.2f\", \
-  \"total_power\": \"%.2f\", \
+  \"current_sens\": %.2f, \
+  \"total_power\": %.2f, \
   \
-  \"fan_speed_r\": \"%i\", \
-  \"fan_speed_l\": \"%i\", \
+  \"fan_speed_r\": %i, \
+  \"fan_speed_l\": %i, \
   \
-  \"temp_inv_dx_2\": \"%.2f\", \
-  \"temp_inv_sx_1\": \"%.2f\", \
-  \"temp_inv_dx_1\": \"%.2f\", \
-  \"temp_inv_sx_2\": \"%.2f\", \
-  \"temp_mot_rr_1\": \"%.2f\", \
-  \"temp_mot_rl_1\": \"%.2f\", \
-  \"temp_mot_rl_2\": \"%.2f\", \
-  \"temp_mot_rr_2\": \"%.2f\", \
+  \"temp_inv_dx_2\": %.2f, \
+  \"temp_inv_sx_1\": %.2f, \
+  \"temp_inv_dx_1\": %.2f, \
+  \"temp_inv_sx_2\": %.2f, \
+  \"temp_mot_rr_1\": %.2f, \
+  \"temp_mot_rl_1\": %.2f, \
+  \"temp_mot_rl_2\": %.2f, \
+  \"temp_mot_rr_2\": %.2f, \
   \
-  \"gpio_bms\": \"%i\", \
-  \"gpio_imd\": \"%i\", \
-  \"max_temp_n_slave\": \"%i\", \
+  \"gpio_bms\": %i, \
+  \"gpio_imd\": %i, \
+  \"max_temp_n_slave\": %i, \
   \
-  \"acc_pot_1\": \"%.2f\", \
-  \"acc_pot_2\": \"%.2f\", \
-  \"brk_pot\": \"%.2f\" \
+  \"acc_pot_1\": %.2f, \
+  \"acc_pot_2\": %.2f, \
+  \"brk_pot\": %.2f \
 }"
 
 #endif
