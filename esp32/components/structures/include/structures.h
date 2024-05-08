@@ -137,7 +137,7 @@ struct logs
 // oneJSON
 #define JSON "{\
   \"stest\": %lli, \
-  \
+  \"timestamp\": %lli,\
   \"bms_lv0\": %.2f, \
   \"bms_lv1\": %.2f, \
   \"bms_lv2\": %.2f, \
@@ -265,6 +265,7 @@ struct logs
 // first json for very important data
 #define JSON_1 "{\
   \"stest\": %lli, \
+  \"timestamp\": %lli,\
   \
   \"bms_lv0\": %.2f, \
   \"bms_lv1\": %.2f, \
@@ -327,6 +328,7 @@ struct logs
 // second json for less important data
 #define JSON_2 "{\
   \"stest\": \"%lli\", \
+  \"timestamp\": %lli,\
   \
   \"amk_torque_current_fl\": %.2f, \
   \"amk_voltage_fl\": %i, \

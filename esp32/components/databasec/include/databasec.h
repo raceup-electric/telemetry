@@ -12,10 +12,15 @@
 // VERY IMPORTANT: edit 'zconf.h' line 263 'MAX_MEM_LEVEL' and set it to 7
 #include "zlib.h"
 
-#include "mbedtls/base64.h"
 
 // LED GPIO for errors
 #define DB_ERROR_GPIO 20
+
+// Use Gzip compression
+#define GZIP 0
+
+// Split JSON file
+#define SPLIT 1
 
 // import ssl certificate for supabase connection
 extern const char ssl_cert_pem_start[] asm("_binary_ssl_cert_pem_start");
@@ -25,10 +30,8 @@ extern esp_http_client_handle_t http_client;
 extern esp_http_client_config_t http_cfg;
 
 extern bool connected;
-extern struct logs ecu2;                    // store copy of ecu struct from queue
 extern int64_t stest;                       // test identifier
-extern QueueHandle_t supabase_q;            // received new struct on uart
-extern SemaphoreHandle_t can_insert;        // already using ecu2?
+extern QueueHandle_t ecu_data;            // received new struct on uart
 
 void database_insert();
 

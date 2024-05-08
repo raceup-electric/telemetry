@@ -30,3 +30,4 @@ arduino/.vscode
 
 config/privateKey.txt
 config/publicKey.txt
+build/**/*

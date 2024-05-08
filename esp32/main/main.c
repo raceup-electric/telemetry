@@ -6,6 +6,7 @@
 #include "esp_system.h"
 #include "nvs_flash.h"
 #include "esp_timer.h"
+#include "esp_netif_sntp.h"
 
 // COMPONENTS
 #include "zlib.h"
@@ -35,11 +36,8 @@ esp_http_client_config_t http_cfg = {               // HTTP client configuration
 };
 
 // DEFINItioNS
-struct logs ecu;                                    // Store struct from UART
-struct logs ecu2;                                   // Struct to read for db insert
 int64_t stest = -1;                                 // Default test init number (-1 because incremented on main)
-QueueHandle_t supabase_q;
-SemaphoreHandle_t can_insert;
+QueueHandle_t ecu_data;
 
 void app_main(void)
 {
@@ -63,9 +61,7 @@ void app_main(void)
     serial_init();
 
     // Init queue
-    supabase_q = xQueueCreate(1, sizeof(struct logs));
-    can_insert = xSemaphoreCreateBinary();
-    xSemaphoreGive(can_insert);
+    ecu_data = xQueueCreate(5, sizeof(struct logs));
 
     // Init http client
     http_client = esp_http_client_init(&http_cfg);
@@ -73,8 +69,14 @@ void app_main(void)
     //esp_http_client_set_header(http_client, "Authorization", BEARER_VALUE);
     esp_http_client_set_header(http_client, "Content-Type", "application/json");
     esp_http_client_set_header(http_client, "Prefer", "return=minimal");
+
+    esp_sntp_config_t config = ESP_NETIF_SNTP_DEFAULT_CONFIG("pool.ntp.org");
+    esp_netif_sntp_init(&config); 
+    if (esp_netif_sntp_sync_wait(pdMS_TO_TICKS(10000)) != ESP_OK) {
+        ESP_LOGE("SNTP", "Failed to update system time within 10s timeout");
+    }
     
     // Set tasks to cores
-    xTaskCreatePinnedToCore(serial_receive, "serial_receive", BUF_SIZE * 2, NULL, 1, NULL, 0);
-    xTaskCreatePinnedToCore(database_insert, "supabase_insert", 4096, NULL, tskIDLE_PRIORITY, NULL, 1);
+    xTaskCreatePinnedToCore(serial_receive, "serial_receive", 6144, NULL, tskIDLE_PRIORITY + 1, NULL, 0);
+    xTaskCreatePinnedToCore(database_insert, "database_insert", 8192, NULL, tskIDLE_PRIORITY + 1, NULL, 1);
 }

@@ -15,11 +15,9 @@ extern struct logs ecu;
 // uart definitions
 #define UART_RTS UART_PIN_NO_CHANGE
 #define UART_CTS UART_PIN_NO_CHANGE
-#define BUF_SIZE (1024)
+#define BUF_SIZE (2048)
 
-extern QueueHandle_t supabase_q;
-
-static QueueHandle_t uart_queue;
+extern QueueHandle_t ecu_data;
 
 void serial_init(void);
 
