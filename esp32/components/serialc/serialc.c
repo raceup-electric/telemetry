@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <sys/time.h>
 #include "serialc.h"
 #include "esp_log.h"
 
@@ -17,7 +18,7 @@ void serial_init(void)
   };
 
   // uart initialization
-  ESP_ERROR_CHECK(uart_driver_install(UART_NUM, BUF_SIZE * 2, 512, 50, &uart_queue, 0));
+  ESP_ERROR_CHECK(uart_driver_install(UART_NUM, 3072, 512, 50, &uart_queue, 0));
   ESP_ERROR_CHECK(uart_param_config(UART_NUM, &uart_config));
   ESP_ERROR_CHECK(uart_set_pin(UART_NUM, UART_TX, UART_RX, UART_RTS, UART_CTS));
   ESP_ERROR_CHECK(uart_enable_pattern_det_baud_intr(UART_NUM, '\0', 1, 2000 , 0, 0));
@@ -93,6 +94,10 @@ void serial_receive()
             {
               ESP_LOGI("UART", "Decoding COBS");
               cobs_decode(decoded, sizeof(decoded), data, read);
+              struct timeval tv_now;
+              gettimeofday(&tv_now, NULL);
+              int64_t time_ms = (int64_t)tv_now.tv_sec * 1000L + (int64_t)tv_now.tv_usec / 1000;
+              ESP_LOGI("UART", "Received struct at %lli", time_ms);
               // send struct to task
               xQueueSend(ecu_data, &decoded, 0);
             }

@@ -15,7 +15,7 @@ extern struct logs ecu;
 // uart definitions
 #define UART_RTS UART_PIN_NO_CHANGE
 #define UART_CTS UART_PIN_NO_CHANGE
-#define BUF_SIZE (2048)
+#define BUF_SIZE (1024)
 
 extern QueueHandle_t ecu_data;
 

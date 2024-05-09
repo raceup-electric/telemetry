@@ -18,7 +18,7 @@ void database_insert()
             struct timeval tv_now;
             gettimeofday(&tv_now, NULL);
             int64_t time_ms = (int64_t)tv_now.tv_sec * 1000L + (int64_t)tv_now.tv_usec / 1000;
-            ESP_LOGI("TIME", "Unix timestamp (ms): %lli", time_ms);
+            ESP_LOGI("DB", "Unix timestamp (ms): %lli", time_ms);
             int body_len = 0;
             // Most important data
             #ifndef SPLITTED

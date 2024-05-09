@@ -19,6 +19,7 @@ static void event_handler(void *arg, esp_event_base_t event_base, int32_t event_
         {
         case WIFI_EVENT_STA_DISCONNECTED:
             s_retry_num++;
+            break;
         case WIFI_EVENT_STA_START:
             esp_wifi_connect();
             break;
