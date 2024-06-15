@@ -25,6 +25,7 @@ void database_insert()
                 JSON,
                 stest,
                 time_ms,
+                ecu.gps.lap,
                 // bms lv voltages and temperatures
                 ecu.bms_lv[0], 
                 ecu.bms_lv[1],

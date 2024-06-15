@@ -8,15 +8,14 @@
 #define UART_BAUD 460800 
 
 // WIFI
-#define WIFI_SSID "."
-#define WIFI_PASSWORD "8caratteri"
+#define WIFI_SSID "Velex_Raceup"
+#define WIFI_PASSWORD "Velex.2021"
 #define WIFI_MAXIMUM_RETRY 10
 
 // DATABASE
-//#define HTTP_SERVER_URL "http://204.216.214.158:8000/rest/v1/test"
+//#define HTTP_SERVER_URL "http://204.216.214.158:8000/rest/v1/test" supabase
 #define HTTP_SERVER_URL "http://204.216.214.158:8080/telegraf"
-//#define HTTP_SERVER_URL "http://204.216.214.158:8080/"
-//#define HTTP_SERVER_URL "http://10.8.6.218:8080/"
+//#define HTTP_SERVER_URL "http://10.8.6.218:8080/" velex
 #define API_KEY "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE"
 #define BEARER_VALUE "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE"
 #define BODY_MAX_SIZE 3000

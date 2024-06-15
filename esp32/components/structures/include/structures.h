@@ -45,7 +45,7 @@ struct Status_Log
   int16_t brake;                     // int in TI
   int16_t brakePress;                // int in TI
   int16_t actualVelocityKMH;         // int in TI
-  uint32_t status;
+  uint16_t status;
 };
 
 struct Pedals_Log
@@ -53,7 +53,7 @@ struct Pedals_Log
   float acc_pot;
   float brk_pot;
   int16_t brk_req;                   // int in TI
-  int16_t acc_req;              // int in TI
+  int16_t acc_req;                   // int in TI
 };
 
 struct BMS_Log
@@ -85,7 +85,7 @@ struct Imu_Log
 {
   float accelerations[3];
   float omegas[3];
-  float temperatures[8];
+  float temperatures[10];
   float suspensions[4];
 };
 
@@ -104,6 +104,7 @@ struct Power_Setup_Log
 };
 
 struct GPS {
+  uint16_t lap;
   float velocity;
   float lati;
   float longi;
@@ -127,9 +128,11 @@ struct logs
 };
 
 // oneJSON
+
 #define JSON "{\
   \"stest\": %lli, \
   \"timestamp\": %lli,\
+  \"lap\": %i,\
   \
   \"bms_lv0\": %.2f, \
   \"bms_lv1\": %.2f, \
@@ -198,7 +201,7 @@ struct logs
   \"brake\": %i, \
   \"brake_press\": %i, \
   \"actual_velocity_kmh\": %i, \
-  \"car_status\": \"%lu\", \
+  \"car_status\": \"%i\", \
   \
   \"acc_pot\": %.2f, \
   \"brk_pot\": %.2f, \
