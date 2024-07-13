@@ -8,9 +8,9 @@
 #define UART_BAUD 460800 
 
 // WIFI
-#define WIFI_SSID "Velex_Raceup"
-#define WIFI_PASSWORD "Velex.2021"
-#define WIFI_MAXIMUM_RETRY 10
+#define WIFI_SSID "RG07"
+#define WIFI_PASSWORD "VediQualcosa"
+#define WIFI_MAXIMUM_RETRY 10000
 
 // DATABASE
 //#define HTTP_SERVER_URL "http://204.216.214.158:8000/rest/v1/test" supabase

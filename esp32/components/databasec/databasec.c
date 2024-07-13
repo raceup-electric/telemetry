@@ -4,14 +4,13 @@
 
 void database_insert()
 {
-    int i = 0; // JSON (select) counter
     char body[BODY_MAX_SIZE];
     struct logs ecu;
 
     // continuous task
     while (1)
     {
-        bool uart_cond = xQueueReceive(ecu_data, &ecu, pdMS_TO_TICKS(1000)) == pdPASS;
+        bool uart_cond = xQueueReceive(ecu_data, &ecu, pdMS_TO_TICKS(10)) == pdPASS;
         // check if connected to wifi, struct arrived and sempahore taken
         if (connected && uart_cond)
         {
@@ -215,8 +214,6 @@ void database_insert()
             esp_http_client_perform(http_client);
             ESP_LOGI("DB DONE", "JSON inserting done");
             #endif
-            // Increment JSON counter
-            i++;
             memset(body, 0, BODY_MAX_SIZE);
         }
         else
