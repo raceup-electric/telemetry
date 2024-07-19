@@ -20,22 +20,7 @@
 // EXTERN DEFINITIONS
 bool connected = false;                             // connected to wifi?
 nvs_handle_t nsv_stest_handle;                      // Non Volatile Storage for stest
-esp_http_client_handle_t http_client;               // HTTP client for POST request
-esp_http_client_config_t http_cfg = {               // HTTP client configuration
-    .url = HTTP_SERVER_URL,
-    .timeout_ms = 5000,
-    .buffer_size = 1024,
-    .buffer_size_tx = 2048,
-    .method = HTTP_METHOD_POST,
-    #ifdef WITH_DEFLATE 
-    .transport_type = HTTP_TRANSPORT_OVER_SSL,
-    .cert_pem = ssl_cert_pem_start
-    #else
-    .transport_type = HTTP_TRANSPORT_OVER_TCP,
-    #endif
-};
-
-// DEFINItioNS
+// DEFINITIONS
 int64_t stest = -1;                                 // Default test init number (-1 because incremented on main)
 QueueHandle_t ecu_data;
 
@@ -62,13 +47,6 @@ void app_main(void)
 
     // Init queue
     ecu_data = xQueueCreate(5, sizeof(struct logs));
-
-    // Init http client
-    http_client = esp_http_client_init(&http_cfg);
-    //esp_http_client_set_header(http_client, "apikey", API_KEY);
-    //esp_http_client_set_header(http_client, "Authorization", BEARER_VALUE);
-    esp_http_client_set_header(http_client, "Content-Type", "application/json");
-    esp_http_client_set_header(http_client, "Prefer", "return=minimal");
 
     esp_sntp_config_t config = ESP_NETIF_SNTP_DEFAULT_CONFIG("pool.ntp.org");
     esp_netif_sntp_init(&config); 

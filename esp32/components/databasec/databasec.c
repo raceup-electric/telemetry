@@ -1,11 +1,26 @@
 #include <stdio.h>
 #include <time.h>
+#include "lwip/sockets.h"
 #include "databasec.h"
 
 void database_insert()
 {
     char body[BODY_MAX_SIZE];
     struct logs ecu;
+
+    // create UDP socket
+    int sock = 0;
+    int ret = 0;
+
+    if ((sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0) {
+        ESP_LOGE("DB", "Failed to open socket");
+        return;
+    }
+    // init server address
+    struct sockaddr_in endpoint;
+    endpoint.sin_family = AF_INET;
+    endpoint.sin_port = htons(ENDPOINT_PORT);
+    inet_aton(ENDPOINT_IP, &(endpoint.sin_addr));
 
     // continuous task
     while (1)
@@ -19,8 +34,9 @@ void database_insert()
             int64_t time_ms = (int64_t)tv_now.tv_sec * 1000L + (int64_t)tv_now.tv_usec / 1000;
             ESP_LOGI("DB", "Unix timestamp (ms): %lli", time_ms);
             int body_len = 0;
-            body_len = sprintf(
+            body_len = snprintf(
                 body,
+                BODY_MAX_SIZE,
                 JSON,
                 stest,
                 time_ms,
@@ -199,20 +215,17 @@ void database_insert()
             compressed_size = strm.total_out;
             deflateEnd(&strm); 
             ESP_LOGI("GZIP", "Compression done, original size %d, compressed size: %lu", body_len, compressed_size);
-
-            esp_http_client_set_header(http_client, "Content-Encoding", "gzip");
-            char http_request_len[10];
-            esp_http_client_set_header(http_client, "Content-Length", itoa(compressed_size, http_request_len, 10));
-            esp_http_client_set_post_field(http_client, (char*)compressed_body, compressed_size);
-            esp_http_client_perform(http_client);
+            sendto(sock, compressed_body, compressed_size, 0, (struct sockaddr *)(&endpoint), sizeof(endpoint));
             ESP_LOGI("DB DONE", "Compressed JSON inserting done");
             free(compressed_body);
             #else 
-            char http_request_len[10];
-            esp_http_client_set_header(http_client, "Content-Length", itoa(body_len, http_request_len, 10));
-            esp_http_client_set_post_field(http_client, body, body_len);
-            esp_http_client_perform(http_client);
-            ESP_LOGI("DB DONE", "JSON inserting done");
+            if ((ret = sendto(sock, body, body_len, 0, (struct sockaddr *)(&endpoint), sizeof(endpoint))) < 0) {
+                ESP_LOGE("DB", "Error in sendto");
+                perror("Porco Dio");
+            }
+            else {
+                ESP_LOGI("DB", "Sent %d bytes", body_len);
+            }
             #endif
             memset(body, 0, BODY_MAX_SIZE);
         }
