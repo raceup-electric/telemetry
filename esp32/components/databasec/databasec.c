@@ -221,7 +221,6 @@ void database_insert()
             #else 
             if ((ret = sendto(sock, body, body_len, 0, (struct sockaddr *)(&endpoint), sizeof(endpoint))) < 0) {
                 ESP_LOGE("DB", "Error in sendto");
-                perror("Porco Dio");
             }
             else {
                 ESP_LOGI("DB", "Sent %d bytes", body_len);

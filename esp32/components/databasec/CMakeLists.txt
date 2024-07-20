@@ -1,4 +1,4 @@
 idf_component_register(SRCS "databasec.c"
                     INCLUDE_DIRS "include"
-                    REQUIRES esp_http_client zlib structures globals driver mbedtls lwip
+                    REQUIRES esp_http_client zlib structures globals driver mbedtls
                     EMBED_TXTFILES ssl_cert.pem)
