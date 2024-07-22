@@ -249,6 +249,6 @@ struct logs
 \"velocity\":%.2f,\
 \"latitude\":%.2f,\
 \"longitude\":%.2f\
-}\n"
+}"
 
 #endif

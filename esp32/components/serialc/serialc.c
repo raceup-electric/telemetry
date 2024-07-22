@@ -22,7 +22,7 @@ void serial_init(void)
   ESP_ERROR_CHECK(uart_param_config(UART_NUM, &uart_config));
   ESP_ERROR_CHECK(uart_set_pin(UART_NUM, UART_TX, UART_RX, UART_RTS, UART_CTS));
   ESP_ERROR_CHECK(uart_enable_pattern_det_baud_intr(UART_NUM, '\0', 1, 2000 , 0, 0));
-  ESP_ERROR_CHECK(uart_pattern_queue_reset(UART_NUM, 5));
+  ESP_ERROR_CHECK(uart_pattern_queue_reset(UART_NUM, 8));
 }
 
 void serial_receive()
