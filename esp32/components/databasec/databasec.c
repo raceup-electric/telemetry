@@ -1,16 +1,39 @@
 #include <stdio.h>
 #include <time.h>
+
+#include "lwip/err.h"
+#include "lwip/sockets.h"
+#include "lwip/sys.h"
+#include <lwip/netdb.h>
+#include "esp_netif.h"
+
 #include "databasec.h"
 
 void database_insert()
 {
-    char body[BODY_MAX_SIZE];
+    char body1[BODY_MAX_SIZE];
+    char body2[BODY_MAX_SIZE];
+    char body3[BODY_MAX_SIZE];
     struct logs ecu;
+
+    // create UDP socket
+    int sock = 0;
+    int ret = 0;
+
+    if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+        ESP_LOGE("DB", "Failed to open socket");
+        return;
+    }
+    // init server address
+    struct sockaddr_in endpoint;
+    endpoint.sin_family = AF_INET;
+    endpoint.sin_port = htons(ENDPOINT_PORT);
+    inet_aton(ENDPOINT_IP, &(endpoint.sin_addr));
 
     // continuous task
     while (1)
     {
-        bool uart_cond = xQueueReceive(ecu_data, &ecu, pdMS_TO_TICKS(10)) == pdPASS;
+        bool uart_cond = xQueueReceive(ecu_data, &ecu, pdMS_TO_TICKS(50)) == pdPASS;
         // check if connected to wifi, struct arrived and sempahore taken
         if (connected && uart_cond)
         {
@@ -18,10 +41,13 @@ void database_insert()
             gettimeofday(&tv_now, NULL);
             int64_t time_ms = (int64_t)tv_now.tv_sec * 1000L + (int64_t)tv_now.tv_usec / 1000;
             ESP_LOGI("DB", "Unix timestamp (ms): %lli", time_ms);
-            int body_len = 0;
-            body_len = sprintf(
-                body,
-                JSON,
+            int body_len1 = 0;
+            int body_len2 = 0;
+            int body_len3 = 0;
+            body_len1 = snprintf(
+                body1,
+                BODY_MAX_SIZE,
+                JSON1,
                 stest,
                 time_ms,
                 ecu.gps.lap,
@@ -90,7 +116,16 @@ void database_insert()
                 ecu.motorVal2[0].AMK_TempMotor,
                 ecu.motorVal2[0].AMK_TempInverter,
                 ecu.motorVal2[0].AMK_TempIGBT,
-                ecu.motorVal2[0].AMK_ErrorInfo,
+                ecu.motorVal2[0].AMK_ErrorInfo
+            );
+
+            body_len2 = snprintf(
+                body2,
+                BODY_MAX_SIZE,
+                JSON2,
+                stest,
+                time_ms,
+                ecu.gps.lap,
                 // FR motor values
                 ecu.motorVal2[1].AMK_TempMotor,
                 ecu.motorVal2[1].AMK_TempInverter,
@@ -121,7 +156,16 @@ void database_insert()
                 ecu.status.brake,
                 ecu.status.brakePress,
                 ecu.status.actualVelocityKMH,
-                ecu.status.status,
+                ecu.status.status
+            );
+
+            body_len3 = snprintf(
+                body3,
+                BODY_MAX_SIZE,
+                JSON3,
+                stest,
+                time_ms,
+                ecu.gps.lap,
                 // Potentiometers
                 ecu.pedals.acc_pot,
                 ecu.pedals.brk_pot,
@@ -199,22 +243,37 @@ void database_insert()
             compressed_size = strm.total_out;
             deflateEnd(&strm); 
             ESP_LOGI("GZIP", "Compression done, original size %d, compressed size: %lu", body_len, compressed_size);
-
-            esp_http_client_set_header(http_client, "Content-Encoding", "gzip");
-            char http_request_len[10];
-            esp_http_client_set_header(http_client, "Content-Length", itoa(compressed_size, http_request_len, 10));
-            esp_http_client_set_post_field(http_client, (char*)compressed_body, compressed_size);
-            esp_http_client_perform(http_client);
+            sendto(sock, compressed_body, compressed_size, 0, (struct sockaddr *)(&endpoint), sizeof(endpoint));
             ESP_LOGI("DB DONE", "Compressed JSON inserting done");
             free(compressed_body);
             #else 
-            char http_request_len[10];
-            esp_http_client_set_header(http_client, "Content-Length", itoa(body_len, http_request_len, 10));
-            esp_http_client_set_post_field(http_client, body, body_len);
-            esp_http_client_perform(http_client);
-            ESP_LOGI("DB DONE", "JSON inserting done");
+            if ((ret = sendto(sock, body1, body_len1, 0, (struct sockaddr *)(&endpoint), sizeof(endpoint))) < 0) {
+                ESP_LOGE("DB", "Error in sendto json1");
+                perror("Porco Dio");
+            }
+            else {
+                ESP_LOGI("DB", "Sent %d bytes of json1", body_len1);
+            }
+
+            if ((ret = sendto(sock, body2, body_len2, 0, (struct sockaddr *)(&endpoint), sizeof(endpoint))) < 0) {
+                ESP_LOGE("DB", "Error in sendto json2");
+                perror("Porco Dio");
+            }
+            else {
+                ESP_LOGI("DB", "Sent %d bytes of json2", body_len2);
+            }
+
+            if ((ret = sendto(sock, body3, body_len3, 0, (struct sockaddr *)(&endpoint), sizeof(endpoint))) < 0) {
+                ESP_LOGE("DB", "Error in sendto of json3");
+                perror("Porco Dio");
+            }
+            else {
+                ESP_LOGI("DB", "Sent %d bytes of json3", body_len1);
+            }
             #endif
-            memset(body, 0, BODY_MAX_SIZE);
+            memset(body1, 0, BODY_MAX_SIZE);
+            memset(body2, 0, BODY_MAX_SIZE);
+            memset(body3, 0, BODY_MAX_SIZE);
         }
         else
         {
