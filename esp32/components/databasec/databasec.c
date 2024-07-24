@@ -1,6 +1,12 @@
 #include <stdio.h>
 #include <time.h>
+
+#include "lwip/err.h"
 #include "lwip/sockets.h"
+#include "lwip/sys.h"
+#include <lwip/netdb.h>
+#include "esp_netif.h"
+
 #include "databasec.h"
 
 void database_insert()
@@ -12,7 +18,7 @@ void database_insert()
     int sock = 0;
     int ret = 0;
 
-    if ((sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0) {
+    if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
         ESP_LOGE("DB", "Failed to open socket");
         return;
     }
@@ -25,7 +31,7 @@ void database_insert()
     // continuous task
     while (1)
     {
-        bool uart_cond = xQueueReceive(ecu_data, &ecu, pdMS_TO_TICKS(10)) == pdPASS;
+        bool uart_cond = xQueueReceive(ecu_data, &ecu, pdMS_TO_TICKS(50)) == pdPASS;
         // check if connected to wifi, struct arrived and sempahore taken
         if (connected && uart_cond)
         {
