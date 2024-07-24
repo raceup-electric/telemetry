@@ -15,6 +15,6 @@
 // DATABASE
 #define ENDPOINT_PORT 8814
 #define ENDPOINT_IP "204.216.214.158"
-#define BODY_MAX_SIZE 3000
+#define BODY_MAX_SIZE 1000
 
 #endif

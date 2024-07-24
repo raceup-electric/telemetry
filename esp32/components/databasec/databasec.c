@@ -11,7 +11,9 @@
 
 void database_insert()
 {
-    char body[BODY_MAX_SIZE];
+    char body1[BODY_MAX_SIZE];
+    char body2[BODY_MAX_SIZE];
+    char body3[BODY_MAX_SIZE];
     struct logs ecu;
 
     // create UDP socket
@@ -39,11 +41,13 @@ void database_insert()
             gettimeofday(&tv_now, NULL);
             int64_t time_ms = (int64_t)tv_now.tv_sec * 1000L + (int64_t)tv_now.tv_usec / 1000;
             ESP_LOGI("DB", "Unix timestamp (ms): %lli", time_ms);
-            int body_len = 0;
-            body_len = snprintf(
-                body,
+            int body_len1 = 0;
+            int body_len2 = 0;
+            int body_len3 = 0;
+            body_len1 = snprintf(
+                body1,
                 BODY_MAX_SIZE,
-                JSON,
+                JSON1,
                 stest,
                 time_ms,
                 ecu.gps.lap,
@@ -112,7 +116,16 @@ void database_insert()
                 ecu.motorVal2[0].AMK_TempMotor,
                 ecu.motorVal2[0].AMK_TempInverter,
                 ecu.motorVal2[0].AMK_TempIGBT,
-                ecu.motorVal2[0].AMK_ErrorInfo,
+                ecu.motorVal2[0].AMK_ErrorInfo
+            );
+
+            body_len2 = snprintf(
+                body2,
+                BODY_MAX_SIZE,
+                JSON2,
+                stest,
+                time_ms,
+                ecu.gps.lap,
                 // FR motor values
                 ecu.motorVal2[1].AMK_TempMotor,
                 ecu.motorVal2[1].AMK_TempInverter,
@@ -143,7 +156,16 @@ void database_insert()
                 ecu.status.brake,
                 ecu.status.brakePress,
                 ecu.status.actualVelocityKMH,
-                ecu.status.status,
+                ecu.status.status
+            );
+
+            body_len3 = snprintf(
+                body3,
+                BODY_MAX_SIZE,
+                JSON3,
+                stest,
+                time_ms,
+                ecu.gps.lap,
                 // Potentiometers
                 ecu.pedals.acc_pot,
                 ecu.pedals.brk_pot,
@@ -225,14 +247,33 @@ void database_insert()
             ESP_LOGI("DB DONE", "Compressed JSON inserting done");
             free(compressed_body);
             #else 
-            if ((ret = sendto(sock, body, body_len, 0, (struct sockaddr *)(&endpoint), sizeof(endpoint))) < 0) {
-                ESP_LOGE("DB", "Error in sendto");
+            if ((ret = sendto(sock, body1, body_len1, 0, (struct sockaddr *)(&endpoint), sizeof(endpoint))) < 0) {
+                ESP_LOGE("DB", "Error in sendto json1");
+                perror("Porco Dio");
             }
             else {
-                ESP_LOGI("DB", "Sent %d bytes", body_len);
+                ESP_LOGI("DB", "Sent %d bytes of json1", body_len1);
+            }
+
+            if ((ret = sendto(sock, body2, body_len2, 0, (struct sockaddr *)(&endpoint), sizeof(endpoint))) < 0) {
+                ESP_LOGE("DB", "Error in sendto json2");
+                perror("Porco Dio");
+            }
+            else {
+                ESP_LOGI("DB", "Sent %d bytes of json2", body_len2);
+            }
+
+            if ((ret = sendto(sock, body3, body_len3, 0, (struct sockaddr *)(&endpoint), sizeof(endpoint))) < 0) {
+                ESP_LOGE("DB", "Error in sendto of json3");
+                perror("Porco Dio");
+            }
+            else {
+                ESP_LOGI("DB", "Sent %d bytes of json3", body_len1);
             }
             #endif
-            memset(body, 0, BODY_MAX_SIZE);
+            memset(body1, 0, BODY_MAX_SIZE);
+            memset(body2, 0, BODY_MAX_SIZE);
+            memset(body3, 0, BODY_MAX_SIZE);
         }
         else
         {
