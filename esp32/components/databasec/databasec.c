@@ -154,7 +154,8 @@ void database_insert()
                 ecu.status.throttle,
                 ecu.status.steering,
                 ecu.status.brake,
-                ecu.status.brakePress,
+                ecu.status.brakePress1,
+                ecu.status.brakePress2,
                 ecu.status.actualVelocityKMH,
                 ecu.status.status
             );

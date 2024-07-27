@@ -56,26 +56,6 @@ void serial_receive()
         case UART_PATTERN_DET:
         {
           ESP_LOGI("UART", "Pattern detected");
-          // int pattern_pos = uart_pattern_pop_pos(UART_NUM);
-          // if (pattern_pos < 0) {
-          //   // Pattern queue full, flush queue
-          //   ESP_LOGW("UART", "Pattern queue full");
-          //   uart_flush_input(UART_NUM);
-          //   uart_pattern_queue_reset(UART_NUM, 10);
-          //   break;
-          // }
-          // int read_len = uart_read_bytes(UART_NUM, data, pattern_pos, pdMS_TO_TICKS(100));
-          // uart_flush_input(UART_NUM);
-          // ESP_LOGI("UART", "Read %d bytes", read_len);
-          // // check struct completness
-          // // COBS adds at least 1 and at most roundup(size/254) (in this case 2) bytes of overhead
-          // if (read_len == sizeof(struct logs) + 1 || read_len == sizeof(struct logs) + 2)
-          // {
-          //    ESP_LOGI("UART", "Decoding COBS");
-          //    cobs_decode(decoded, sizeof(decoded), data, read_len);
-          //    // send struct to task
-          //    xQueueSend(ecu_data, &decoded, 0);
-          //  }
           int pos = uart_pattern_pop_pos(UART_NUM);
           ESP_LOGI("UART", "Pattern detected pos: %d", pos);
           if (pos == -1) {

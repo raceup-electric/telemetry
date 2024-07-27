@@ -18,6 +18,7 @@ struct motorValues1
   float AMK_Current;
 };
 
+
 struct motorValues2
 {
   float AMK_TempMotor;
@@ -43,7 +44,8 @@ struct Status_Log
   int16_t throttle;                  // int in TI
   int16_t steering;                  // int in TI
   int16_t brake;                     // int in TI
-  int16_t brakePress;                // int in TI
+  int16_t brakePress1;                // int in TI
+  int16_t brakePress2;                // int in TI
   int16_t actualVelocityKMH;         // int in TI
   uint16_t status;
 };
@@ -328,7 +330,8 @@ struct logs
 \"throttle\":%i,\
 \"steering_angle\":%i,\
 \"brake\":%i,\
-\"brake_press\":%i,\
+\"brake_press_front\":%i,\
+\"brake_press_rear\":%i,\
 \"actual_velocity_kmh\":%i,\
 \"car_status\":\"%i\"\
 }"
