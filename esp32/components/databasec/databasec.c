@@ -200,7 +200,7 @@ void database_insert()
                 ecu.imu.temperatures[2],
                 ecu.imu.temperatures[3],
                 ecu.imu.temperatures[4],
-                ecu.imu.temperatures[5],
+                ecu.imu.temperatures[9],
                 ecu.imu.temperatures[6],
                 ecu.imu.temperatures[7],
                 ecu.imu.suspensions[0],
