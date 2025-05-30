@@ -10,10 +10,13 @@ services:
     environment:
       - DOCKER_INFLUXDB_INIT_MODE=setup
       - DOCKER_INFLUXDB_INIT_USERNAME=admin
-      - DOCKER_INFLUXDB_INIT_PASSWORD=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=adminpasswd
       - DOCKER_INFLUXDB_INIT_ORG=raceup
       - DOCKER_INFLUXDB_INIT_BUCKET=telemetry
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=1mYfOXFlghYobqZSq6Indjf1d3Tf7gECrZWAcm4EmqZB_pX6KKBIuEiaK3Wr2nQwBT3vzMXdW1DFK6zV5SKm-A==
+    networks:
+      - telemetry
+
   # Telegraf
   broker:
     image: 'telegraf:1.30'
@@ -21,8 +24,12 @@ services:
       - ./config/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
     ports:
       - 8080:8080
+      - "8094:8094/udp"
     depends_on:
       - db
+    networks:
+      - telemetry
+
   # Grafana
   dashboard:
     image: 'grafana/grafana-enterprise'
@@ -30,15 +37,23 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./config/grafana/dashboards:/var/lib/grafana/dashboards
       - ./config/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
-      - ./config/config/grafana/dashboards:/var/lib/grafana/dashboards
       - ./config/grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./config/grafana/dashboards:/var/lib/grafana/dashboards
     environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=a
       - GF_SERVER_ROOT_URL=http://telemetryed.raceup.it/
       - GF_DASHBOARDS_MIN_REFRESH_INTERVAL=100ms
+      - GF_INSTALL_PLUGINS=grafana-github-datasource
+    networks:
+      - telemetry
 
 volumes:
   data-influx:
   config-influx:
-  data-grafana:
+
+networks:
+  telemetry:
+    driver: bridge
+
