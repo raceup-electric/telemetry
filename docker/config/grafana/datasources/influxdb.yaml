@@ -1,0 +1,15 @@
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    orgId: 1
+    isDefault: true
+    url: http://db:8086
+    jsonData:
+      version: Flux
+      organization: raceup
+      defaultBucket: telemetry
+    secureJsonData:
+      token: 1mYfOXFlghYobqZSq6Indjf1d3Tf7gECrZWAcm4EmqZB_pX6KKBIuEiaK3Wr2nQwBT3vzMXdW1DFK6zV5SKm-A==
