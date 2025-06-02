@@ -28,6 +28,16 @@ What has not been set yet:
 - All the dashboards
 - grafana query
 - telegraf jsons
+- automatic key settings for live data from telegraf to grafana
+
+## Grafana Dashboards
+
+To access live data from telegraf you can use:
+- data source : --Grafana--
+- Query type: Live Measurements
+- channel stream/custom_stream_id
+
+For more details check [telegraf-grafana-live](https://grafana.com/tutorials/stream-metrics-from-telegraf-to-grafana/);
 
 # Access
 
@@ -47,3 +57,4 @@ http://localhost:3000
 login: admin
 passwd: admin
 ```
+
