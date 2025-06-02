@@ -20,15 +20,21 @@ services:
   # Telegraf
   broker:
     image: 'telegraf:1.30'
+    depends_on:
+      - grafana-init
+      - db
+    environment:
+      - GRAFANA_TOKEN_FILE=/run/shared/service-account-token.txt
     volumes:
       - ./config/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - ./config/telegraf/secret:/run/shared:ro
+      - ./config/telegraf/init/init.sh:/ready.sh
+    networks:
+      - telemetry
     ports:
       - 8080:8080
       - "8094:8094/udp"
-    depends_on:
-      - db
-    networks:
-      - telemetry
+    entrypoint: ["/bin/sh", "/ready.sh"]
 
   # Grafana
   dashboard:
@@ -49,6 +55,18 @@ services:
     networks:
       - telemetry
 
+  #setting grafana
+  grafana-init:
+    image: alpine:latest
+    depends_on:
+      - dashboard
+    volumes:
+      - ./config/grafana/init/init_grafana.sh:/etc/grafana/init-grafana.sh:ro
+      - ./config/telegraf/secret:/run/shared:rw
+    networks:
+      - telemetry
+    entrypoint: ["/bin/sh", "/etc/grafana/init-grafana.sh"]
+
 volumes:
   data-influx:
   config-influx:
@@ -56,4 +74,3 @@ volumes:
 networks:
   telemetry:
     driver: bridge
-
