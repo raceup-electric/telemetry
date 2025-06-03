@@ -45,6 +45,13 @@ To add a new dashboard you can put the json file in:
 ```
 As axample there already is a dummy dashboard with real time data from telegraf
 
+## Telegraf input points
+
+Telegraf is set to receive json as input data and that can be done in a few way:
+
+- HTTP on port 8080
+- UDP on port 8094
+
 # Access
 
 ## Influxdb:
