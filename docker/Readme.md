@@ -39,6 +39,12 @@ To access live data from telegraf you can use:
 
 For more details check [telegraf-grafana-live](https://grafana.com/tutorials/stream-metrics-from-telegraf-to-grafana/);
 
+To add a new dashboard you can put the json file in:
+```sh
+./config/grafana/dashboards
+```
+As axample there already is a dummy dashboard with real time data from telegraf
+
 # Access
 
 ## Influxdb:
