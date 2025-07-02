@@ -3,7 +3,7 @@
 rm -rf /run/shared/service-account-token.txt
 
 # Install necessary tools
-apk add --no-cache curl jq netcat-openbsd
+apk add --no-cache curl jq netcat-openbsd tcpdump
 
 
 # Wait for Grafana port to be open
