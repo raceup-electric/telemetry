@@ -18,107 +18,21 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 3,
   "links": [],
   "panels": [
     {
-      "datasource": {
-        "type": "datasource",
-        "uid": "grafana"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic-by-name"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "right",
-            "axisWidth": 150,
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              }
-            ]
-          },
-          "unit": "percent"
-        },
-        "overrides": []
-      },
+      "collapsed": false,
       "gridPos": {
-        "h": 10,
+        "h": 1,
         "w": 24,
         "x": 0,
         "y": 0
       },
-      "id": 4,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "12.0.1+security-01",
-      "targets": [
-        {
-          "channel": "stream/custom_stream_id/socket_listener",
-          "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
-          },
-          "filter": {
-            "fields": [
-              "time",
-              "throttle"
-            ]
-          },
-          "queryType": "measurements",
-          "refId": "A"
-        }
-      ],
-      "title": "Throttle",
-      "transparent": true,
-      "type": "timeseries"
+      "id": 9,
+      "panels": [],
+      "title": "Inputs",
+      "type": "row"
     },
     {
       "datasource": {
@@ -203,10 +117,10 @@
         ]
       },
       "gridPos": {
-        "h": 10,
+        "h": 8,
         "w": 24,
         "x": 0,
-        "y": 10
+        "y": 1
       },
       "id": 5,
       "options": {
@@ -252,17 +166,14 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "red",
-            "mode": "fixed"
+            "mode": "palette-classic-by-name"
           },
           "custom": {
             "axisBorderShow": false,
-            "axisCenteredZero": true,
+            "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "right",
-            "axisSoftMax": 57,
-            "axisSoftMin": -60,
             "axisWidth": 150,
             "barAlignment": 0,
             "barWidthFactor": 0.6,
@@ -292,8 +203,108 @@
             }
           },
           "mappings": [],
-          "max": 60,
-          "min": -60,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.0.1+security-01",
+      "targets": [
+        {
+          "channel": "stream/custom_stream_id/socket_listener",
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "filter": {
+            "fields": [
+              "time",
+              "throttle"
+            ]
+          },
+          "queryType": "measurements",
+          "refId": "A"
+        }
+      ],
+      "title": "Throttle",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "red",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": true,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "right",
+            "axisWidth": 150,
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "max": 9000,
+          "min": -9000,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -304,38 +315,13 @@
           },
           "unit": "degree"
         },
-        "overrides": [
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "brake"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 20
+        "y": 17
       },
       "id": 3,
       "options": {
@@ -374,11 +360,457 @@
       "type": "timeseries"
     },
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 26
+      },
+      "id": 9,
+      "panels": [],
+      "title": "Velocity",
+      "type": "row"
+    },
+    {
       "datasource": {
         "type": "datasource",
         "uid": "grafana"
       },
-      "description": "Compression of suspension in mm",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic-by-name"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "right",
+            "axisWidth": 150,
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "velocitykmh"
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "brake"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 27
+      },
+      "id": 14,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.0.1+security-01",
+      "targets": [
+        {
+          "channel": "stream/custom_stream_id/socket_listener",
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "filter": {
+            "fields": [
+              "time",
+              "actual_velocity_kmh"
+            ]
+          },
+          "queryType": "measurements",
+          "refId": "A"
+        }
+      ],
+      "title": "Velocity",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 35
+      },
+      "id": 10,
+      "panels": [],
+      "title": "Accellerations and Omegas",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "right",
+            "axisWidth": 150,
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "m/s²"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "acceleration_x"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "acceleration x"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "acceleration_y"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "acceleration y"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "acceleration_z fa58e82dd3ae"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "acceleration z"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 36
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.0.1+security-01",
+      "targets": [
+        {
+          "channel": "stream/custom_stream_id/socket_listener",
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "filter": {
+            "fields": [
+              "time",
+              "acceleration_x",
+              "acceleration_y",
+              "acceleration_z"
+            ]
+          },
+          "queryType": "measurements",
+          "refId": "A"
+        }
+      ],
+      "title": "Accellerations",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "right",
+            "axisWidth": 150,
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "omega_x"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "omega x"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "omega_y"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "omega y"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "omega_z"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "omega z"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 24,
+        "x": 0,
+        "y": 46
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.0.1+security-01",
+      "targets": [
+        {
+          "channel": "stream/custom_stream_id/socket_listener",
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "filter": {
+            "fields": [
+              "time",
+              "omega_x",
+              "omega_y",
+              "omega_z"
+            ]
+          },
+          "queryType": "measurements",
+          "refId": "A"
+        }
+      ],
+      "title": "Omegas",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 57
+      },
+      "id": 6,
+      "panels": [],
+      "title": "Suspensions",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -445,7 +877,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "Suspension Front Left"
+                "value": "front left suspension"
               },
               {
                 "id": "color",
@@ -464,70 +896,12 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "Suspension Front Right"
-              },
-              {
-                "id": "custom.lineStyle",
-                "value": {
-                  "dash": [
-                    10,
-                    10
-                  ],
-                  "fill": "dash"
-                }
+                "value": "front right suspension"
               },
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "suspensions_rl"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Suspension Rear Left"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "orange",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "suspensions_rr"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Suspension Rear Right"
-              },
-              {
-                "id": "custom.lineStyle",
-                "value": {
-                  "dash": [
-                    10,
-                    10
-                  ],
-                  "fill": "dash"
-                }
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "orange",
+                  "fixedColor": "light-red",
                   "mode": "fixed"
                 }
               }
@@ -539,9 +913,9 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 30
+        "y": 58
       },
-      "id": 2,
+      "id": 7,
       "options": {
         "legend": {
           "calcs": [],
@@ -567,7 +941,151 @@
             "fields": [
               "time",
               "suspensions_fl",
-              "suspensions_fr",
+              "suspensions_fr"
+            ]
+          },
+          "queryType": "measurements",
+          "refId": "A"
+        }
+      ],
+      "title": "Front Suspensions",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "right",
+            "axisSoftMin": 0,
+            "axisWidth": 150,
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "lengthmm"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "suspensions_rl"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "rearleft suspension"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "suspensions_rr"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "rear right suspension"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 68
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.0.1+security-01",
+      "targets": [
+        {
+          "channel": "stream/custom_stream_id/socket_listener",
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "filter": {
+            "fields": [
+              "time",
               "suspensions_rl",
               "suspensions_rr"
             ]
@@ -576,7 +1094,7 @@
           "refId": "A"
         }
       ],
-      "title": "Suspensions",
+      "title": "Rear Suspensions",
       "transparent": true,
       "type": "timeseries"
     }
