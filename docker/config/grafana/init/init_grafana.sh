@@ -1,5 +1,9 @@
 #!/bin/sh
 
+GRAFANA_URL="http://dashboard:3000"
+ADMIN_USER="admin"
+ADMIN_PASSWORD="a"
+
 rm -rf /run/shared/service-account-token.txt
 
 # Install necessary tools
@@ -42,4 +46,22 @@ TOKEN_JSON=$(curl -s -u "$GRAFANA_USER:$GRAFANA_PASS" \
 echo "Created token:"
 echo "$TOKEN_JSON" | jq -r '.key' > /run/shared/service-account-token.txt
 cat /run/shared/service-account-token.txt
+
+
+# List of users to create
+
+echo "Creating user: $NAME"
+
+curl -s -X POST "$GRAFANA_URL/api/admin/users" \
+  -u "$ADMIN_USER:$ADMIN_PASSWORD" \
+  -H "Content-Type: application/json" \
+  -d @- <<EOF
+{
+  "name": "ed_user",
+  "email": "ed_user@raceup.it",
+  "login": "ed_user",
+  "password": "ed_passwd"
+}
+EOF
+
 
