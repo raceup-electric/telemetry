@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 4,
+  "id": 8,
   "links": [],
   "panels": [
     {
@@ -29,7 +29,7 @@
         "x": 0,
         "y": 0
       },
-      "id": 16,
+      "id": 10,
       "panels": [
         {
           "datasource": {
@@ -87,612 +87,15 @@
                   }
                 ]
               },
-              "unit": "rotrpm"
+              "unit": "celsius"
             },
             "overrides": []
           },
           "gridPos": {
             "h": 10,
-            "w": 12,
+            "w": 24,
             "x": 0,
-            "y": 1
-          },
-          "id": 5,
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom",
-              "showLegend": true
-            },
-            "tooltip": {
-              "hideZeros": false,
-              "mode": "multi",
-              "sort": "none"
-            }
-          },
-          "pluginVersion": "12.0.1+security-01",
-          "targets": [
-            {
-              "channel": "stream/custom_stream_id/socket_listener",
-              "datasource": {
-                "type": "datasource",
-                "uid": "grafana"
-              },
-              "filter": {
-                "fields": [
-                  "time",
-                  "amk_actual_velocity_fl",
-                  "amk_actual_velocity_fr",
-                  "amk_actual_velocity_rl",
-                  "amk_actual_velocity_rr"
-                ]
-              },
-              "queryType": "measurements",
-              "refId": "A"
-            }
-          ],
-          "title": "Actual velocity",
-          "transformations": [
-            {
-              "id": "renameByRegex",
-              "options": {
-                "regex": "(\\w+).*",
-                "renamePattern": "$1"
-              }
-            }
-          ],
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisBorderShow": false,
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "barWidthFactor": 0.6,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "insertNulls": false,
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "rotrpm"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 10,
-            "w": 12,
-            "x": 12,
-            "y": 1
-          },
-          "id": 12,
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom",
-              "showLegend": true
-            },
-            "tooltip": {
-              "hideZeros": false,
-              "mode": "multi",
-              "sort": "none"
-            }
-          },
-          "pluginVersion": "12.0.1+security-01",
-          "targets": [
-            {
-              "channel": "stream/custom_stream_id/socket_listener",
-              "datasource": {
-                "type": "datasource",
-                "uid": "grafana"
-              },
-              "filter": {
-                "fields": [
-                  "time",
-                  "amk_target_velocity_fl",
-                  "amk_target_velocity_fr",
-                  "amk_target_velocity_rl",
-                  "amk_target_velocity_rr"
-                ]
-              },
-              "queryType": "measurements",
-              "refId": "A"
-            }
-          ],
-          "title": "Target velocity",
-          "transformations": [
-            {
-              "id": "renameByRegex",
-              "options": {
-                "regex": "(\\w+).*",
-                "renamePattern": "$1"
-              }
-            }
-          ],
-          "type": "timeseries"
-        }
-      ],
-      "title": "Velocity",
-      "type": "row"
-    },
-    {
-      "collapsed": true,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 1
-      },
-      "id": 13,
-      "panels": [
-        {
-          "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisBorderShow": false,
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "barWidthFactor": 0.6,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "insertNulls": false,
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "max": 560,
-              "min": 380,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "volt"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 10,
-            "w": 12,
-            "x": 0,
-            "y": 12
-          },
-          "id": 6,
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom",
-              "showLegend": true
-            },
-            "tooltip": {
-              "hideZeros": false,
-              "mode": "multi",
-              "sort": "none"
-            }
-          },
-          "pluginVersion": "12.0.1+security-01",
-          "targets": [
-            {
-              "channel": "stream/custom_stream_id/socket_listener",
-              "datasource": {
-                "type": "datasource",
-                "uid": "grafana"
-              },
-              "filter": {
-                "fields": [
-                  "time",
-                  "amk_voltage_fl",
-                  "amk_voltage_fr",
-                  "amk_voltage_rl",
-                  "amk_voltage_rr"
-                ]
-              },
-              "queryType": "measurements",
-              "refId": "A"
-            }
-          ],
-          "title": "Voltages",
-          "transformations": [
-            {
-              "id": "renameByRegex",
-              "options": {
-                "regex": "(\\w+).*",
-                "renamePattern": "$1"
-              }
-            }
-          ],
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisBorderShow": false,
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "barWidthFactor": 0.6,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "insertNulls": false,
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "amp"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 10,
-            "w": 12,
-            "x": 12,
-            "y": 12
-          },
-          "id": 7,
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom",
-              "showLegend": true
-            },
-            "tooltip": {
-              "hideZeros": false,
-              "mode": "multi",
-              "sort": "none"
-            }
-          },
-          "pluginVersion": "12.0.1+security-01",
-          "targets": [
-            {
-              "channel": "stream/custom_stream_id/socket_listener",
-              "datasource": {
-                "type": "datasource",
-                "uid": "grafana"
-              },
-              "filter": {
-                "fields": [
-                  "time",
-                  "amk_current_fl",
-                  "amk_current_fr",
-                  "amk_current_rl",
-                  "amk_current_rr"
-                ]
-              },
-              "queryType": "measurements",
-              "refId": "A"
-            }
-          ],
-          "title": "Current",
-          "transformations": [
-            {
-              "id": "renameByRegex",
-              "options": {
-                "regex": "(\\w+).*",
-                "renamePattern": "$1"
-              }
-            }
-          ],
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisBorderShow": false,
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "barWidthFactor": 0.6,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "insertNulls": false,
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "none"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 10,
-            "w": 12,
-            "x": 0,
-            "y": 22
-          },
-          "id": 8,
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom",
-              "showLegend": true
-            },
-            "tooltip": {
-              "hideZeros": false,
-              "mode": "multi",
-              "sort": "none"
-            }
-          },
-          "pluginVersion": "12.0.1+security-01",
-          "targets": [
-            {
-              "channel": "stream/custom_stream_id/socket_listener",
-              "datasource": {
-                "type": "datasource",
-                "uid": "grafana"
-              },
-              "filter": {
-                "fields": [
-                  "time",
-                  "amk_torque_current_fl",
-                  "amk_torque_current_fr",
-                  "amk_torque_current_rl",
-                  "amk_torque_current_rr"
-                ]
-              },
-              "queryType": "measurements",
-              "refId": "A"
-            }
-          ],
-          "title": "Torque current",
-          "transformations": [
-            {
-              "id": "renameByRegex",
-              "options": {
-                "regex": "(\\w+).*",
-                "renamePattern": "$1"
-              }
-            }
-          ],
-          "type": "timeseries"
-        }
-      ],
-      "title": "Etc",
-      "type": "row"
-    },
-    {
-      "collapsed": true,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 2
-      },
-      "id": 14,
-      "panels": [
-        {
-          "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisBorderShow": false,
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "axisSoftMin": 0,
-                "barAlignment": 0,
-                "barWidthFactor": 0.6,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "insertNulls": false,
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "decimals": 0,
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "none"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 10,
-            "w": 12,
-            "x": 0,
-            "y": 33
+            "y": 8
           },
           "id": 11,
           "options": {
@@ -719,28 +122,63 @@
               "filter": {
                 "fields": [
                   "time",
-                  "amk_status_fl",
-                  "amk_status_fr",
-                  "amk_status_rl",
-                  "amk_status_rr"
+                  "temp_motor_post_rl_pin",
+                  "temp_motor_post_rr_pin",
+                  "temp_mot_pre_fr",
+                  "temp_mot_pot_fr"
                 ]
               },
               "queryType": "measurements",
               "refId": "A"
             }
           ],
-          "title": "Statuses",
+          "title": "",
           "transformations": [
             {
               "id": "renameByRegex",
               "options": {
-                "regex": "(\\w+).*",
-                "renamePattern": "$1"
+                "regex": "temp_motor_post_rl_pin",
+                "renamePattern": "Motor RL Post"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "temp_motor_post_rr_pin",
+                "renamePattern": "Motor RR Post"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "temp_mot_pre_fr",
+                "renamePattern": "Motor FR Pre"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "temp_mot_pot_fr",
+                "renamePattern": "Motor FR Post"
               }
             }
           ],
           "type": "timeseries"
-        },
+        }
+      ],
+      "title": "Motors",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 20,
+      "panels": [
         {
           "datasource": {
             "type": "datasource",
@@ -757,7 +195,6 @@
                 "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
-                "axisSoftMin": 0,
                 "barAlignment": 0,
                 "barWidthFactor": 0.6,
                 "drawStyle": "line",
@@ -785,7 +222,6 @@
                   "mode": "off"
                 }
               },
-              "decimals": 0,
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
@@ -799,17 +235,17 @@
                   }
                 ]
               },
-              "unit": "none"
+              "unit": "celsius"
             },
             "overrides": []
           },
           "gridPos": {
             "h": 10,
-            "w": 12,
-            "x": 12,
-            "y": 33
+            "w": 24,
+            "x": 0,
+            "y": 20
           },
-          "id": 15,
+          "id": 21,
           "options": {
             "legend": {
               "calcs": [],
@@ -834,30 +270,167 @@
               "filter": {
                 "fields": [
                   "time",
-                  "amk_error_info_fl",
-                  "amk_error_info_fr",
-                  "amk_error_info_rl",
-                  "amk_error_info_rr"
+                  "temp_inverter_post_l_pin",
+                  "temp_inverter_post_r_pin"
                 ]
               },
               "queryType": "measurements",
               "refId": "A"
             }
           ],
-          "title": "Errors",
+          "title": "Inverter Post",
           "transformations": [
             {
               "id": "renameByRegex",
               "options": {
-                "regex": "(\\w+).*",
-                "renamePattern": "$1"
+                "regex": "temp_inverter_post_l_pin",
+                "renamePattern": "Inverter Post Left"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "temp_inverter_post_r_pin",
+                "renamePattern": "Inverter Post Right"
               }
             }
           ],
           "type": "timeseries"
         }
       ],
-      "title": "Statuses & Errors",
+      "title": "Inverter",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 2
+      },
+      "id": 30,
+      "panels": [
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "celsius"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 24,
+            "x": 0,
+            "y": 73
+          },
+          "id": 31,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.0.1+security-01",
+          "targets": [
+            {
+              "channel": "stream/custom_stream_id/socket_listener",
+              "datasource": {
+                "type": "datasource",
+                "uid": "grafana"
+              },
+              "filter": {
+                "fields": [
+                  "time",
+                  "temp_rad_post_l_pin",
+                  "temp_rad_post_r_pin"
+                ]
+              },
+              "queryType": "measurements",
+              "refId": "A"
+            }
+          ],
+          "title": "",
+          "transformations": [
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "temp_rad_post_l_pin",
+                "renamePattern": "Radiator Post Left"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "temp_rad_post_r_pin",
+                "renamePattern": "Radiator Post Right"
+              }
+            }
+          ],
+          "type": "timeseries"
+        }
+      ],
+      "title": "Radiator",
       "type": "row"
     },
     {
@@ -868,454 +441,809 @@
         "x": 0,
         "y": 3
       },
-      "id": 17,
-      "panels": [],
-      "title": "Torque Limit",
+      "id": 40,
+      "panels": [
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "celsius"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 24,
+            "x": 0,
+            "y": 84
+          },
+          "id": 41,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.0.1+security-01",
+          "targets": [
+            {
+              "channel": "stream/custom_stream_id/socket_listener",
+              "datasource": {
+                "type": "datasource",
+                "uid": "grafana"
+              },
+              "filter": {
+                "fields": [
+                  "time",
+                  "temp_pump_left",
+                  "temp_pump_right"
+                ]
+              },
+              "queryType": "measurements",
+              "refId": "A"
+            }
+          ],
+          "title": "Pumps",
+          "transformations": [
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "temp_pump_left",
+                "renamePattern": "Pump Left"
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "temp_pump_right",
+                "renamePattern": "Pump Right"
+              }
+            }
+          ],
+          "type": "timeseries"
+        }
+      ],
+      "title": "Pumps",
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "datasource",
-        "uid": "grafana"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "amk_torque_limit_negative_fl"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Negative"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "amk_torque_limit_positive_fl"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "orange",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "displayName",
-                "value": "Positive"
-              }
-            ]
-          }
-        ]
-      },
+      "collapsed": true,
       "gridPos": {
-        "h": 8,
-        "w": 12,
+        "h": 1,
+        "w": 24,
         "x": 0,
         "y": 4
       },
-      "id": 18,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "12.0.1+security-01",
-      "targets": [
+      "id": 50,
+      "panels": [
         {
-          "channel": "stream/custom_stream_id/socket_listener",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
           },
-          "filter": {
-            "fields": [
-              "time",
-              "amk_torque_limit_negative_fl",
-              "amk_torque_limit_positive_fl"
-            ]
-          },
-          "queryType": "measurements",
-          "refId": "A"
-        }
-      ],
-      "title": "Front Left",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "datasource",
-        "uid": "grafana"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "amk_torque_limit_negative_fr"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Negative"
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
               },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "amk_torque_limit_positive_fr"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "orange",
-                  "mode": "fixed"
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
                 }
               },
-              {
-                "id": "displayName",
-                "value": "Positive"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 4
-      },
-      "id": 20,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "celsius"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 95
+          },
+          "id": 51,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": false
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.0.1+security-01",
+          "targets": [
+            {
+              "channel": "stream/custom_stream_id/socket_listener",
+              "datasource": {
+                "type": "datasource",
+                "uid": "grafana"
+              },
+              "filter": {
+                "fields": [
+                  "time",
+                  "temp_embedded_post_pin"
+                ]
+              },
+              "queryType": "measurements",
+              "refId": "A"
+            }
           ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "12.0.1+security-01",
-      "targets": [
-        {
-          "channel": "stream/custom_stream_id/socket_listener",
-          "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
-          },
-          "filter": {
-            "fields": [
-              "time",
-              "amk_torque_limit_positive_fr",
-              "amk_torque_limit_negative_fr"
-            ]
-          },
-          "queryType": "measurements",
-          "refId": "A"
+          "title": "Embedded Post",
+          "transformations": [
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "temp_embedded_post_pin",
+                "renamePattern": "Embedded Post"
+              }
+            }
+          ],
+          "type": "timeseries"
         }
       ],
-      "title": "Front Right",
-      "type": "stat"
+      "title": "Embedded",
+      "type": "row"
     },
     {
-      "datasource": {
-        "type": "datasource",
-        "uid": "grafana"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "amk_torque_limit_negative_rl"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Negative"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "amk_torque_limit_positive_rl"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "orange",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "displayName",
-                "value": "Positive"
-              }
-            ]
-          }
-        ]
-      },
+      "collapsed": true,
       "gridPos": {
-        "h": 8,
-        "w": 12,
+        "h": 1,
+        "w": 24,
         "x": 0,
-        "y": 12
+        "y": 5
       },
-      "id": 19,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "12.0.1+security-01",
-      "targets": [
+      "id": 52,
+      "panels": [
         {
-          "channel": "stream/custom_stream_id/socket_listener",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
           },
-          "filter": {
-            "fields": [
-              "time",
-              "amk_torque_limit_negative_rl",
-              "amk_torque_limit_positive_rl"
-            ]
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "celsius"
+            },
+            "overrides": []
           },
-          "queryType": "measurements",
-          "refId": "A"
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 6
+          },
+          "id": 53,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.0.1+security-01",
+          "targets": [
+            {
+              "channel": "stream/custom_stream_id/socket_listener",
+              "datasource": {
+                "type": "datasource",
+                "uid": "grafana"
+              },
+              "filter": {
+                "fields": [
+                  "time",
+                  "amk_temp_motor_fl",
+                  "amk_temp_inverter_fl",
+                  "amk_temp_igbt_fl"
+                ]
+              },
+              "queryType": "measurements",
+              "refId": "A"
+            }
+          ],
+          "title": "Front Left",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "celsius"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 6
+          },
+          "id": 54,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.0.1+security-01",
+          "targets": [
+            {
+              "channel": "stream/custom_stream_id/socket_listener",
+              "datasource": {
+                "type": "datasource",
+                "uid": "grafana"
+              },
+              "filter": {
+                "fields": [
+                  "time",
+                  "amk_temp_motor_fr",
+                  "amk_temp_inverter_fr",
+                  "amk_temp_igbt_fr"
+                ]
+              },
+              "queryType": "measurements",
+              "refId": "A"
+            }
+          ],
+          "title": "Front Right",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "celsius"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 34
+          },
+          "id": 55,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.0.1+security-01",
+          "targets": [
+            {
+              "channel": "stream/custom_stream_id/socket_listener",
+              "datasource": {
+                "type": "datasource",
+                "uid": "grafana"
+              },
+              "filter": {
+                "fields": [
+                  "time",
+                  "amk_temp_motor_rl",
+                  "amk_temp_inverter_rl",
+                  "amk_temp_igbt_rl"
+                ]
+              },
+              "queryType": "measurements",
+              "refId": "A"
+            }
+          ],
+          "title": "Rear Left",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "celsius"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 34
+          },
+          "id": 56,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.0.1+security-01",
+          "targets": [
+            {
+              "channel": "stream/custom_stream_id/socket_listener",
+              "datasource": {
+                "type": "datasource",
+                "uid": "grafana"
+              },
+              "filter": {
+                "fields": [
+                  "time",
+                  "amk_temp_motor_rr",
+                  "amk_temp_inverter_rr",
+                  "amk_temp_igbt_rr"
+                ]
+              },
+              "queryType": "measurements",
+              "refId": "A"
+            }
+          ],
+          "title": "Rear Right",
+          "type": "timeseries"
         }
       ],
-      "title": "Rear Left",
-      "type": "stat"
+      "title": "AMK",
+      "type": "row"
     },
     {
-      "datasource": {
-        "type": "datasource",
-        "uid": "grafana"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "amk_torque_limit_negative_rr"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Negative"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "amk_torque_limit_positive_rr"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "orange",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "displayName",
-                "value": "Positive"
-              }
-            ]
-          }
-        ]
-      },
+      "collapsed": true,
       "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 12
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 6
       },
-      "id": 21,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "12.0.1+security-01",
-      "targets": [
+      "id": 57,
+      "panels": [
         {
-          "channel": "stream/custom_stream_id/socket_listener",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
           },
-          "filter": {
-            "fields": [
-              "time",
-              "amk_torque_limit_negative_rr",
-              "amk_torque_limit_positive_rr"
-            ]
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "rotrpm"
+            },
+            "overrides": []
           },
-          "queryType": "measurements",
-          "refId": "A"
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 7
+          },
+          "id": 58,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": false
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.0.1+security-01",
+          "targets": [
+            {
+              "channel": "stream/custom_stream_id/socket_listener",
+              "datasource": {
+                "type": "datasource",
+                "uid": "grafana"
+              },
+              "filter": {
+                "fields": [
+                  "time",
+                  "fan_speed"
+                ]
+              },
+              "queryType": "measurements",
+              "refId": "A"
+            }
+          ],
+          "title": "Fans speed",
+          "type": "timeseries"
         }
       ],
-      "title": "Rear Right",
-      "type": "stat"
+      "title": "Fans",
+      "type": "row"
     }
   ],
   "preload": false,
-  "refresh": "100ms",
   "schemaVersion": 41,
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-30s",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "AMK",
-  "uid": "bdldaqogd1c00e",
-  "version": 3
+  "title": "Cooling",
+  "uid": "temps_auto_generated",
+  "version": 1
 }
