@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 8,
+  "id": 3,
   "links": [],
   "panels": [
     {
@@ -95,7 +95,7 @@
             "h": 10,
             "w": 24,
             "x": 0,
-            "y": 8
+            "y": 1
           },
           "id": 11,
           "options": {
@@ -111,7 +111,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.0.1+security-01",
+          "pluginVersion": "12.0.1",
           "targets": [
             {
               "channel": "stream/custom_stream_id/socket_listener",
@@ -243,7 +243,7 @@
             "h": 10,
             "w": 24,
             "x": 0,
-            "y": 20
+            "y": 2
           },
           "id": 21,
           "options": {
@@ -259,7 +259,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.0.1+security-01",
+          "pluginVersion": "12.0.1",
           "targets": [
             {
               "channel": "stream/custom_stream_id/socket_listener",
@@ -375,7 +375,7 @@
             "h": 10,
             "w": 24,
             "x": 0,
-            "y": 73
+            "y": 3
           },
           "id": 31,
           "options": {
@@ -391,7 +391,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.0.1+security-01",
+          "pluginVersion": "12.0.1",
           "targets": [
             {
               "channel": "stream/custom_stream_id/socket_listener",
@@ -507,7 +507,7 @@
             "h": 10,
             "w": 24,
             "x": 0,
-            "y": 84
+            "y": 4
           },
           "id": 41,
           "options": {
@@ -523,7 +523,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.0.1+security-01",
+          "pluginVersion": "12.0.1",
           "targets": [
             {
               "channel": "stream/custom_stream_id/socket_listener",
@@ -639,7 +639,7 @@
             "h": 8,
             "w": 24,
             "x": 0,
-            "y": 95
+            "y": 5
           },
           "id": 51,
           "options": {
@@ -655,7 +655,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.0.1+security-01",
+          "pluginVersion": "12.0.1",
           "targets": [
             {
               "channel": "stream/custom_stream_id/socket_listener",
@@ -779,7 +779,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.0.1+security-01",
+          "pluginVersion": "12.0.1",
           "targets": [
             {
               "channel": "stream/custom_stream_id/socket_listener",
@@ -882,7 +882,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.0.1+security-01",
+          "pluginVersion": "12.0.1",
           "targets": [
             {
               "channel": "stream/custom_stream_id/socket_listener",
@@ -969,7 +969,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 34
+            "y": 14
           },
           "id": 55,
           "options": {
@@ -985,7 +985,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.0.1+security-01",
+          "pluginVersion": "12.0.1",
           "targets": [
             {
               "channel": "stream/custom_stream_id/socket_listener",
@@ -1072,7 +1072,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 34
+            "y": 14
           },
           "id": 56,
           "options": {
@@ -1088,7 +1088,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.0.1+security-01",
+          "pluginVersion": "12.0.1",
           "targets": [
             {
               "channel": "stream/custom_stream_id/socket_listener",
@@ -1116,7 +1116,7 @@
       "type": "row"
     },
     {
-      "collapsed": true,
+      "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1124,111 +1124,413 @@
         "y": 6
       },
       "id": 57,
-      "panels": [
+      "panels": [],
+      "title": "Fans",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "rotrpm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 7
+      },
+      "id": 60,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.0.1",
+      "targets": [
         {
+          "channel": "stream/custom_stream_id/socket_listener",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
           },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisBorderShow": false,
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "barWidthFactor": 0.6,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "insertNulls": false,
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "rotrpm"
-            },
-            "overrides": []
+          "filter": {
+            "fields": [
+              "time",
+              "adc_fanbattl"
+            ]
           },
-          "gridPos": {
-            "h": 8,
-            "w": 24,
-            "x": 0,
-            "y": 7
-          },
-          "id": 58,
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom",
-              "showLegend": false
-            },
-            "tooltip": {
-              "hideZeros": false,
-              "mode": "single",
-              "sort": "none"
-            }
-          },
-          "pluginVersion": "12.0.1+security-01",
-          "targets": [
-            {
-              "channel": "stream/custom_stream_id/socket_listener",
-              "datasource": {
-                "type": "datasource",
-                "uid": "grafana"
-              },
-              "filter": {
-                "fields": [
-                  "time",
-                  "fan_speed"
-                ]
-              },
-              "queryType": "measurements",
-              "refId": "A"
-            }
-          ],
-          "title": "Fans speed",
-          "type": "timeseries"
+          "queryType": "measurements",
+          "refId": "A"
         }
       ],
-      "title": "Fans",
-      "type": "row"
+      "title": "fan battery left",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "rotrpm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 7
+      },
+      "id": 62,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.0.1",
+      "targets": [
+        {
+          "channel": "stream/custom_stream_id/socket_listener",
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "filter": {
+            "fields": [
+              "time",
+              "adc_fanbattr"
+            ]
+          },
+          "queryType": "measurements",
+          "refId": "A"
+        }
+      ],
+      "title": "Fan battery right",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "rotrpm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 14
+      },
+      "id": 61,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.0.1",
+      "targets": [
+        {
+          "channel": "stream/custom_stream_id/socket_listener",
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "filter": {
+            "fields": [
+              "time",
+              "adc_fanradl"
+            ]
+          },
+          "queryType": "measurements",
+          "refId": "A"
+        }
+      ],
+      "title": "Fan rad left",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "rotrpm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 14
+      },
+      "id": 63,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.0.1",
+      "targets": [
+        {
+          "channel": "stream/custom_stream_id/socket_listener",
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "filter": {
+            "fields": [
+              "time",
+              "adc_fanradr"
+            ]
+          },
+          "queryType": "measurements",
+          "refId": "A"
+        }
+      ],
+      "title": "Fan rad right",
+      "type": "timeseries"
     }
   ],
   "preload": false,
