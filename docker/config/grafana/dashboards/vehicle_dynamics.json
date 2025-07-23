@@ -632,7 +632,7 @@
     "list": []
   },
   "time": {
-    "from": "now-1m",
+    "from": "now-30s",
     "to": "now"
   },
   "timepicker": {},
