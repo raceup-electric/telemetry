@@ -46,6 +46,8 @@ services:
       - ./config/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
       - ./config/grafana/datasources:/etc/grafana/provisioning/datasources
       - ./config/grafana/dashboards:/var/lib/grafana/dashboards
+      - ./config/grafana/dashboards/telemetry_live:/var/lib/grafana/dashboards/telemetry_live
+      - ./config/grafana/dashboards/telemetry_stored:/var/lib/grafana/dashboards/telemetry_stored
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=a
