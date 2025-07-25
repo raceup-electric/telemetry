@@ -118,7 +118,7 @@
       "pluginVersion": "12.0.1+security-01",
       "targets": [
         {
-          "channel": "stream/custom_stream_id/socket_listener",
+          "channel": "stream/current/socket_listener",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
@@ -247,7 +247,7 @@
       "pluginVersion": "12.0.1+security-01",
       "targets": [
         {
-          "channel": "stream/custom_stream_id/socket_listener",
+          "channel": "stream/current/socket_listener",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
@@ -378,7 +378,7 @@
       "pluginVersion": "12.0.1+security-01",
       "targets": [
         {
-          "channel": "stream/custom_stream_id/socket_listener",
+          "channel": "stream/temps/socket_listener",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
@@ -496,7 +496,7 @@
       "pluginVersion": "12.0.1+security-01",
       "targets": [
         {
-          "channel": "stream/custom_stream_id/socket_listener",
+          "channel": "stream/current/socket_listener",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
@@ -625,7 +625,7 @@
       "pluginVersion": "12.0.1+security-01",
       "targets": [
         {
-          "channel": "stream/custom_stream_id/socket_listener",
+          "channel": "stream/current/socket_listener",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
@@ -756,7 +756,7 @@
       "pluginVersion": "12.0.1+security-01",
       "targets": [
         {
-          "channel": "stream/custom_stream_id/socket_listener",
+          "channel": "stream/temps/socket_listener",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
@@ -859,7 +859,7 @@
       "pluginVersion": "12.0.1+security-01",
       "targets": [
         {
-          "channel": "stream/custom_stream_id/socket_listener",
+          "channel": "stream/current/socket_listener",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
@@ -960,7 +960,7 @@
       "pluginVersion": "12.0.1+security-01",
       "targets": [
         {
-          "channel": "stream/custom_stream_id/socket_listener",
+          "channel": "stream/current/socket_listener",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
@@ -1062,7 +1062,7 @@
       "pluginVersion": "12.0.1+security-01",
       "targets": [
         {
-          "channel": "stream/custom_stream_id/socket_listener",
+          "channel": "stream/current/socket_listener",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
@@ -1163,7 +1163,7 @@
       "pluginVersion": "12.0.1+security-01",
       "targets": [
         {
-          "channel": "stream/custom_stream_id/socket_listener",
+          "channel": "stream/current/socket_listener",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"

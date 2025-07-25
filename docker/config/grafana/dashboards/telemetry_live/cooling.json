@@ -114,7 +114,7 @@
           "pluginVersion": "12.0.1",
           "targets": [
             {
-              "channel": "stream/custom_stream_id/socket_listener",
+              "channel": "stream/temps/socket_listener",
               "datasource": {
                 "type": "datasource",
                 "uid": "grafana"
@@ -262,7 +262,7 @@
           "pluginVersion": "12.0.1",
           "targets": [
             {
-              "channel": "stream/custom_stream_id/socket_listener",
+              "channel": "stream/temps/socket_listener",
               "datasource": {
                 "type": "datasource",
                 "uid": "grafana"
@@ -394,7 +394,7 @@
           "pluginVersion": "12.0.1",
           "targets": [
             {
-              "channel": "stream/custom_stream_id/socket_listener",
+              "channel": "stream/temps/socket_listener",
               "datasource": {
                 "type": "datasource",
                 "uid": "grafana"
@@ -526,7 +526,7 @@
           "pluginVersion": "12.0.1",
           "targets": [
             {
-              "channel": "stream/custom_stream_id/socket_listener",
+              "channel": "stream/temps/socket_listener",
               "datasource": {
                 "type": "datasource",
                 "uid": "grafana"
@@ -658,7 +658,7 @@
           "pluginVersion": "12.0.1",
           "targets": [
             {
-              "channel": "stream/custom_stream_id/socket_listener",
+              "channel": "stream/temps/socket_listener",
               "datasource": {
                 "type": "datasource",
                 "uid": "grafana"
@@ -782,7 +782,7 @@
           "pluginVersion": "12.0.1",
           "targets": [
             {
-              "channel": "stream/custom_stream_id/socket_listener",
+              "channel": "stream/temps/socket_listener",
               "datasource": {
                 "type": "datasource",
                 "uid": "grafana"
@@ -885,7 +885,7 @@
           "pluginVersion": "12.0.1",
           "targets": [
             {
-              "channel": "stream/custom_stream_id/socket_listener",
+              "channel": "stream/temps/socket_listener",
               "datasource": {
                 "type": "datasource",
                 "uid": "grafana"
@@ -988,7 +988,7 @@
           "pluginVersion": "12.0.1",
           "targets": [
             {
-              "channel": "stream/custom_stream_id/socket_listener",
+              "channel": "stream/temps/socket_listener",
               "datasource": {
                 "type": "datasource",
                 "uid": "grafana"
@@ -1091,7 +1091,7 @@
           "pluginVersion": "12.0.1",
           "targets": [
             {
-              "channel": "stream/custom_stream_id/socket_listener",
+              "channel": "stream/temps/socket_listener",
               "datasource": {
                 "type": "datasource",
                 "uid": "grafana"
@@ -1211,7 +1211,7 @@
       "pluginVersion": "12.0.1",
       "targets": [
         {
-          "channel": "stream/custom_stream_id/socket_listener",
+          "channel": "stream/fans/socket_listener",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
@@ -1312,7 +1312,7 @@
       "pluginVersion": "12.0.1",
       "targets": [
         {
-          "channel": "stream/custom_stream_id/socket_listener",
+          "channel": "stream/fans/socket_listener",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
@@ -1413,7 +1413,7 @@
       "pluginVersion": "12.0.1",
       "targets": [
         {
-          "channel": "stream/custom_stream_id/socket_listener",
+          "channel": "stream/fans/socket_listener",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
@@ -1514,7 +1514,7 @@
       "pluginVersion": "12.0.1",
       "targets": [
         {
-          "channel": "stream/custom_stream_id/socket_listener",
+          "channel": "stream/fans/socket_listener",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
