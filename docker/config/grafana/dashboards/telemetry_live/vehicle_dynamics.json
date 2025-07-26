@@ -345,7 +345,7 @@
               "filter": {
                 "fields": [
                   "time",
-                  "brake"
+                  "steering_angle"
                 ]
               },
               "queryType": "measurements",
