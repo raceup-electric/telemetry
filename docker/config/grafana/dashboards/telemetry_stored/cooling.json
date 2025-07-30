@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 13,
+  "id": 9,
   "links": [],
   "panels": [
     {
@@ -750,6 +750,30 @@
             }
           ],
           "title": "Front Left",
+          "transformations": [
+            {
+              "id": "calculateField",
+              "options": {
+                "binary": {
+                  "left": {
+                    "matcher": {
+                      "id": "byType",
+                      "options": "number"
+                    }
+                  },
+                  "operator": "/",
+                  "right": {
+                    "fixed": "10"
+                  }
+                },
+                "mode": "binary",
+                "reduce": {
+                  "reducer": "sum"
+                },
+                "replaceFields": true
+              }
+            }
+          ],
           "type": "timeseries"
         },
         {
@@ -844,6 +868,30 @@
             }
           ],
           "title": "Front Right",
+          "transformations": [
+            {
+              "id": "calculateField",
+              "options": {
+                "binary": {
+                  "left": {
+                    "matcher": {
+                      "id": "byType",
+                      "options": "number"
+                    }
+                  },
+                  "operator": "/",
+                  "right": {
+                    "fixed": "10"
+                  }
+                },
+                "mode": "binary",
+                "reduce": {
+                  "reducer": "sum"
+                },
+                "replaceFields": true
+              }
+            }
+          ],
           "type": "timeseries"
         },
         {
@@ -938,6 +986,30 @@
             }
           ],
           "title": "Rear Left",
+          "transformations": [
+            {
+              "id": "calculateField",
+              "options": {
+                "binary": {
+                  "left": {
+                    "matcher": {
+                      "id": "byType",
+                      "options": "number"
+                    }
+                  },
+                  "operator": "/",
+                  "right": {
+                    "fixed": "10"
+                  }
+                },
+                "mode": "binary",
+                "reduce": {
+                  "reducer": "sum"
+                },
+                "replaceFields": true
+              }
+            }
+          ],
           "type": "timeseries"
         },
         {
@@ -1032,6 +1104,30 @@
             }
           ],
           "title": "Rear Right",
+          "transformations": [
+            {
+              "id": "calculateField",
+              "options": {
+                "binary": {
+                  "left": {
+                    "matcher": {
+                      "id": "byType",
+                      "options": "number"
+                    }
+                  },
+                  "operator": "/",
+                  "right": {
+                    "fixed": "10"
+                  }
+                },
+                "mode": "binary",
+                "reduce": {
+                  "reducer": "sum"
+                },
+                "replaceFields": true
+              }
+            }
+          ],
           "type": "timeseries"
         }
       ],
@@ -1112,7 +1208,7 @@
             "h": 7,
             "w": 12,
             "x": 0,
-            "y": 7
+            "y": 23
           },
           "id": 60,
           "options": {
@@ -1206,7 +1302,7 @@
             "h": 7,
             "w": 12,
             "x": 12,
-            "y": 7
+            "y": 23
           },
           "id": 62,
           "options": {
@@ -1300,7 +1396,7 @@
             "h": 7,
             "w": 12,
             "x": 0,
-            "y": 14
+            "y": 30
           },
           "id": 61,
           "options": {
@@ -1394,7 +1490,7 @@
             "h": 7,
             "w": 12,
             "x": 12,
-            "y": 14
+            "y": 30
           },
           "id": 63,
           "options": {
@@ -1443,5 +1539,5 @@
   "timezone": "browser",
   "title": "Cooling",
   "uid": "sos",
-  "version": 15
+  "version": 1
 }
