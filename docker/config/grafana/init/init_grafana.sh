@@ -50,18 +50,40 @@ cat /run/shared/service-account-token.txt
 
 # List of users to create
 
-echo "Creating user: $NAME"
+FILE="account.csv"
 
-curl -s -X POST "$GRAFANA_URL/api/admin/users" \
-  -u "$ADMIN_USER:$ADMIN_PASSWORD" \
-  -H "Content-Type: application/json" \
-  -d @- <<EOF
-{
-  "name": "ed_user",
-  "email": "ed_user@raceup.it",
-  "login": "ed_user",
-  "password": "ed_passwd"
-}
+curl -sS -L -o $FILE "https://docs.google.com/spreadsheets/d/1uOm5v2PGaIuHu4JrMOmmV8THiIVy6Vdb9NubWfWz5HY/export?format=csv"
+
+echo >> $FILE
+# 2) Skip header, then split on commas:
+#    _ _  name         email                      user       rest
+tail -n +2 "$FILE" | while IFS=, read name email user rest; do
+
+  # If anything spilled into $rest, that's >5 columns → error out
+  if [ -n "$rest" ]; then
+    echo "Error: unexpected extra field(s): '$rest'"
+  else
+    clean_name="${name// /}"
+    first2="${clean_name:0:2}"
+    last3="${clean_name: -3}"
+    passwd="${first2}${last3}"
+
+    echo
+    echo "Creating user: $user"
+
+    # Otherwise process your three fields:
+    curl -s -X POST "$GRAFANA_URL/api/admin/users" \
+      -u "$ADMIN_USER:$ADMIN_PASSWORD" \
+      -H "Content-Type: application/json" \
+      -d @- <<EOF
+    {
+      "name": "$name",
+      "email": "$email",
+      "login": "$user",
+      "password": "$passwd"
+    }
 EOF
+  fi
+done
 
 
