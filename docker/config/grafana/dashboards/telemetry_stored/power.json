@@ -18,7 +18,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 11,
   "links": [],
   "panels": [
     {
@@ -51,7 +50,6 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
-            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -78,12 +76,14 @@
             }
           },
           "mappings": [],
-          "min": 0,
+          "max": 4400,
+          "min": 2700,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -103,7 +103,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "dark-blue",
+                  "fixedColor": "green",
                   "mode": "fixed"
                 }
               }
@@ -122,7 +122,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "light-blue",
+                  "fixedColor": "dark-red",
                   "mode": "fixed"
                 }
               }
@@ -141,7 +141,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "blue",
+                  "fixedColor": "light-orange",
                   "mode": "fixed"
                 }
               }
@@ -165,7 +165,7 @@
         },
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -176,11 +176,10 @@
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
-          "query": "from(bucket: \"telemetry\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"socket_listener\")\n  |> filter(fn: (r) => r[\"_field\"] == \"tot_lv_volt\" or r[\"_field\"] == \"max_lv_volt\" or r[\"_field\"] == \"min_lv_volt\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
+          "query": "from(bucket: \"telemetry\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"socket_listener\")\n  |> filter(fn: (r) => r[\"_field\"] == \"max_lv_volt\" or r[\"_field\"] == \"min_lv_volt\" or r[\"_field\"] == \"avg_lv_volt\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
           "refId": "A"
         }
       ],
-      "title": "",
       "transparent": true,
       "type": "timeseries"
     },
@@ -192,7 +191,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "palette-classic-by-name"
           },
           "custom": {
             "axisBorderShow": false,
@@ -201,7 +200,6 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
-            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -212,6 +210,9 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -228,12 +229,14 @@
             }
           },
           "mappings": [],
+          "max": 15000,
           "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -249,9 +252,13 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "blue",
+                  "fixedColor": "yellow",
                   "mode": "fixed"
                 }
+              },
+              {
+                "id": "displayName",
+                "value": "Current"
               }
             ]
           }
@@ -284,7 +291,7 @@
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
-          "query": "from(bucket: \"telemetry\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"socket_listener\")\n  |> filter(fn: (r) => r[\"_field\"] == \"lv_lem_current\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
+          "query": "from(bucket: \"telemetry\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"socket_listener\")\n  |> filter(fn: (r) => r[\"_field\"] == \"lv_lem_current\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> map(fn: (r) => ({ r with _value: float(v: r._value) / 10.0 }))\n  |> yield(name: \"last\")",
           "refId": "A"
         }
       ],
@@ -306,12 +313,15 @@
             "neutral": 3
           },
           "mappings": [],
-          "min": 0,
+          "max": 65,
+          "min": 15,
+          "noValue": "Nan",
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -340,7 +350,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "min_lv_temp f4c9ccf4e99d"
+              "options": "min_lv_temp"
             },
             "properties": [
               {
@@ -380,6 +390,111 @@
         "showThresholdMarkers": true,
         "sizing": "auto"
       },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P951FEA4DE68E13C5"
+          },
+          "query": "from(bucket: \"telemetry\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"socket_listener\")\n  |> filter(fn: (r) => r[\"_field\"] == \"max_lv_temp\" or r[\"_field\"] == \"min_lv_temp\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> map(fn: (r) => ({ r with _value: float(v: r._value) / 10.0 }))\n  |> yield(name: \"last\")",
+          "refId": "A"
+        }
+      ],
+      "transparent": true,
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "P951FEA4DE68E13C5"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "TOT LV",
+          "mappings": [],
+          "max": 52000,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": null
+              },
+              {
+                "color": "dark-red",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 42000
+              },
+              {
+                "color": "dark-green",
+                "value": 47000
+              }
+            ]
+          },
+          "unit": "mvolt"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 0,
+        "y": 11
+      },
+      "id": 14,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
       "pluginVersion": "12.0.1+security-01",
       "targets": [
         {
@@ -387,13 +502,12 @@
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
-          "query": "from(bucket: \"telemetry\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"socket_listener\")\n  |> filter(fn: (r) => r[\"_field\"] == \"max_lv_temp\" or r[\"_field\"] == \"min_lv_temp\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
+          "query": "from(bucket: \"telemetry\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"socket_listener\")\n  |> filter(fn: (r) => r[\"_field\"] == \"tot_lv_volt\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
           "refId": "A"
         }
       ],
-      "title": "",
       "transparent": true,
-      "type": "gauge"
+      "type": "timeseries"
     },
     {
       "collapsed": false,
@@ -401,7 +515,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 11
+        "y": 21
       },
       "id": 6,
       "panels": [],
@@ -425,7 +539,6 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
-            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -452,12 +565,14 @@
             }
           },
           "mappings": [],
-          "min": 0,
+          "max": 4400,
+          "min": 2700,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -477,7 +592,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "semi-dark-red",
+                  "fixedColor": "yellow",
                   "mode": "fixed"
                 }
               }
@@ -496,7 +611,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "super-light-red",
+                  "fixedColor": "dark-red",
                   "mode": "fixed"
                 }
               }
@@ -510,12 +625,12 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "AVG HV"
+                "value": "Avg HV"
               },
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "red",
+                  "fixedColor": "purple",
                   "mode": "fixed"
                 }
               }
@@ -527,7 +642,7 @@
         "h": 10,
         "w": 8,
         "x": 0,
-        "y": 12
+        "y": 22
       },
       "id": 2,
       "options": {
@@ -539,7 +654,7 @@
         },
         "tooltip": {
           "hideZeros": false,
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -550,11 +665,10 @@
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
-          "query": "from(bucket: \"telemetry\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"socket_listener\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avg_hv_volt\" or r[\"_field\"] == \"max_hv_volt\" or r[\"_field\"] == \"min_hv_volt\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"last\")",
+          "query": "from(bucket: \"telemetry\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"socket_listener\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avg_hv_volt\" or r[\"_field\"] == \"max_hv_volt\" or r[\"_field\"] == \"min_hv_volt\")\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> map(fn: (r) => ({ r with _value: float(v: r._value) / 10.0 }))\n  |> yield(name: \"last\")",
           "refId": "A"
         }
       ],
-      "title": "",
       "transparent": true,
       "type": "timeseries"
     },
@@ -566,52 +680,42 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "red",
-            "mode": "fixed"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "right",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "fixedColor": "dark-orange",
+            "mode": "thresholds"
           },
           "mappings": [],
+          "max": 100,
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "dark-red",
+                "value": null
               },
               {
-                "color": "red",
+                "color": "dark-red",
+                "value": 40
+              },
+              {
+                "color": "semi-dark-orange",
+                "value": 50
+              },
+              {
+                "color": "light-orange",
+                "value": 60
+              },
+              {
+                "color": "super-light-yellow",
+                "value": 70
+              },
+              {
+                "color": "green",
                 "value": 80
+              },
+              {
+                "color": "dark-green",
+                "value": 90
               }
             ]
           },
@@ -623,23 +727,25 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 12
+        "y": 22
       },
       "id": 1,
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
-      "pluginVersion": "12.0.1+security-01",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -650,9 +756,9 @@
           "refId": "A"
         }
       ],
-      "title": "High Voltage",
+      "title": "State of Charge",
       "transparent": true,
-      "type": "timeseries"
+      "type": "gauge"
     },
     {
       "datasource": {
@@ -668,12 +774,14 @@
             "neutral": 3
           },
           "mappings": [],
-          "min": 0,
+          "max": 65,
+          "min": 15,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -726,7 +834,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "AVG temp"
+                "value": "Avg temp"
               },
               {
                 "id": "color",
@@ -743,7 +851,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 12
+        "y": 22
       },
       "id": 8,
       "options": {
@@ -761,7 +869,7 @@
         "showThresholdMarkers": true,
         "sizing": "auto"
       },
-      "pluginVersion": "12.0.1+security-01",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -772,7 +880,6 @@
           "refId": "A"
         }
       ],
-      "title": "",
       "transparent": true,
       "type": "gauge"
     },
@@ -784,7 +891,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "palette-classic-by-name"
           },
           "custom": {
             "axisBorderShow": false,
@@ -793,7 +900,6 @@
             "axisLabel": "",
             "axisPlacement": "right",
             "barAlignment": 0,
-            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -820,26 +926,43 @@
             }
           },
           "mappings": [],
+          "max": 100000,
+          "min": -85000,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "watt"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total_power"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Power"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 21
+        "y": 31
       },
       "id": 10,
       "options": {
@@ -878,7 +1001,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "palette-classic-by-name"
           },
           "custom": {
             "axisBorderShow": false,
@@ -887,7 +1010,6 @@
             "axisLabel": "",
             "axisPlacement": "right",
             "barAlignment": 0,
-            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -913,19 +1035,24 @@
               "mode": "off"
             }
           },
+          "displayName": "Current",
           "mappings": [],
+          "max": 150,
+          "min": -200,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "amp"
         },
         "overrides": []
       },
@@ -933,7 +1060,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 22
+        "y": 32
       },
       "id": 5,
       "options": {
@@ -981,7 +1108,6 @@
             "axisLabel": "",
             "axisPlacement": "right",
             "barAlignment": 0,
-            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -1012,7 +1138,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1027,7 +1154,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 31
+        "y": 41
       },
       "id": 11,
       "options": {
@@ -1066,7 +1193,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "palette-classic-by-name"
           },
           "custom": {
             "axisBorderShow": false,
@@ -1075,7 +1202,6 @@
             "axisLabel": "",
             "axisPlacement": "right",
             "barAlignment": 0,
-            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -1101,12 +1227,16 @@
               "mode": "off"
             }
           },
+          "displayName": "Car Voltage",
           "mappings": [],
+          "max": 600,
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1122,7 +1252,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 32
+        "y": 42
       },
       "id": 12,
       "options": {
@@ -1154,20 +1284,20 @@
       "type": "timeseries"
     }
   ],
-  "preload": false,
-  "refresh": "auto",
-  "schemaVersion": 41,
+  "refresh": "",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-30s",
-    "to": "now"
+    "from": "2025-08-16T13:44:30.000Z",
+    "to": "2025-08-16T13:47:55.000Z"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Power",
   "uid": "94fc023f-d696-4a9c-84df-12348eabd394",
-  "version": 1
+  "version": 1,
+  "weekStart": ""
 }
