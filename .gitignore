@@ -33,3 +33,8 @@ config/publicKey.txt
 build/**/*
 
 .venv
+
+*.rpm
+
+docker/config/telegraf/secret/account*.csv
+

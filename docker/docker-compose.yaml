@@ -20,11 +20,17 @@ services:
   # Telegraf
   broker:
     image: 'telegraf:1.30'
+    cap_add:
+      - IPC_LOCK
     depends_on:
       - grafana-init
       - db
     environment:
       - GRAFANA_TOKEN_FILE=/run/shared/service-account-token.txt
+    ulimits:
+      memlock:
+        soft: 307200    # 300 KB in bytes
+        hard: 307200
     volumes:
       - ./config/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
       - ./config/telegraf/secret:/run/shared:ro
@@ -33,7 +39,7 @@ services:
       - telemetry
     ports:
       - 8080:8080
-      - "8094:8094/udp"
+      - "8814:8814/udp"
     entrypoint: ["/bin/sh", "/ready.sh"]
 
   # Grafana
